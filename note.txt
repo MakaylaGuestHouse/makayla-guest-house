@@ -1,0 +1,188 @@
+AMENITIES
+
+Reason you'll love staying with us
+Our hotel, Your home.
+
+scroll to top button
+
+add: get direction button to the hero section
+
+FAQS
+
+
+
+# Luxury Guest House Website Styling Guide ## Color Palette - Primary: Stone/Neutral tones (stone-800, stone-600, stone-400) - Used for text, borders, and backgrounds to create an elegant, timeless feel - Accent: Amber/Gold tones (amber-700, amber-400, amber-50) - Used sparingly for highlights, CTAs, and decorative elements - Background: Whites and soft neutrals (white, stone-50) - Creates a clean, spacious canvas for content - Text: Rich dark tones for headings (stone-800), softer tones for body text (stone-600) ## Typography - Headings: Serif fonts (font-serif) for sophistication and luxury feel - Section titles: 4xl-5xl size, stone-800 color - Subheadings: 2xl-3xl size, stone-800 color - Body text: Sans-serif for readability - stone-600 color with appropriate line height (leading-relaxed) - Decorative text: Light weight (font-light) uppercase with wide tracking for labels/categories ## Layout Elements - Subtle background patterns/shapes for depth - Thin decorative lines/dividers (w-20 h-px bg-amber-400) - Generous white space between sections (py-24) - Grid-based layouts with consistent gaps - Container widths: max-w-6xl for content, max-w-7xl for featured elements ## Component Styling - Cards: Clean white backgrounds with subtle shadows (shadow-sm, hover:shadow-md) - Buttons: - Primary: Dark background (bg-stone-800) with white text, hover to accent (amber-700) - Secondary: White background with dark border, hover to fill - Images: Consistent aspect ratios with overflow hidden and hover scale effects - Decorative elements: Subtle border accents, especially positioned frames ## Animation Principles - Subtle fade-ins on scroll using staggered timing - Gentle hover effects (scale 1.05-1.1 for images) - Smooth color transitions for buttons/interactive elements - Animation durations: 300-700ms - Ease functions: easeOut for natural movement ## UI/UX Guidelines - Clear visual hierarchy with prominent headings - Consistent spacing between elements - Important information (pricing, room details) easily scannable - Interactive elements have clear hover states - CTAs are prominent and action-oriented - Mobile responsiveness with appropriate grid adjustments ## Design Motifs - Thin gold/amber accent lines - Subtle background shapes for visual interest - Frame borders for important images - Consistent iconography style (stroke weight 2, rounded caps)
+
+next js, tailwind css
+
+already we have these defined:"use client";
+import { useEffect, useRef } from "react";
+import {  useAnimation, useInView } from 'framer-motion';
+
+export const useAnimateInView = () => {
+  const controls = useAnimation();
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
+
+  useEffect(() => {
+    if (isInView) {
+      controls.start("visible");
+    }
+  }, [controls, isInView]);
+
+  return { ref, controls, isInView };
+};
+
+// Animation variants
+export const animateVariants = {
+  fadeIn: {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+  fadeInLeft: {
+    hidden: { opacity: 0, x: -30 },
+    visible: { opacity: 1, x: 0 },
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+  fadeInRight: {
+    hidden: { opacity: 0, x: 30 },
+    visible: { opacity: 1, x: 0 },
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+  scaleIn: {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1 },
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
+
+export const staggerContainer = {
+  hidden: { 
+    opacity: 0 
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      // This is the key property that creates the staggered effect
+      staggerChildren: 0.1,  // Time delay between each child animation (in seconds)
+
+      // Optional properties to further customize the stagger behavior
+      delayChildren: 0.3,    // Initial delay before first child starts animating
+      ease: "easeOut",       // Easing function for smooth animation
+      duration: 0.5          // Duration of the container's own opacity animation
+    }
+  }
+};
+
+so if you will use another one that is not here, make sure you defined them. dont repeat what i have aready defined in your response just use them
+
+how to import them:import { useAnimateInView } from '@/hooks/useAnimateInView';
+import { animateVariants } from '@/lib/constants/animation';
+
+# Luxury Guest House Website Styling Guide
+
+## Color Palette
+- Primary: Stone/Neutral tones (stone-800, stone-600, stone-400)
+  - Used for text, borders, and backgrounds to create an elegant, timeless feel
+- Accent: Amber/Gold tones (amber-700, amber-400, amber-50)
+  - Used sparingly for highlights, CTAs, and decorative elements
+- Background: Whites and soft neutrals (white, stone-50)
+  - Creates a clean, spacious canvas for content
+- Text: Rich dark tones for headings (stone-800), softer tones for body text (stone-600)
+
+## Typography
+- Headings: Serif fonts (font-serif) for sophistication and luxury feel
+  - Section titles: 4xl-5xl size, stone-800 color
+  - Subheadings: 2xl-3xl size, stone-800 color
+- Body text: Sans-serif for readability
+  - stone-600 color with appropriate line height (leading-relaxed)
+- Decorative text: Light weight (font-light) uppercase with wide tracking for labels/categories
+
+## Layout Elements
+- Subtle background patterns/shapes for depth
+- Thin decorative lines/dividers (w-20 h-px bg-amber-400)
+- Generous white space between sections (py-24)
+- Grid-based layouts with consistent gaps
+- Container widths: max-w-6xl for content, max-w-7xl for featured elements
+
+## Component Styling
+- Cards: Clean white backgrounds with subtle shadows (shadow-sm, hover:shadow-md)
+- Buttons:
+  - Primary: Dark background (bg-stone-800) with white text, hover to accent (amber-700)
+  - Secondary: White background with dark border, hover to fill
+- Images: Consistent aspect ratios with overflow hidden and hover scale effects
+- Decorative elements: Subtle border accents, especially positioned frames
+
+## Animation Principles
+- Subtle fade-ins on scroll using staggered timing
+- Gentle hover effects (scale 1.05-1.1 for images)
+- Smooth color transitions for buttons/interactive elements
+- Animation durations: 300-700ms
+- Ease functions: easeOut for natural movement
+
+## UI/UX Guidelines
+- Clear visual hierarchy with prominent headings
+- Consistent spacing between elements
+- Important information (pricing, room details) easily scannable
+- Interactive elements have clear hover states
+- CTAs are prominent and action-oriented
+- Mobile responsiveness with appropriate grid adjustments
+
+## Design Motifs
+- Thin gold/amber accent lines
+- Subtle background shapes for visual interest
+- Frame borders for important images
+- Consistent iconography style (stroke weight 2, rounded caps)
+
+
+
+
+
+
+
+
+
+
+
+
+Booking CTA Section
+
+Purpose: Convert interest into booking
+
+Features:
+
+Prominent button:  or “Book Now”
+
+🧾 Core Booking Form Fields
+
+👤 Guest Details
+
+Full Name (First and last names)
+
+Email Address
+
+Phone Number
+
+🏠 Booking Details
+
+Check-in Date
+
+Check-out Date
+
+Number of Guests
+
+Adults
+
+Children (optional)
+
+Room Type (e.g., Deluxe, Suite, Standard)
+
+Number of Rooms
+
+Message (optional)
+
+
+i want this exact layout or an improved more luxury, modern and visually appealing one for the booking section.   bakground image, with the left having an over lay content and the right being the form. i dont the exact form there instead i more advanced 0one, appealin and attracting visitors to book. must be easy to use. 
+
+limit the fields to exactly the details i have given but the desinged you can goo ahead and more more visuall appealing stuff to it. must be a pro designer hand-work. make it functional as well. no complicated codes but sclable and maintainable and not at the expense of performance and a better ui/ux
