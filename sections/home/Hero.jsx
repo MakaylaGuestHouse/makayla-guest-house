@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { heroTransitions } from './config';
 import { carouselImages } from './constants';
-import RoomFilter from '@/components/ui/Filter';
+import { RoomFilter } from '@/components/ui/rooms/RoomFilter';
 
 const Hero = () => {
    const [currentIndex, setCurrentIndex] = useState(0);
@@ -107,7 +107,7 @@ const Hero = () => {
    };
 
    return (
-      <div className="relative h-screen w-full overflow-hidden">
+      <div className="relative h-screen w-full">
          {/* Image Preload to prevent flashes */}
          <div className="hidden">
             {carouselImages.map((image, index) => (
@@ -236,7 +236,7 @@ const Hero = () => {
             </button>
          </div>
 
-         <RoomFilter />
+         <RoomFilter initialFilters={{}} isRoomPage={false} onFiltersApplied={null} />
       </div>
    );
 };

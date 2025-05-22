@@ -4,6 +4,7 @@ import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { useAnimateInView } from '@/hooks/useAnimateInView';
 import { animateVariants, staggerContainer } from '@/lib/constants/animation';
 import { X, ChevronLeft, ChevronRight, ZoomIn, Info } from "lucide-react";
+import { SectionHeader } from "@/components/common/SectionHeader";
 
 // Gallery data - Replace with your actual luxury guest house images
 const galleryImages = [
@@ -72,7 +73,7 @@ const galleryImages = [
   },
   {
     id: 8,
-    src:"/room14.jpg",
+    src: "/room14.jpg",
     alt: "Breakfast View",
     category: "Dining",
     width: "square",
@@ -97,14 +98,14 @@ const Lightbox = ({ image, onClose, onNext, onPrevious, currentIndex, totalImage
   useEffect(() => {
     // Disable body scroll when lightbox is open
     document.body.style.overflow = "hidden";
-    
+
     // Handle keyboard navigation
     const handleKeyDown = (e) => {
       if (e.key === "Escape") onClose();
       if (e.key === "ArrowRight") onNext();
       if (e.key === "ArrowLeft") onPrevious();
     };
-    
+
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       document.body.style.overflow = "auto";
@@ -113,59 +114,59 @@ const Lightbox = ({ image, onClose, onNext, onPrevious, currentIndex, totalImage
   }, [onClose, onNext, onPrevious]);
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900 bg-opacity-95 p-4 backdrop-blur-sm"
     >
       {/* Close button - Made more visible for all devices */}
-      <button 
+      <button
         onClick={onClose}
         className="absolute top-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-white text-stone-900 transition-all hover:bg-amber-400 shadow-lg"
         aria-label="Close gallery"
       >
         <X size={24} />
       </button>
-      
+
       {/* Navigation counter */}
       <div className="absolute top-6 left-6 text-white font-light tracking-widest bg-stone-800 bg-opacity-60 px-3 py-1 rounded">
         <span className="text-amber-400">{currentIndex + 1}</span>
         <span className="mx-2">/</span>
         <span>{totalImages}</span>
       </div>
-      
+
       {/* Previous button - Enhanced visibility */}
-      <button 
+      <button
         onClick={onPrevious}
         className="absolute left-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-white text-stone-900 transition-all hover:bg-amber-400 shadow-lg"
         aria-label="Previous image"
       >
         <ChevronLeft size={28} />
       </button>
-      
+
       {/* Next button - Enhanced visibility */}
-      <button 
+      <button
         onClick={onNext}
         className="absolute right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-white text-stone-900 transition-all hover:bg-amber-400 shadow-lg"
         aria-label="Next image"
       >
         <ChevronRight size={28} />
       </button>
-      
+
       {/* Image container */}
-      <motion.div 
+      <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.3 }}
         className="relative max-h-[85vh] max-w-[85vw]"
       >
-        <img 
-          src={image.src} 
-          alt={image.alt} 
+        <img
+          src={image.src}
+          alt={image.alt}
           className="max-h-[85vh] max-w-[85vw] rounded-lg object-contain shadow-2xl"
         />
-        
+
         {/* Image caption */}
         <div className="absolute -bottom-16 left-0 right-0 text-center px-4">
           <h3 className="font-serif text-xl text-white mb-2">{image.alt}</h3>
@@ -182,13 +183,13 @@ const Lightbox = ({ image, onClose, onNext, onPrevious, currentIndex, totalImage
 const GalleryImage = ({ image, onClick, index, isMobile }) => {
   const { ref, controls } = useAnimateInView();
   const [showDetails, setShowDetails] = useState(false);
-  
+
   // Determine the span class based on image width type (adjusted for mobile)
   const getSpanClass = () => {
     if (isMobile) {
       return "col-span-1"; // On mobile, all images are the same width
     }
-    
+
     switch (image.width) {
       case "wide":
         return "col-span-2 row-span-1";
@@ -227,17 +228,17 @@ const GalleryImage = ({ image, onClick, index, isMobile }) => {
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.8 }}
         />
-        
+
         {/* Featured badge */}
         {image.featured && (
           <div className="absolute top-4 left-4 bg-amber-400 bg-opacity-90 text-stone-900 px-3 py-1 text-xs font-medium uppercase tracking-wider rounded z-10">
             Featured
           </div>
         )}
-        
+
         {/* Info button for mobile */}
         {isMobile && (
-          <button 
+          <button
             onClick={toggleDetails}
             className="absolute top-4 right-4 z-10 bg-white bg-opacity-80 text-stone-900 rounded-full p-2 shadow-md"
             aria-label="Show image details"
@@ -245,12 +246,12 @@ const GalleryImage = ({ image, onClick, index, isMobile }) => {
             <Info size={20} />
           </button>
         )}
-        
+
         {/* Overlay with details - different behavior for mobile vs desktop */}
-        <div 
+        <div
           className={`absolute inset-0 bg-gradient-to-t from-stone-900 via-stone-900/70 to-transparent 
-            ${isMobile 
-              ? showDetails ? 'opacity-100' : 'opacity-0' 
+            ${isMobile
+              ? showDetails ? 'opacity-100' : 'opacity-0'
               : 'opacity-0 group-hover:opacity-100'} 
             transition-opacity duration-500 flex flex-col justify-end p-6`}
         >
@@ -262,7 +263,7 @@ const GalleryImage = ({ image, onClick, index, isMobile }) => {
             <p className="text-stone-200 text-sm mb-4 line-clamp-2">
               {image.description}
             </p>
-            <button 
+            <button
               onClick={() => onClick(image)}
               className="mt-2 inline-flex items-center text-white bg-amber-700 bg-opacity-80 hover:bg-opacity-100 px-4 py-2 rounded-sm transition-colors duration-300"
             >
@@ -279,24 +280,24 @@ const GalleryImage = ({ image, onClick, index, isMobile }) => {
 // Parallax background elements
 const ParallaxBackground = () => {
   const { scrollY } = useScroll();
-  
+
   const topRightY = useTransform(scrollY, [0, 1000], [0, -150]);
   const bottomLeftY = useTransform(scrollY, [0, 1000], [0, 150]);
   const centerBlobY = useTransform(scrollY, [0, 500], [0, -50]);
-  
+
   return (
     <>
-      <motion.div 
+      <motion.div
         style={{ y: topRightY }}
-        className="absolute top-0 right-0 w-1/2 h-1/2 bg-stone-100 opacity-40 -z-10 rounded-bl-full" 
+        className="absolute top-0 right-0 w-1/2 h-1/2 bg-stone-100 opacity-40 -z-10 rounded-bl-full"
       />
-      <motion.div 
+      <motion.div
         style={{ y: bottomLeftY }}
-        className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-amber-50 opacity-30 -z-10 rounded-tr-full" 
+        className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-amber-50 opacity-30 -z-10 rounded-tr-full"
       />
-      <motion.div 
+      <motion.div
         style={{ y: centerBlobY }}
-        className="absolute top-1/4 left-1/4 w-64 h-64 bg-amber-100 opacity-10 -z-10 rounded-full blur-3xl" 
+        className="absolute top-1/4 left-1/4 w-64 h-64 bg-amber-100 opacity-10 -z-10 rounded-full blur-3xl"
       />
     </>
   );
@@ -311,19 +312,19 @@ export default function GallerySection() {
   const [isMobile, setIsMobile] = useState(false);
   const { ref, controls } = useAnimateInView();
   const sectionRef = useRef(null);
-  
+
   // Check if device is mobile
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     // Initial check
     checkMobile();
-    
+
     // Add event listener for window resize
     window.addEventListener('resize', checkMobile);
-    
+
     // Cleanup
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
@@ -367,31 +368,19 @@ export default function GallerySection() {
     <section ref={sectionRef} className="relative py-24 overflow-hidden bg-stone-50">
       {/* Parallax background elements */}
       <ParallaxBackground />
-      
+
       <div className="container mx-auto max-w-7xl px-4">
-        {/* Section header */}
-        <motion.div 
-          ref={ref}
-          variants={animateVariants.fadeIn}
-          initial="hidden"
-          animate={controls}
-          className="text-center mb-16"
-           >
-              <span className="text-sm font-light uppercase tracking-widest text-amber-700">Gallery</span>
-          <h3 className="font-serif text-4xl md:text-5xl text-stone-800 mb-4">
-            Experience Luxury
-          </h3>
-          <div className="mx-auto w-20 h-px bg-amber-400 mb-6"></div>
-          <p className="text-stone-600 max-w-2xl mx-auto">
-            Immerse yourself in the refined elegance of our meticulously designed spaces
-          </p>
-        </motion.div>
-        
+        <SectionHeader
+          title="Gallery"
+          subTitle="Experience Luxury"
+          description="Immerse yourself in the refined elegance of our meticulously designed spaces"
+        />
+
         {/* Category filters - Scrollable on mobile */}
-        <motion.div 
+        <motion.div
           className="flex flex-nowrap md:flex-wrap justify-start md:justify-center gap-4 mb-16 overflow-x-auto pb-4 md:pb-0 scrollbar-hide"
           variants={staggerContainer}
-          initial="hidden"
+          // initial="hidden"
           animate={controls}
         >
           {categories.map((category) => (
@@ -399,8 +388,8 @@ export default function GallerySection() {
               key={category}
               variants={animateVariants.fadeIn}
               className={`px-6 py-2 rounded-sm transition-all duration-300 whitespace-nowrap
-                ${activeCategory === category 
-                  ? 'bg-stone-800 text-white' 
+                ${activeCategory === category
+                  ? 'bg-stone-800 text-white'
                   : 'bg-white text-stone-600 hover:bg-stone-100 border border-stone-200'}`}
               onClick={() => setActiveCategory(category)}
             >
@@ -408,28 +397,28 @@ export default function GallerySection() {
             </motion.button>
           ))}
         </motion.div>
-        
+
         {/* Gallery grid - Adjusted for mobile */}
-        <motion.div 
+        <motion.div
           className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6`}
           variants={staggerContainer}
           initial="hidden"
           animate="visible"
         >
           {filteredImages.map((image, index) => (
-            <GalleryImage 
-              key={image.id} 
-              image={image} 
-              onClick={openLightbox} 
+            <GalleryImage
+              key={image.id}
+              image={image}
+              onClick={openLightbox}
               index={index}
               isMobile={isMobile}
             />
           ))}
         </motion.div>
-        
+
         {/* Mobile info helper text */}
         {isMobile && filteredImages.length > 0 && (
-          <motion.p 
+          <motion.p
             className="text-center text-stone-500 italic mt-6 text-sm"
             variants={animateVariants.fadeIn}
             initial="hidden"
@@ -438,9 +427,9 @@ export default function GallerySection() {
             Tap the <Info size={14} className="inline mb-1" /> icon to see image details
           </motion.p>
         )}
-        
+
         {/* "Book Your Stay" CTA */}
-        <motion.div 
+        <motion.div
           className="mt-20 text-center"
           variants={animateVariants.scaleIn}
           initial="hidden"
@@ -450,7 +439,7 @@ export default function GallerySection() {
             {/* Decorative elements */}
             <div className="absolute -top-10 -right-10 w-20 h-20 border-t-2 border-r-2 border-amber-400 opacity-60"></div>
             <div className="absolute -bottom-10 -left-10 w-20 h-20 border-b-2 border-l-2 border-amber-400 opacity-60"></div>
-            
+
             <button className="bg-stone-800 hover:bg-amber-700 text-white font-light tracking-wide py-4 px-8 text-lg transition-colors duration-300 uppercase">
               Book Your Luxury Stay
             </button>
@@ -460,11 +449,11 @@ export default function GallerySection() {
           </p>
         </motion.div>
       </div>
-      
+
       {/* Lightbox */}
       <AnimatePresence>
         {selectedImage && (
-          <Lightbox 
+          <Lightbox
             image={selectedImage}
             onClose={closeLightbox}
             onNext={showNextImage}

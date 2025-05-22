@@ -2,7 +2,7 @@
 export const DateInput = ({ label, icon }) => {
    return (
       <div className="relative w-full mb-6">
-         <label className="block text-stone-600 text-sm mb-2 font-light tracking-wide uppercase">
+         <label className="block text-stone-600 text-sm mb-2 font-light tracking-wide">
             {label}
          </label>
          <div className="relative">

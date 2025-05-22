@@ -1,166 +1,199 @@
-'use client';
-
-import { motion } from 'framer-motion';
+"use client";
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { staggerContainer } from '@/lib/constants/animation';
 import { ChevronRight } from 'lucide-react';
 import { RoomCard } from './RoomCard';
+import { RoomFilter } from './RoomFilter';
+import { roomsData } from '@/data';
+import { PagesHero } from '@/components/common/PagesHero';
 
-// Sample room data based on the provided schema
-const roomData = {
-  id: "deluxe-suite-001",
-  name: "Veloria Deluxe Suite",
-  roomType: "Suite",
-  description: "Experience the height of comfort in our Veloria Deluxe Suite, featuring floor-to-ceiling windows with panoramic views, custom furniture, and a spa-inspired ensuite bathroom.",
-  images: [
-    "/room10.jpg",
-    "/room12.jpg",
-    "/room13.jpg",
-    "/room14.jpg",
-  ],
-  pricePerNight: 320,
-  roomSize: "42 m²",
-  bedInfo: {
-    totalBeds: 1,
-    types: [
-      {
-        type: "King",
-        quantity: 1
+// Updated Room Page Component with Hero, Filter and Grid
+export const RoomsGrid = () => {
+  const [filteredRooms, setFilteredRooms] = useState(roomsData);
+  const [activeFilters, setActiveFilters] = useState({});
+  const [filterFormData, setFilterFormData] = useState(null);
+
+  // Add a key state to force re-render of all room cards when filters change
+  const [animationKey, setAnimationKey] = useState(0);
+
+  // Function to handle filter application
+  const handleFiltersApplied = (formData, filters) => {
+    setFilterFormData(formData);
+    setActiveFilters(filters);
+
+    // Apply filtering logic based on the form data
+    const filtered = roomsData.filter(room => {
+      // Location filter
+      if (formData.location !== "All Locations" && !room.name.includes(formData.location)) {
+        return false;
       }
-    ],
-    sofaBed: false,
-    extraBedAvailable: false
-  },
-  maxGuests: 3,
-  maxAdults: 2,
-  maxChildren: 1,
-  hasBalcony: true,
-  bathroomType: "Private Bathroom",
-  isSmokingAllowed: false,
-  hasClimateControl: true,
-  housekeepingFrequency: "Daily",
-  availability: true,
-  rating: 4.9,
-  tags: ["Popular", "Best Seller"],
-  amenities: [
-    "Free High-Speed Wi-Fi",
-    "Smart TV with Streaming Services",
-    "Air Conditioning & Heating",
-    "Complimentary Breakfast",
-    "In-Room Safe & Security Features",
-    "Room Service",
-    "Mini Bar",
-    "Luxury Bath Products",
-    "Daily Housekeeping",
-    "24/7 Reception or Concierge Service"
-  ]
-};
 
-// Create multiple room instances with variations
-const generateRoomData = (count) => {
-  // Room variations for a more realistic listing
-  const roomVariations = [
-    {
-      id: "standard-king-001",
-      name: "Executive King Room",
-      roomType: "Standard",
-      pricePerNight: 180,
-      roomSize: "28 m²",
-      bedInfo: { totalBeds: 1, types: [{ type: "King", quantity: 1 }] },
-      maxGuests: 2,
-      rating: 4.5,
-      tags: ["Popular"]
-    },
-    {
-      id: "premium-twin-001",
-      name: "Premium Twin Suite",
-      roomType: "Premium",
-      pricePerNight: 240,
-      roomSize: "32 m²",
-      bedInfo: { totalBeds: 2, types: [{ type: "Twin", quantity: 2 }] },
-      maxGuests: 2,
-      rating: 4.7,
-      tags: []
-    },
-    {
-      id: "family-suite-001",
-      name: "Luxury Family Suite",
-      roomType: "Suite",
-      pricePerNight: 420,
-      roomSize: "58 m²",
-      bedInfo: { totalBeds: 2, types: [{ type: "King", quantity: 1 }, { type: "Twin", quantity: 2 }] },
-      maxGuests: 4,
-      rating: 4.8,
-      tags: ["Best for Families"]
-    },
-    {
-      id: "penthouse-001",
-      name: "Penthouse Panorama Suite",
-      roomType: "Penthouse",
-      pricePerNight: 750,
-      roomSize: "120 m²",
-      bedInfo: { totalBeds: 1, types: [{ type: "Emperor", quantity: 1 }] },
-      maxGuests: 2,
-      rating: 5.0,
-      tags: ["Exclusive", "Best View"]
-    }
-  ];
+      // Room type filter
+      if (formData.roomType !== "All Types" && room.roomType !== formData.roomType) {
+        return false;
+      }
 
-  // Create rooms array with variations
-  const rooms = [];
-  for (let i = 0; i < count; i++) {
-    const variation = i % roomVariations.length;
-    const room = {
-      ...roomData,
-      ...roomVariations[variation],
-      id: `${roomVariations[variation].id}-${Math.floor(i/roomVariations.length)}`
-    };
-    rooms.push(room);
-  }
-  return rooms;
-};
+      // Bed type filter
+      if (formData.bedType !== "All Beds" &&
+        !room.bedInfo.types.some(bed => bed.type === formData.bedType)) {
+        return false;
+      }
 
-// Room Grid Component
-export const RoomGrid = () => {
-  const rooms = generateRoomData(6); // Generate 6 room cards
+      // Price range filter
+      if (room.pricePerNight > formData.priceRange) {
+        return false;
+      }
+
+      // Guests filter
+      let guestCount = 1;
+      if (formData.guests === "2 Adults") guestCount = 2;
+      else if (formData.guests === "2 Adults, 1 Child") guestCount = 3;
+      else if (formData.guests === "2 Adults, 2 Children") guestCount = 4;
+
+      if (room.maxGuests < guestCount) {
+        return false;
+      }
+
+      // Amenities filter
+      if (formData.amenities.length > 0) {
+        const hasAllAmenities = formData.amenities.every(amenity =>
+          room.amenities.includes(amenity)
+        );
+        if (!hasAllAmenities) {
+          return false;
+        }
+      }
+
+      // Room size filter
+      if (formData.roomSize !== "Any Size") {
+        const roomSizeRange = formData.roomSize.match(/\d+/g);
+        if (roomSizeRange) {
+          const roomSizeValue = parseInt(room.roomSize);
+          const minSize = parseInt(roomSizeRange[0]);
+          const maxSize = roomSizeRange.length > 1 ? parseInt(roomSizeRange[1]) : 1000;
+
+          if (roomSizeValue < minSize || roomSizeValue > maxSize) {
+            return false;
+          }
+        }
+      }
+
+      // Total beds filter
+      if (formData.totalBeds !== "Any") {
+        const totalBeds = formData.totalBeds === "4+" ? 4 : parseInt(formData.totalBeds);
+        if (room.bedInfo.totalBeds < totalBeds) {
+          return false;
+        }
+      }
+
+      // If all filters passed, include the room
+      return true;
+    });
+
+    setFilteredRooms(filtered);
+    // Increment the animation key to force re-render with fresh animation states
+    setAnimationKey(prevKey => prevKey + 1);
+  };
+
+  // Function to reset filters
+  const resetFilters = () => {
+    setFilteredRooms(roomsData);
+    setActiveFilters({});
+    // Increment the animation key to force re-render with fresh animation states
+    setAnimationKey(prevKey => prevKey + 1);
+  };
+
+  // Scroll to room listings
+  const scrollToRooms = () => {
+    document.getElementById('room-listings').scrollIntoView({
+      behavior: 'smooth'
+    });
+  };
 
   return (
-    <section className="py-16 px-4 md:px-8 lg:px-16 bg-stone-50">
-      <div className="max-w-7xl mx-auto">
-        {/* Section header */}
-        <div className="text-center mb-16">
-          <p className="font-light text-amber-700 text-sm tracking-wider uppercase mb-2">Luxury Accommodations</p>
-          <h2 className="font-serif text-4xl md:text-5xl text-stone-800 mb-6">Our Exclusive Rooms</h2>
-          <div className="w-20 h-px bg-amber-400 mx-auto mb-6"></div>
-          <p className="text-stone-600 max-w-2xl mx-auto">Experience unparalleled comfort and elegance in our thoughtfully designed spaces, where every detail has been carefully considered for your perfect stay.</p>
+    <>
+      {/* Hero Section */}
+      <PagesHero onClick={scrollToRooms } />
+
+      {/* Room Filter */}
+      <RoomFilter
+        isRoomPage={true}
+        initialFilters={filterFormData}
+        onFiltersApplied={handleFiltersApplied}
+      />
+
+      {/* Room Grid Section */}
+      <section id="room-listings" className="py-16 px-4 md:px-8 lg:px-16 bg-stone-50">
+        <div className="max-w-7xl mx-auto">
+          {/* Section header */}
+          <div className="text-center mb-16">
+            <p className="font-light text-amber-700 text-sm tracking-wider uppercase mb-2">Luxury Accommodations</p>
+            <h2 className="font-serif text-4xl md:text-5xl text-stone-800 mb-6">Our Exclusive Rooms</h2>
+            <div className="w-20 h-px bg-amber-400 mx-auto mb-6"></div>
+            <p className="text-stone-600 max-w-2xl mx-auto">
+              Experience unparalleled comfort and elegance in our thoughtfully designed spaces,
+              where every detail has been carefully considered for your perfect stay.
+            </p>
+          </div>
+
+          {/* Room grid */}
+          {filteredRooms.length > 0 ? (
+            <motion.div
+              key={animationKey} // Key changes force complete re-render
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+              variants={staggerContainer}
+              initial="hidden"
+              animate="visible" // Changed from whileInView to animate
+              viewport={{ once: false }} // Changed from true to false
+            >
+              <AnimatePresence>
+                {filteredRooms.map((room) => (
+                  <motion.div
+                    key={room.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <RoomCard room={room} />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          ) : (
+            <div className="text-center py-16">
+              <p className="text-stone-600 text-lg mb-6">No rooms match your current filters.</p>
+              <button
+                onClick={resetFilters}
+                className="inline-flex items-center bg-amber-700 text-white hover:bg-amber-800 transition-colors duration-300 py-2 px-6 rounded-md"
+              >
+                View All Rooms
+              </button>
+            </div>
+          )}
+
+          {/* Conditional "View All" button - only show if filters are active and not all rooms are showing */}
+          {Object.keys(activeFilters).length > 0 && filteredRooms.length < roomsData.length && filteredRooms.length > 0 && (
+            <div className="text-center mt-12">
+              <p className="text-stone-600 mb-2">
+                Showing {filteredRooms.length} of {roomsData.length} rooms
+              </p>
+              <motion.button
+                onClick={resetFilters}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+                className="inline-flex items-center bg-transparent border-2 border-stone-800 text-stone-800 hover:bg-stone-800 hover:text-white transition-colors duration-300 py-3 px-8 rounded-md font-medium"
+              >
+                View All Rooms
+                <ChevronRight size={18} className="ml-2" />
+              </motion.button>
+            </div>
+          )}
         </div>
-        
-        {/* Room grid */}
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-        >
-          {rooms.map((room) => (
-            <RoomCard key={room.id} room={room} />
-          ))}
-        </motion.div>
-        
-        {/* View all button */}
-        <div className="text-center mt-12">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
-            className="inline-flex items-center bg-transparent border-2 border-stone-800 text-stone-800 hover:bg-stone-800 hover:text-white transition-colors duration-300 py-3 px-8 rounded-md font-medium"
-          >
-            View All Rooms
-            <ChevronRight size={18} className="ml-2" />
-          </motion.button>
-        </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 
-export default RoomGrid;
+export default RoomsGrid;

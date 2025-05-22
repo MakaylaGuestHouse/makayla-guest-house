@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAnimateInView } from '@/hooks/useAnimateInView';
 import { animateVariants, staggerContainer } from '@/lib/constants/animation';
 import { Star, Quote } from "lucide-react";
+import { SectionHeader } from "@/components/common/SectionHeader";
 
 // Testimonial data
 const testimonials = [
@@ -126,7 +127,7 @@ const TestimonialCard = ({ testimonial }) => {
          </div>
 
          {/* Testimonial content */}
-         <p className="text-stone-700 leading-relaxed mb-6 text-lg" style={{
+         <p className="text-stone-700 italic leading-relaxed mb-6 text-lg" style={{
             fontFamily: "'Cormorant Garamond', serif",
             fontWeight: 400,
             letterSpacing: "0.01em",
@@ -197,38 +198,12 @@ export default function Testimonials() {
 
    return (
       <section className="py-24 bg-stone-50 relative overflow-hidden" >
-         {/* Background decorative elements */}
-         <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-stone-100 to-transparent opacity-60"></div>
-         <div className="absolute top-20 right-20 w-64 h-64 rounded-full bg-amber-50 opacity-30 blur-3xl"></div>
-         <div className="absolute bottom-32 left-40 w-96 h-96 rounded-full bg-stone-100 opacity-40 blur-3xl"></div>
-         <div className="absolute bottom-10 right-10 w-32 h-32 rounded-full bg-amber-100 opacity-20 blur-2xl"></div>
-
-         {/* Decorative floating elements */}
-         <div className="absolute top-1/3 left-10 w-6 h-6 rounded-full border border-amber-300 opacity-30"></div>
-         <div className="absolute top-1/4 right-1/4 w-4 h-4 rounded-full border border-amber-400 opacity-20"></div>
-         <div className="absolute bottom-1/4 left-1/3 w-8 h-8 rounded-full border border-stone-300 opacity-20"></div>
-
-         {/* Subtle accent lines */}
-         <div className="absolute top-40 left-0 w-24 h-px bg-gradient-to-r from-amber-400 to-transparent opacity-40"></div>
-         <div className="absolute bottom-60 right-0 w-32 h-px bg-gradient-to-l from-amber-400 to-transparent opacity-40"></div>
-
          <div className="container mx-auto max-w-6xl px-4">
-            {/* Section header */}
-            <motion.div
-               className="text-center mb-20"
-               variants={animateVariants.fadeIn}
-               initial="hidden"
-               animate="visible"
-            >
-               <h2 className="font-light text-stone-400 uppercase tracking-widest mb-3">Testimonials</h2>
-               <h3 className="font-serif text-4xl md:text-5xl text-stone-800 mb-4" >
-                  Guest Experiences
-               </h3>
-               <div className="mx-auto w-24 h-px bg-gradient-to-r from-amber-600 via-amber-400 to-amber-200 mb-6"></div>
-               <p className="text-stone-600 max-w-2xl mx-auto font-light tracking-wide" style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "1.05rem" }}>
-                  Discover what our esteemed guests have to say about their memorable stays with us
-               </p>
-            </motion.div>
+            <SectionHeader
+               title="Testimonials"
+               subTitle="Guest Experiences"
+               description="Discover what our esteemed guests have to say about their memorable stays with us"
+            />
 
             <motion.div
                ref={ref}

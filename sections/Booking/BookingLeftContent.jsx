@@ -4,7 +4,7 @@ import { useAnimateInView } from '@/hooks/useAnimateInView';
 import { animateVariants, staggerContainer } from '@/lib/constants/animation';
 
 export const BookingLeftContent = () => {
-      const { ref, controls } = useAnimateInView();
+   const { ref, controls } = useAnimateInView();
    return (
       <motion.div
          ref={ref}

@@ -2,6 +2,8 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useAnimateInView } from '@/hooks/useAnimateInView';
 import { animateVariants, staggerContainer } from '@/lib/constants/animation';
+import { SectionHeader } from '@/components/common/SectionHeader';
+import { WhatsAppLink } from '@/components/common/WhatsApp';
 
 const FeaturedRoomsSection = () => {
    const { ref: sectionRef, controls: sectionControls } = useAnimateInView(0.1);
@@ -80,11 +82,13 @@ const FeaturedRoomsSection = () => {
                variants={animateVariants.fadeIn}
                className="mb-16 max-w-xl mx-auto text-center"
             >
-               <h2 className="font-light text-stone-400 uppercase tracking-widest mb-3">Featured Accommodations</h2>
-               <h3 className="text-4xl md:text-5xl font-serif text-stone-800 mb-6">Exceptional Spaces for Your Stay</h3>
-               <div className="w-20 h-px bg-amber-400 mx-auto mb-8"></div>
-               <p className="text-stone-600">Discover our meticulously designed rooms and suites, each offering a perfect blend of comfort, elegance, and distinctive character.</p>
             </motion.div>
+
+            <SectionHeader 
+               title="Accommodations"
+               subTitle="Exceptional Spaces for Your Stay"
+               description="Discover our meticulously designed rooms and suites, each offering a perfect blend of comfort, elegance, and distinctive character."
+            />
 
             {/* Filter buttons */}
             <motion.div
@@ -156,7 +160,7 @@ const FeaturedRoomsSection = () => {
                   transition: { delay: 1, duration: 0.6 }
                }
             }}
-            className="mt-24 py-12 bg-stone-50"
+            className="mt-24 py-12 bg-stone-50 w-full max-w-7xl mx-auto"
          >
             <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8">
                <div>
@@ -172,9 +176,7 @@ const FeaturedRoomsSection = () => {
                      </span>
                      +233-595631886
                   </a>
-                  <button className="px-5 py-3 bg-amber-700 text-white hover:bg-amber-800 transition-colors">
-                     Live Chat
-                  </button>
+                  <WhatsAppLink />
                </div>
             </div>
          </motion.div>

@@ -25,7 +25,7 @@ export const Dropdown = ({ label, selected, options, onChange }) => {
 
    return (
       <div className="relative w-full mb-6" ref={dropdownRef}>
-         <label className="block text-stone-600 text-sm mb-2 font-light tracking-wide uppercase">
+         <label className="block text-stone-600 text-sm mb-2 font-light tracking-wide">
             {label}
          </label>
          <div className="relative">

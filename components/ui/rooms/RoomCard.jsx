@@ -3,16 +3,25 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { animateVariants } from '@/lib/constants/animation';
 import { Star, Users, Wifi, Coffee, Wind, ChevronRight, Heart } from 'lucide-react';
+import { useAppRouter } from '@/hooks/useAppRouter';
+import routes from '@/lib/routes';
 
 // Room Card Component
 export const RoomCard = ({ room }) => {
    const [isHovered, setIsHovered] = useState(false);
    const [isFavorite, setIsFavorite] = useState(false);
 
+   const { navigateTo } = useAppRouter();
+
    // Format bed information for display
    const formatBedInfo = () => {
       return room.bedInfo.types.map(bed => `${bed.quantity} ${bed.type} Bed${bed.quantity > 1 ? 's' : ''}`).join(', ');
    };
+
+   const bookNow = (e) => {
+      e.stopPropagation();
+      navigateTo(`${routes.roomDetails(room.id)}/#reserve`)
+   }
 
    return (
       <motion.div
@@ -137,14 +146,16 @@ export const RoomCard = ({ room }) => {
                <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="flex-1 bg-stone-800 hover:bg-amber-700 text-white py-3 px-6 rounded-md transition-colors duration-300 text-sm font-medium tracking-wide"
+                  className="flex-1 bg-stone-800 hover:bg-amber-700 text-white py-3 px-6 rounded-md transition-colors duration-300 text-sm font-medium tracking-wide cursor-pointer"
+                  onClick={bookNow}
                >
                   Book Now
                </motion.button>
                <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.98 }}
-                  className="flex items-center justify-center bg-white border border-stone-200 text-stone-800 py-3 px-4 rounded-md hover:border-amber-400 transition-colors duration-300"
+                  className="flex items-center justify-center bg-white border border-stone-200 text-stone-800 py-3 px-4 rounded-md hover:border-amber-400 transition-colors duration-300 cursor-pointer"
+                  onClick={() => navigateTo(`${routes.roomDetails(room.id)}`)}
                >
                   <span className="text-sm font-medium mr-1">Details</span>
                   <ChevronRight size={16} />

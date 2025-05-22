@@ -15,7 +15,7 @@ export default function Header() {
    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
    // Navigation items
-   const navItems = ["Home", "Rooms", "Amenities", "Gallery", "About", "Contact"];
+   const navItems = ["Home", "Rooms", "Gallery", "About", "Contact"];
 
    // Handle scroll events
    useEffect(() => {

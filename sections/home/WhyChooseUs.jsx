@@ -6,11 +6,12 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { animateVariants } from '@/lib/constants/animation';
 import { useAnimateInView } from '@/hooks/useAnimateInView';
+import { SectionHeader } from '@/components/common/SectionHeader';
 
 // Animated wrapper component that triggers when in view
 const AnimateWhenVisible = ({ children, delay = 0, duration = 0.5, variants }) => {
    const { ref, controls } = useAnimateInView();
-   
+
    return (
       <motion.div
          ref={ref}
@@ -49,19 +50,11 @@ export default function WhyChooseUs() {
          ></motion.div>
 
          {/* Section title */}
-         <div className="container mx-auto px-6 mb-12">
-            <AnimateWhenVisible variants={animateVariants.fadeIn}>
-               <h2 className="text-center font-serif text-lg tracking-widest text-amber-800 relative inline-block">
-                  <span className="relative z-10">WHY CHOOSE US</span>
-                  <motion.span
-                     className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-amber-300/0 via-amber-400 to-amber-300/0"
-                     initial={{ width: 0 }}
-                     animate={{ width: "100%" }}
-                     transition={{ delay: 1, duration: 0.8 }}
-                  ></motion.span>
-               </h2>
-            </AnimateWhenVisible>
-         </div>
+         <SectionHeader
+            title="Why Choose Us"
+            subTitle="Experience the Difference"
+            description="At Makayla Guest House, we prioritize your comfort and satisfaction. Our dedicated team is committed to providing you with an unforgettable experience."
+         />
 
          {/* Main content container */}
          <div className="container mx-auto px-6">
@@ -180,7 +173,7 @@ export default function WhyChooseUs() {
                <div className="space-y-12 pl-0 md:pl-8">
                   <AnimateWhenVisible variants={animateVariants.fadeInRight}>
                      <div>
-                        <h2 className="font-serif text-4xl md:text-5xl font-light text-gray-800 leading-tight mb-4">
+                        <h2 className="font-serif text-2xl md:text-3xl font-light text-gray-800 leading-tight mb-4">
                            Experience the Difference <br />
                            <span className="font-normal">with Every Veloria Moment.</span>
                         </h2>

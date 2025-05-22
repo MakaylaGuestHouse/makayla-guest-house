@@ -23,7 +23,7 @@ export const BookingForm = () => {
          variants={animateVariants.fadeInRight}
          initial="hidden"
          animate="visible"
-         className="w-full lg:w-1/2"
+         className="w-full"
       >
          <div className="bg-white rounded-lg shadow-xl p-8 lg:p-10">
             <div className="mb-8">
@@ -42,7 +42,7 @@ export const BookingForm = () => {
                      icon={<Users size={18} />}
                   />
                   <InputField
-                     label="Email Address"
+                     label="Email"
                      type="email"
                      placeholder="email@example.com"
                      icon={<Mail size={18} />}

@@ -1,31 +1,15 @@
+import { SectionHeader } from '@/components/common/SectionHeader';
 import { useAnimateInView } from '@/hooks/useAnimateInView';
 import { animateVariants } from '@/lib/constants/animation';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
 
 const AboutUsSection = () => {
   const { ref: sectionRef, controls: sectionControls } = useAnimateInView(0.1);
   const { ref: imageRef, controls: imageControls } = useAnimateInView(0.2);
   const { ref: quoteRef, controls: quoteControls } = useAnimateInView(0.3);
-  const { ref: signatureRef, controls: signatureControls } = useAnimateInView(0.4);
-  
-  // Testimonial carousel state
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
-  const testimonials = [
-    {
-      quote: "We don't just create spaces – we craft experiences that resonate with your lifestyle and aspirations.",
-      author: "Emmanuel Owusu",
-      position: "Founder & Creative Director"
-    },
-    {
-      quote: "Luxury isn't excess; it's the perfect balance of elegance, function, and personal expression.",
-      author: "Emmanuel Owusu",
-      position: "Founder & Creative Director"
-    }
-  ];
 
   return (
-    <section className="relative py-24 bg-neutral-50 overflow-hidden">
+    <section className="relative pb-24 bg-neutral-50 overflow-hidden">
       {/* Subtle background pattern */}
       <div className="absolute top-0 left-0 w-full h-full opacity-5">
         <div className="absolute top-0 left-0 w-64 h-64 rounded-full bg-amber-200 blur-3xl -translate-x-1/2 -translate-y-1/2" />
@@ -33,7 +17,6 @@ const AboutUsSection = () => {
       </div>
 
       <div className="container mx-auto px-6 max-w-6xl">
-        {/* Section heading */}
         <motion.div 
           ref={sectionRef}
           initial="hidden"
@@ -41,10 +24,13 @@ const AboutUsSection = () => {
           variants={animateVariants.fadeIn}
           className="mb-16 max-w-xl mx-auto text-center"
         >
-          <h2 className="font-light text-stone-400 uppercase tracking-widest mb-3">About Us</h2>
-          <h3 className="text-4xl md:text-5xl font-serif text-stone-800 mb-6">Where Elegance Meets Innovation</h3>
-          <div className="w-20 h-px bg-amber-400 mx-auto"></div>
         </motion.div>
+
+        <SectionHeader
+          title="Our Story"
+          subTitle="Creating Unforgettable Luxury Experiences"
+          description=""
+        />
 
         {/* Main content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -85,29 +71,6 @@ const AboutUsSection = () => {
               <p className="text-stone-600 leading-relaxed">
                 We believe luxury is personal. It's found in the thoughtful details, the perfect proportions, and the harmonious balance of elements that create not just a beautiful space, but one that tells your unique story. Our award-winning team brings technical precision and artistic vision to every project, whether a complete residence or a singular statement piece.
               </p>
-            </div>
-
-            {/* Testimonial carousel */}
-            <div className="bg-white p-6 border-l-4 border-amber-400 shadow-sm">
-              <p className="text-lg font-serif italic text-stone-700 mb-4">
-                "{testimonials[activeTestimonial].quote}"
-              </p>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium text-stone-800">{testimonials[activeTestimonial].author}</p>
-                  <p className="text-sm text-stone-500">{testimonials[activeTestimonial].position}</p>
-                </div>
-                <div className="flex space-x-2">
-                  {testimonials.map((_, index) => (
-                    <button 
-                      key={index}
-                      onClick={() => setActiveTestimonial(index)}
-                      className={`w-2 h-2 rounded-full ${index === activeTestimonial ? 'bg-amber-400' : 'bg-stone-300'}`}
-                      aria-label={`View testimonial ${index + 1}`}
-                    />
-                  ))}
-                </div>
-              </div>
             </div>
 
           </motion.div>
