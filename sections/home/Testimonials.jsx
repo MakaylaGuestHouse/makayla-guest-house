@@ -215,7 +215,7 @@ export default function Testimonials() {
                {/* Desktop view - 2 testimonials at a time */}
                <div className="hidden md:block relative" style={{ fontFamily: "'Montserrat', sans-serif" }}>
                   <div className="grid grid-cols-2 gap-8 min-h-80">
-                     <AnimatePresence mode="wait">
+                     <AnimatePresence mode="sync">
                         {getVisibleTestimonials().map((testimonial, idx) => (
                            <motion.div
                               key={`desktop-${testimonial.id}-${activeIndex}-${idx}`}
@@ -277,7 +277,7 @@ export default function Testimonials() {
                {/* Mobile view - Single testimonial carousel */}
                <div className="md:hidden" style={{ fontFamily: "'Montserrat', sans-serif" }}>
                   <div className="relative min-h-96">
-                     <AnimatePresence mode="wait">
+                     <AnimatePresence mode="sync">
                         <motion.div
                            key={`mobile-${testimonials[activeIndex].id}-${activeIndex}`}
                            variants={testimonialAnimations}

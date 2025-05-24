@@ -1,3 +1,4 @@
+import { convertImageToBase64 } from "@/utils";
 import { useState } from "react";
 
 // Custom hook for file upload handling
@@ -7,7 +8,7 @@ export const useFileUpload = (maxFileSize = 10) => {
   const [uploadError, setUploadError] = useState(null);
 
   // Handle file selection
-  const handleFileSelect = (selectedFiles) => {
+  const handleFileSelect = async (selectedFiles) => {
     const fileArray = Array.from(selectedFiles);
 
     // Validate file size (in MB)
@@ -25,14 +26,33 @@ export const useFileUpload = (maxFileSize = 10) => {
       return isValidSize;
     });
 
-    // Create preview URLs for images
-    const newFiles = validFiles.map((file) => ({
-      file,
-      name: file.name,
-      size: file.size,
-      type: file.type,
-      preview: URL.createObjectURL(file),
-    }));
+    // Create preview URLs and base64 strings for files
+    const newFiles = await Promise.all(
+      validFiles.map(async (file) => {
+        try {
+          const base64String = await convertImageToBase64(file);
+
+          return {
+            file,
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            preview: URL.createObjectURL(file),
+            base64String,
+          };
+        } catch (error) {
+          console.error(`Error converting ${file.name} to base64:`, error);
+          return {
+            file,
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            preview: URL.createObjectURL(file),
+            base64String: null,
+          };
+        }
+      })
+    );
 
     setFiles((prev) => [...prev, ...newFiles]);
   };

@@ -5,11 +5,37 @@ import { Calendar, Phone, Users, Mail } from 'lucide-react';
 import { Dropdown } from '@/components/ui/forms/DropDown';
 import { InputField } from '@/components/ui/forms/InputField';
 import { DateInput } from '@/components/ui/forms/DateInput';
+import { validateBooking } from '@/utils/validators';
 
 export const BookingForm = () => {
    const [adults, setAdults] = useState('2');
    const [children, setChildren] = useState('0');
    const [roomType, setRoomType] = useState('Deluxe Suite');
+
+   const [formData, setFormData] = useState({
+      fullName: '',
+      email: '',
+      phone: '',
+      checkInDate: '',
+      checkOutDate: ''
+   });
+
+   const [errors, setErrors] = useState({});
+
+   const handleInputChange = (field, value) => {
+      setFormData(prev => ({
+         ...prev,
+         [field]: value
+      }));
+
+      // Clear error when user starts typing
+      if (errors[field]) {
+         setErrors(prev => ({
+            ...prev,
+            [field]: ''
+         }));
+      }
+   };
 
    const roomOptions = [
       'Deluxe Suite',
@@ -17,6 +43,21 @@ export const BookingForm = () => {
       'Executive Suite',
       'Luxury Penthouse'
    ];
+
+   const handleSubmit = () => {
+      if (validateBooking(formData, setErrors)) {
+         console.log('Form Data:', {
+            ...formData,
+            adults,
+            children,
+            roomType
+         });
+         // Handle form submission logic here
+         alert('Booking form submitted successfully!');
+      } else {
+         console.log('Form has errors:', errors);
+      }
+   };
 
    return (
       <motion.div
@@ -40,25 +81,46 @@ export const BookingForm = () => {
                      type="text"
                      placeholder="John Smith"
                      icon={<Users size={18} />}
+                     value={formData.fullName}
+                     onChange={(value) => handleInputChange('fullName', value)}
+                     error={errors.fullName}
                   />
                   <InputField
                      label="Email"
                      type="email"
                      placeholder="email@example.com"
                      icon={<Mail size={18} />}
+                     value={formData.email}
+                     onChange={(value) => handleInputChange('email', value)}
+                     error={errors.email}
                   />
                </div>
 
                <InputField
                   label="Phone Number"
                   type="tel"
-                  placeholder="+233 595 631 886"
+                  placeholder="0595 631 886"
                   icon={<Phone size={18} />}
+                  value={formData.phone}
+                  onChange={(value) => handleInputChange('phone', value)}
+                  error={errors.phone}
                />
 
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <DateInput label="Check-in Date" icon={<Calendar size={18} />} />
-                  <DateInput label="Check-out Date" icon={<Calendar size={18} />} />
+                  <DateInput
+                     label="Check-in Date"
+                     icon={<Calendar size={18} />}
+                     value={formData.checkInDate}
+                     onChange={(value) => handleInputChange('checkInDate', value)}
+                     error={errors.checkInDate}
+                  />
+                  <DateInput
+                     label="Check-out Date"
+                     icon={<Calendar size={18} />}
+                     value={formData.checkOutDate}
+                     onChange={(value) => handleInputChange('checkOutDate', value)}
+                     error={errors.checkOutDate}
+                  />
                </div>
 
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -86,6 +148,7 @@ export const BookingForm = () => {
                <div className="pt-4">
                   <button
                      type="button"
+                     onClick={handleSubmit}
                      className="w-full cursor-pointer bg-stone-800 hover:bg-amber-700 text-white py-4 px-6 rounded-md transition-colors duration-300 font-medium text-center tracking-wide"
                   >
                      Check Availability
@@ -94,6 +157,5 @@ export const BookingForm = () => {
             </div>
          </div>
       </motion.div>
-
    );
 }
