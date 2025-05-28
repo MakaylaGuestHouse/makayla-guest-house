@@ -1,8 +1,8 @@
 "use client"
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Send, Phone, Mail, MapPin, Clock } from "lucide-react";
+import { Send, Phone, Mail, MapPin } from "lucide-react";
 import { useAnimateInView } from "@/hooks/useAnimateInView";
 import { animateVariants, staggerContainer } from "@/lib/constants/animation";
 import LocationSection from "@/sections/Location";
@@ -10,9 +10,9 @@ import { FaPhone } from "react-icons/fa";
 import { SectionHeader } from "../common/SectionHeader";
 import { WhatsAppLink } from "../common/WhatsApp";
 import WorkingHours from "../ui/WorkingHours";
+import { sendEmail } from "@/lib/sendEmail";
 
 // Define additional animation variants
-
 const buttonHoverVariant = {
   initial: { backgroundColor: "#44403c" }, // stone-800
   hover: { backgroundColor: "#b45309" }    // amber-700
@@ -26,21 +26,54 @@ const contactDetails = [
 ];
 
 const ContactPage = () => {
-  const formRef = useRef(null);
   const [formStatus, setFormStatus] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Form data state
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
 
   // Animation hooks
   const contactFormSection = useAnimateInView();
   const contactInfoSection = useAnimateInView();
 
+  // Handle input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  // Reset form
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      email: '',
+      subject: '',
+      message: ''
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    setFormStatus("success");
-    setIsSubmitting(false);
-    formRef.current.reset();
+    try {
+      await sendEmail(formData, '/api/mail/inquiry');
+      setFormStatus("success");
+      resetForm(); // Clear form data
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setFormStatus("error");
+    } finally {
+      setIsSubmitting(false);
+    }
 
     // Reset success message after 5 seconds
     setTimeout(() => {
@@ -50,11 +83,9 @@ const ContactPage = () => {
 
   return (
     <div className="bg-white text-stone-600 ">
-
-
       {/* Contact Form & Information */}
       <section className="py-20 md:py-24 lg:py-32 bg-stone-50 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        {/* // SectionHeader for Contact Us page */}
+        {/* SectionHeader for Contact Us page */}
         <SectionHeader
           title="Contact Us"
           subTitle="We're Here to Assist You"
@@ -76,7 +107,7 @@ const ContactPage = () => {
                 </h2>
                 <div className="w-16 h-px bg-amber-400 mb-8" />
 
-                <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="space-y-6 md:space-y-0 md:flex md:gap-6">
                     <div className="w-full md:w-1/2">
                       <label htmlFor="name" className="block text-sm uppercase tracking-wider font-light mb-2 text-stone-600">
@@ -86,6 +117,8 @@ const ContactPage = () => {
                         type="text"
                         id="name"
                         name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
                         required
                         className="w-full border-b border-stone-300 py-3 px-1 bg-transparent focus:outline-none focus:border-amber-700 transition-colors"
                       />
@@ -98,6 +131,8 @@ const ContactPage = () => {
                         type="email"
                         id="email"
                         name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
                         required
                         className="w-full border-b border-stone-300 py-3 px-1 bg-transparent focus:outline-none focus:border-amber-700 transition-colors"
                       />
@@ -112,6 +147,8 @@ const ContactPage = () => {
                       type="text"
                       id="subject"
                       name="subject"
+                      value={formData.subject}
+                      onChange={handleInputChange}
                       className="w-full border-b border-stone-300 py-3 px-1 bg-transparent focus:outline-none focus:border-amber-700 transition-colors"
                     />
                   </div>
@@ -124,6 +161,8 @@ const ContactPage = () => {
                       id="message"
                       name="message"
                       rows="5"
+                      value={formData.message}
+                      onChange={handleInputChange}
                       required
                       className="w-full border-b border-stone-300 py-3 px-1 bg-transparent focus:outline-none focus:border-amber-700 transition-colors resize-none"
                     ></textarea>
@@ -155,6 +194,16 @@ const ContactPage = () => {
                         className="mt-4 text-green-600"
                       >
                         Your message has been sent successfully. We'll respond shortly.
+                      </motion.p>
+                    )}
+
+                    {formStatus === "error" && (
+                      <motion.p
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mt-4 text-red-600"
+                      >
+                        There was an error sending your message. Please try again.
                       </motion.p>
                     )}
                   </div>

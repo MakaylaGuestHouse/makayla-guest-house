@@ -29,6 +29,7 @@ import { SiteAttraction } from "@/components/ui/SiteAttraction";
 import { SimilarRooms } from "@/components/ui/similarRooms/SimilarRooms";
 
 const room = {
+   _id: "68340fe04c91afa0271611dd",
    id: "deluxe-suite-001",
    name: "Veloria Deluxe Suite",
    roomType: "Suite",
@@ -45,12 +46,10 @@ const room = {
    ],
    pricePerNight: 320,
    roomSize: "42 m²",
-   bedInfo: {
-      totalBeds: 1,
-      types: [{ type: "King", quantity: 1 }],
-      sofaBed: false,
-      extraBedAvailable: false
-   },
+   totalBeds: 1,
+   bedTypes: [{ type: "King", quantity: 1 }],
+   sofaBed: false,
+   extraBedAvailable: false,
    maxGuests: 3,
    maxAdults: 2,
    maxChildren: 1,
@@ -363,9 +362,9 @@ const RoomDetails = () => {
                         <div className="bg-stone-50 p-4 rounded-xl border border-stone-100 transition-all hover:border-amber-200 hover:shadow-sm">
                            <h3 className="text-xs font-light tracking-wide uppercase text-stone-400 mb-2">Bed Type</h3>
                            <p className="text-stone-800 font-medium text-lg">
-                              {room.bedInfo.types.map((bed, i) => (
+                              {room.bedTypes.map((bed, i) => (
                                  <span key={i}>
-                                    {bed.quantity} {bed.type} {i < room.bedInfo.types.length - 1 ? ' & ' : ''}
+                                    {bed.quantity} {bed.type} {i < room.bedTypes.length - 1 ? ' & ' : ''}
                                  </span>
                               ))}
                            </p>
@@ -545,7 +544,7 @@ const RoomDetails = () => {
                            <h3 className="font-serif text-xl text-stone-800 font-medium">Book This Room</h3>
                         </div>
                         <div className="p-6">
-                           <BookingForm />
+                           <BookingForm roomId={room?._id} />
                         </div>
                      </div>
 

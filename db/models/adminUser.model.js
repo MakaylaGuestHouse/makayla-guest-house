@@ -18,6 +18,7 @@ const adminUserSchema = new Schema({
     enum: ["admin", "editor"],
     default: "editor",
   },
+  isSuperAdmin: { type: Boolean, default: false },
   isActive: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now },
 });

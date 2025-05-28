@@ -21,7 +21,7 @@ export default function BookingSection() {
             <BookingLeftContent />
 
             {/* Right Form */}
-            <div className='flex w-full md:w-1/2'>
+            <div className='flex w-full lg:w-1/2'>
                <BookingForm />
             </div>
          </div>

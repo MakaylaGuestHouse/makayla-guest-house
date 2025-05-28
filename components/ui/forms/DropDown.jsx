@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-export const Dropdown = ({ label, selected, options, onChange }) => {
+export const Dropdown = ({ label, selected, options, error, onChange }) => {
    const [isOpen, setIsOpen] = useState(false);
    const dropdownRef = useRef(null);
 
@@ -69,6 +69,9 @@ export const Dropdown = ({ label, selected, options, onChange }) => {
                </div>
             )}
          </div>
+         {error && (
+            <p className="text-red-500 text-xs mt-1 font-light">{error}</p>
+         )}
       </div>
    );
 };

@@ -20,15 +20,15 @@ export const validateBooking = (formData, setErrors) => {
   }
 
   // Ghana phone number validation (10 digits)
-  if (!formData.phone.trim()) {
-    newErrors.phone = "Phone number is required";
+  if (!formData.phoneNumber.trim()) {
+    newErrors.phoneNumber = "Phone number is required";
   } else {
     // Remove all non-digits
-    const phoneDigits = formData.phone.replace(/\D/g, "");
+    const phoneDigits = formData.phoneNumber.replace(/\D/g, "");
     if (phoneDigits?.length !== 10) {
-      newErrors.phone = "Phone number must be exactly 10 digits";
+      newErrors.phoneNumber = "Phone number must be exactly 10 digits";
     } else if (!phoneDigits.startsWith("0")) {
-      newErrors.phone = "Ghana phone numbers should start with 0";
+      newErrors.phoneNumber = "Ghana phone numbers should start with 0";
     }
   }
 
@@ -65,11 +65,33 @@ export const validateBooking = (formData, setErrors) => {
     }
   }
 
+  // Adults validation
+  if (!formData.adults || parseInt(formData.adults) <= 0) {
+    newErrors.adults = "Number of adults is required and must be at least 1";
+  }
+
+  // Children validation
+  if (
+    formData.children === undefined ||
+    formData.children === null ||
+    formData.children === ""
+  ) {
+    newErrors.children =
+      "Number of children is required (use 0 if no children)";
+  } else if (parseInt(formData.children) < 0) {
+    newErrors.children = "Number of children cannot be negative";
+  }
+
+  // Room Type validation
+  if (!formData.roomType || !formData.roomType.trim()) {
+    newErrors.roomType = "Room type is required";
+  }
+
   setErrors(newErrors);
   return Object.keys(newErrors)?.length === 0;
 };
 
-export const validateRoom = (formData ) => {
+export const validateRoom = (formData) => {
   const errors = {};
 
   // Basic Information Validation
@@ -133,6 +155,9 @@ export const validateRoom = (formData ) => {
     errors.maxGuests = "Maximum guests is required";
   }
 
+  if (!formData.maxChildren || maxChildren <= 0) {
+    errors.maxChildren = "Maximum children is required";
+  }
   if (!formData.maxAdults || maxAdults <= 0) {
     errors.maxAdults = "Maximum adults is required";
   }
@@ -158,14 +183,20 @@ export const validateRoom = (formData ) => {
   const validAmenities = formData.amenities.filter(
     (amenity) => amenity.trim() !== ""
   );
+
   if (validAmenities?.length === 0) {
     errors.amenities = "At least one amenity is required";
   }
 
-  const validTags = formData.tags.filter((tag) => tag.trim() !== "");
-  if (validTags?.length === 0) {
-    errors.tags = "At least one tag is required";
+  // Images Validation
+  if (!formData.images || formData.images.length === 0) {
+    errors.images = "At least one image is required";
   }
+
+  // const validTags = formData.tags.filter((tag) => tag.trim() !== "");
+  // if (validTags?.length === 0) {
+  //   errors.tags = "At least one tag is required";
+  // }
 
   return {
     isValid: Object.keys(errors)?.length === 0,
@@ -195,4 +226,69 @@ export const validateBedConfiguration = (totalBeds, bedTypes) => {
     exceedsTotal: configured > total,
     remaining: Math.max(0, total - configured),
   };
+};
+
+export const validateSignInForm = (formData) => {
+  const errors = {};
+
+  if (!formData.email) {
+    errors.email = "Email is required";
+  } else if (
+    !/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(formData.email)
+  ) {
+    errors.email = "Please enter a valid email address";
+  }
+
+  if (!formData.password) {
+    errors.password = "Password is required";
+  } else if (formData.password.length < 6) {
+    errors.password = "Password must be at least 6 characters";
+  }
+
+  return errors;
+};
+
+// Form validation function
+export const validateSignUpForm = (formData) => {
+  const errors = {};
+
+  if (!formData.firstName) {
+    errors.firstName = "First name is required";
+  } else if (formData.firstName.length < 2) {
+    errors.firstName = "First name must be at least 2 characters";
+  }
+
+  if (!formData.lastName) {
+    errors.lastName = "Last name is required";
+  } else if (formData.lastName.length < 2) {
+    errors.lastName = "Last name must be at least 2 characters";
+  }
+
+  if (!formData.email) {
+    errors.email = "Email is required";
+  } else if (
+    !/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(formData.email)
+  ) {
+    errors.email = "Please enter a valid email address";
+  }
+
+  if (!formData.password) {
+    errors.password = "Password is required";
+  } else if (formData.password.length < 8) {
+    errors.password = "Password must be at least 8 characters";
+  } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
+    errors.password = "Password must contain uppercase, lowercase, and number";
+  }
+
+  if (!formData.confirmPassword) {
+    errors.confirmPassword = "Please confirm your password";
+  } else if (formData.password !== formData.confirmPassword) {
+    errors.confirmPassword = "Passwords do not match";
+  }
+
+  if (!formData.role || formData.role === "Select Role") {
+    errors.role = "Please select a role";
+  }
+
+  return errors;
 };

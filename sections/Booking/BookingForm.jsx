@@ -6,16 +6,18 @@ import { Dropdown } from '@/components/ui/forms/DropDown';
 import { InputField } from '@/components/ui/forms/InputField';
 import { DateInput } from '@/components/ui/forms/DateInput';
 import { validateBooking } from '@/utils/validators';
+import { createBooking } from '@/server/booking.action';
+import { sendEmail } from '@/lib/sendEmail';
 
-export const BookingForm = () => {
-   const [adults, setAdults] = useState('2');
-   const [children, setChildren] = useState('0');
-   const [roomType, setRoomType] = useState('Deluxe Suite');
+export const BookingForm = ({ roomId }) => {
+   const [adults, setAdults] = useState('');
+   const [children, setChildren] = useState('');
+   const [roomType, setRoomType] = useState('');
 
    const [formData, setFormData] = useState({
       fullName: '',
       email: '',
-      phone: '',
+      phoneNumber: '',
       checkInDate: '',
       checkOutDate: ''
    });
@@ -44,16 +46,19 @@ export const BookingForm = () => {
       'Luxury Penthouse'
    ];
 
-   const handleSubmit = () => {
-      if (validateBooking(formData, setErrors)) {
-         console.log('Form Data:', {
-            ...formData,
-            adults,
-            children,
-            roomType
-         });
-         // Handle form submission logic here
-         alert('Booking form submitted successfully!');
+   const handleSubmit = async () => {
+      const newFormData = {
+         ...formData,
+         adults,
+         children,
+         roomType,
+         roomId: roomId ?? null
+      };
+
+      
+      if (validateBooking(newFormData, setErrors)) {
+         await sendEmail(newFormData, '/api/mail/booking');
+         // await createBooking(newnewFormData, roomId);
       } else {
          console.log('Form has errors:', errors);
       }
@@ -101,9 +106,9 @@ export const BookingForm = () => {
                   type="tel"
                   placeholder="0595 631 886"
                   icon={<Phone size={18} />}
-                  value={formData.phone}
-                  onChange={(value) => handleInputChange('phone', value)}
-                  error={errors.phone}
+                  value={formData.phoneNumber}
+                  onChange={(value) => handleInputChange('phoneNumber', value)}
+                  error={errors.phoneNumber}
                />
 
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -129,12 +134,14 @@ export const BookingForm = () => {
                      selected={adults}
                      options={['1', '2', '3', '4', '5']}
                      onChange={setAdults}
+                     error={errors.adults}
                   />
                   <Dropdown
                      label="Number of Children"
                      selected={children}
                      options={['0', '1', '2', '3', '4']}
                      onChange={setChildren}
+                     error={errors.children}
                   />
                </div>
 
@@ -143,6 +150,7 @@ export const BookingForm = () => {
                   selected={roomType}
                   options={roomOptions}
                   onChange={setRoomType}
+                  error={errors.roomType}
                />
 
                <div className="pt-4">

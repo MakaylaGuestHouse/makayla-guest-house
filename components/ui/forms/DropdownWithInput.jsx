@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 export const DropdownWithInput = ({
    icon,
    label,
+   error,
    options,
    selected,
    onChange,
@@ -43,22 +44,23 @@ export const DropdownWithInput = ({
    }, []);
 
    // Show all options when input is empty, otherwise filter
-   const filteredOptions = inputValue.trim() === '' 
-      ? options 
+   const filteredOptions = inputValue.trim() === ''
+      ? options
       : options.filter((opt) =>
-           opt.toLowerCase().includes(inputValue.toLowerCase())
-        );
+         opt.toLowerCase().includes(inputValue.toLowerCase())
+      );
 
    return (
       <div ref={dropdownRef} className="relative">
          <InputField
-            label={label}
             type="text"
-            placeholder={placeholder}
+            icon={icon}
+            error={error}
+            label={label}
             value={inputValue}
+            placeholder={placeholder}
             onChange={handleInputChange}
             onFocus={handleInputFocus}
-            icon={icon}
          />
 
          {isDropdownVisible && filteredOptions.length > 0 && (

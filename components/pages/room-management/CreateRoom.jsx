@@ -23,34 +23,15 @@ import {
 } from 'lucide-react';
 import { validateRoom } from '@/utils/validators';
 import { uploadImageToCloud } from '@/lib/uploadImageToCloud';
+import { deleteCloudinaryImg } from '@/server/cloudinary.action';
+import { ROOM_INITIAL_VALUES } from '@/lib/constants/initialValues';
+import { amenityOptions, bathroomOptions, bedQuantityOptions, bedTypeOptions, guestChildOptions, guestOptions, housekeepingOptions, ratingOptions, roomNameOptions, roomSizeOptions, roomTypeOptions, tagOptions } from './constants';
+import { createRoom } from '@/server/rooms.action';
 
 const CreateRoomPage = () => {
    const { files, uploadError, handleFileSelect, removeFile, clearFiles } = useFileUpload(8);
 
-   const [formData, setFormData] = useState({
-      name: '',
-      roomType: '',
-      roomNumber: '',
-      description: '',
-      images: [],
-      price: '',
-      roomSize: '',
-      totalBeds: '',
-      bedTypes: [{ type: '', quantity: '' }],
-      sofaBed: false,
-      extraBedAvailable: false,
-      sameConfigForRemainingBeds: false,
-      maxGuests: '',
-      maxAdults: '',
-      maxChildren: '',
-      hasBalcony: false,
-      bathroomType: '',
-      rating: '',
-      tags: [""],
-      amenities: [""],
-      isSmokingAllowed: false,
-      housekeepingFrequency: '',
-   });
+   const [formData, setFormData] = useState(ROOM_INITIAL_VALUES);
 
    const [errors, setErrors] = useState({});
    const [isSubmitting, setIsSubmitting] = useState(false);
@@ -164,26 +145,32 @@ const CreateRoomPage = () => {
       }
    };
 
-   const deleteImgFromCloud = async (imageId, index) => {
-      // Implement image deletion logic here
-      console.log(`Delete image with ID: ${imageId} at index ${index}`);
-      // After deletion, update formData.images to remove the deleted image
+   const deleteImgFromCloud = async (file, index) => {
+      // Find the image in formData that matches the file name
+      const foundImage = formData.images.find((image) => image.originalName === file.name);
 
-      removeFile(index); // Remove from local state
+      if (foundImage) {
+         await deleteCloudinaryImg(foundImage.image_id);
 
-      setFormData(prev => ({
-         ...prev,
-         images: prev.images.filter((image) => image.img_id !== imageId)
-      }));
+         // Remove from local state
+         removeFile(index);
+
+         // Update formData.images to remove the found image
+         setFormData(prev => ({
+            ...prev,
+            images: prev.images.filter((image) => image.originalName !== file.name)
+         }));
+      } else {
+         removeFile(index);
+      }
    };
 
+
+   console.log(formData);
+
+
    const handleSubmit = async () => {
-      const newFormData = { ...formData, images: files };
-      console.log(newFormData, 1)
-
-      const validation = validateRoom(newFormData);
-
-      console.log(validateRoom(newFormData))
+      const validation = validateRoom(formData);
 
       if (!validation.isValid) {
          setErrors(validation.errors);
@@ -193,18 +180,10 @@ const CreateRoomPage = () => {
       setIsSubmitting(true);
 
       try {
-         // Upload images to cloud
-         const imageFiles = files.map(f => f.file);
-         // const uploadedImages = await uploadImageToCloud(imageFiles);
-
-         const roomData = {
-            ...formData,
-            images: imageFiles
-            // images: uploadedImages
-         };
-
-         console.log('Room Data:', roomData);
+         console.log('Room Data:', formData);
          // Handle actual submission here
+
+         await createRoom(formData)
 
       } catch (error) {
          console.error('Submission error:', error);
@@ -213,46 +192,6 @@ const CreateRoomPage = () => {
          setIsSubmitting(false);
       }
    };
-
-   const roomTypeOptions = [
-      'Standard Room', 'Deluxe Room', 'Premium Suite', 'Executive Suite',
-      'Presidential Suite', 'Family Room', 'Studio Apartment'
-   ];
-
-   const roomSizeOptions = [
-      '200 sq ft', '300 sq ft', '400 sq ft', '500 sq ft', '600 sq ft', '700 sq ft', '800+ sq ft'
-   ];
-
-   const roomNameOptions = [
-      'Ocean View Suite', 'Garden View Room', 'City View Deluxe', 'Penthouse Suite',
-      'Honeymoon Suite', 'Family Room', 'Executive Room', 'Standard Room'
-   ];
-
-   const bathroomOptions = [
-      'Private Bathroom', 'Shared Bathroom', 'En-suite', 'Half Bath'
-   ];
-
-   const housekeepingOptions = [
-      'Daily', 'Every 2 Days', 'Weekly', 'Upon Request'
-   ];
-
-   const amenityOptions = [
-      'WiFi', 'Air Conditioning', 'Smart TV', 'Mini Bar', 'Coffee Machine',
-      'Safe', 'Hairdryer', 'Iron', 'Balcony', 'Ocean View', 'City View'
-   ];
-
-   const tagOptions = [
-      'Ocean View', 'Pet Friendly', 'Business Center', 'Romantic', 'Family Friendly',
-      'Accessible', 'Quiet', 'Modern', 'Luxury', 'Budget Friendly'
-   ];
-
-   const guestOptions = ['1', '2', '3', '4', '5', '6', '7', '8'];
-   const bedQuantityOptions = ['1', '2', '3', '4'];
-   const ratingOptions = ['1', '2', '3', '4', '5'];
-
-   const bedTypeOptions = [
-      'Single Bed', 'Double Bed', 'Queen Bed', 'King Bed', 'Bunk Bed'
-   ];
 
    const totalBeds = parseInt(formData.totalBeds) || 0;
    const showSameConfigToggle = totalBeds > 1 && formData.bedTypes[0]?.type && formData.bedTypes[0]?.quantity;
@@ -303,6 +242,7 @@ const CreateRoomPage = () => {
                            onChange={(value) => handleInputChange('name', value)}
                            placeholder="Enter custom room name"
                            icon={<Home size={18} />}
+                           error={errors.name}
                         />
 
                         <InputField
@@ -321,6 +261,7 @@ const CreateRoomPage = () => {
                            label="Room Type"
                            selected={formData.roomType}
                            options={roomTypeOptions}
+                           error={errors.roomType}
                            onChange={(value) => handleInputChange('roomType', value)}
                         />
 
@@ -417,7 +358,7 @@ const CreateRoomPage = () => {
                                     />
                                     <button
                                        type="button"
-                                       onClick={() => removeFile(index)}
+                                       onClick={() => deleteImgFromCloud(file, index)}
                                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 cursor-pointer hover:bg-red-600 transition-colors"
                                     >
                                        <X size={14} />
@@ -471,6 +412,7 @@ const CreateRoomPage = () => {
                            onChange={(value) => handleInputChange('roomSize', value)}
                            placeholder="Enter custom size"
                            icon={<Maximize size={18} />}
+                           error={errors.roomSize}
                         />
 
                         <Dropdown
@@ -478,21 +420,9 @@ const CreateRoomPage = () => {
                            selected={formData.totalBeds}
                            options={bedQuantityOptions}
                            onChange={(value) => handleInputChange('totalBeds', value)}
-                        />
-
-                        <Dropdown
-                           label="Room Rating"
-                           selected={formData.rating}
-                           options={ratingOptions}
-                           onChange={(value) => handleInputChange('rating', value)}
+                           error={errors.totalBeds}
                         />
                      </div>
-
-                     {errors.bedConfiguration && (
-                        <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-                           {errors.bedConfiguration}
-                        </div>
-                     )}
 
                      {/* Bed Types */}
                      <div className="space-y-4">
@@ -528,7 +458,7 @@ const CreateRoomPage = () => {
                         )}
 
                         {formData.bedTypes.map((bed, index) => (
-                           <div key={index} className="flex items-end gap-4 p-4 bg-stone-50 rounded-lg">
+                           <div key={index} className="flex items-center gap-4 p-4 bg-stone-50 rounded-lg">
                               <div className="flex-1">
                                  <Dropdown
                                     label="Bed Type"
@@ -549,14 +479,34 @@ const CreateRoomPage = () => {
                                  <button
                                     type="button"
                                     onClick={() => removeArrayItem('bedTypes', index)}
-                                    className="mb-1 p-2 text-red-500 hover:bg-red-100 rounded-lg transition-colors cursor-pointer"
+                                    className=" p-2 text-red-500 bg-red-100 rounded-lg transition-colors cursor-pointer"
                                  >
                                     <X size={16} />
                                  </button>
                               )}
                            </div>
                         ))}
+
+                        {errors.bedTypes && (
+                           <div className="-mt-10 mb-6 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                              {errors.bedTypes}
+                           </div>
+                        )}
+
+                        {errors.bedConfiguration && (
+                           <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                              {errors.bedConfiguration}
+                           </div>
+                        )}
                      </div>
+
+                     <Dropdown
+                        label="Room Rating"
+                        selected={formData.rating}
+                        options={ratingOptions}
+                        error={errors.roomRating}
+                        onChange={(value) => handleInputChange('rating', value)}
+                     />
 
                      {/* Bed Options */}
                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -612,6 +562,7 @@ const CreateRoomPage = () => {
                            label="Maximum Guests"
                            selected={formData.maxGuests}
                            options={guestOptions}
+                           error={errors.maxGuests}
                            onChange={(value) => handleInputChange('maxGuests', value)}
                         />
 
@@ -619,16 +570,23 @@ const CreateRoomPage = () => {
                            label="Maximum Adults"
                            selected={formData.maxAdults}
                            options={guestOptions}
+                           error={errors.maxAdults}
                            onChange={(value) => handleInputChange('maxAdults', value)}
                         />
 
                         <Dropdown
                            label="Maximum Children"
                            selected={formData.maxChildren}
-                           options={guestOptions}
+                           options={guestChildOptions}
+                           error={errors.maxChildren}
                            onChange={(value) => handleInputChange('maxChildren', value)}
                         />
                      </div>
+                     {errors.guestCapacity && (
+                        <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                           {errors.guestCapacity}
+                        </div>
+                     )}
                   </div>
                </motion.div>
 
@@ -651,6 +609,7 @@ const CreateRoomPage = () => {
                            label="Bathroom Type"
                            selected={formData.bathroomType}
                            options={bathroomOptions}
+                           error={errors.bathroomType}
                            onChange={(value) => handleInputChange('bathroomType', value)}
                         />
 
@@ -658,6 +617,7 @@ const CreateRoomPage = () => {
                            label="Housekeeping Frequency"
                            selected={formData.housekeepingFrequency}
                            options={housekeepingOptions}
+                           error={errors.housekeepingFrequency}
                            onChange={(value) => handleInputChange('housekeepingFrequency', value)}
                         />
                      </div>
@@ -721,6 +681,7 @@ const CreateRoomPage = () => {
                                     onChange={(value) => handleArrayChange('amenities', index, value)}
                                     placeholder="e.g., WiFi, Air Conditioning, Smart TV..."
                                     icon={<Wifi size={18} />}
+                                    error={errors.amenities}
                                  />
                               </div>
                               {formData.amenities.length > 1 && (
@@ -737,7 +698,7 @@ const CreateRoomPage = () => {
                      </div>
 
                      {/* Tags */}
-                     <div className="space-y-4">
+                     {/* <div className="space-y-4">
                         <div className="flex items-center justify-between">
                            <label className="block text-sm font-medium text-stone-700">
                               Room Tags
@@ -775,7 +736,7 @@ const CreateRoomPage = () => {
                               )}
                            </div>
                         ))}
-                     </div>
+                     </div> */}
                   </div>
                </motion.div>
 

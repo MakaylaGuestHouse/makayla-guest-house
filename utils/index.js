@@ -40,17 +40,6 @@ export const validateUser = (userData, confirmPassword) => {
     return null; // If no errors are found, return null indicating successful validation.
 }
 
-export const authorizedUsers = ['admin', 'creator', 'editor', 'moderator']
-export const isUserAuthorized = (userRoles) => {
-    // Ensure userType is an array
-    if (!Array.isArray(userRoles)) {
-        userRoles = [userRoles];
-    }
-
-    // Check if the user has at least one authorized userType
-    return userRoles.some(role => authorizedUsers.includes(role));
-};
-
 const MAX_FILE_SIZE = 99 * 1024; // 99KB in bytes
 export const isFileSizeValid = (size) => {
     if (size > MAX_FILE_SIZE) {
