@@ -16,11 +16,6 @@ import {
 } from 'lucide-react';
 import useAuth from '@/hooks/useAuth';
 
-const fetchData = async ({ type }) => {
-   // This function would fetch real data from your API
-   return [];
-};
-
 const InquiryCard = ({ inquiry, onView }) => {
    const [isExpanded, setIsExpanded] = useState(false);
 
@@ -181,7 +176,6 @@ const Inquiries = ({ inquiries }) => {
 
    const handleView = (inquiry) => {
       // Show detailed view or open inquiry in modal
-      console.log('View inquiry details:', inquiry);
    };
 
    if (loading) {

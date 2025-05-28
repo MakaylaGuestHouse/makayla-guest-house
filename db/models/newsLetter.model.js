@@ -1,7 +1,7 @@
 import { Schema, model, models } from "mongoose";
 
 const newsLetterSchema = new Schema({
-  eamil: { type: String, required: true },
+  email: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
 });
 

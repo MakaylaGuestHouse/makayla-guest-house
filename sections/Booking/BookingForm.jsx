@@ -55,7 +55,7 @@ export const BookingForm = ({ roomId }) => {
          roomId: roomId ?? null
       };
 
-      
+
       if (validateBooking(newFormData, setErrors)) {
          await sendEmail(newFormData, '/api/mail/booking');
          // await createBooking(newnewFormData, roomId);

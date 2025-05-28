@@ -65,8 +65,6 @@ export default function SignUpPage() {
 
       const { user } = JSON.parse(authData);
 
-      console.log("auth data", authData);
-      console.log(user, "json user", user.role, user.isSuperAdmin);
       if ((user.role !== 'admin') || !user.isSuperAdmin) {
         setAuthError('Only admins can create new users');
         setIsLoading(false);

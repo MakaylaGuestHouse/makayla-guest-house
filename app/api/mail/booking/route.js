@@ -1,6 +1,13 @@
-import { APP_EMAIL, APP_HOUSE_ADDRESS, APP_LOGO, APP_NAME, APP_PHONE_NUMBER } from "@/lib/constants";
+import {
+  APP_EMAIL,
+  APP_HOUSE_ADDRESS,
+  APP_LOGO,
+  APP_NAME,
+  APP_PHONE_NUMBER,
+} from "@/lib/constants";
 import { guestHouseEmailTemplate } from "@/lib/emailTemplates";
 import { createBooking, fetchBooking } from "@/server/booking.action";
+import { fetchRoom } from "@/server/rooms.action";
 import { handleError } from "@/utils";
 import { logger } from "@/utils/log";
 import nodemailer from "nodemailer";
@@ -8,7 +15,6 @@ import nodemailer from "nodemailer";
 export const POST = async (request) => {
   try {
     const { data: bookingData } = await request.json();
-    console.log("Booking data received:", bookingData);
 
     // Create the booking first
     const bookingResult = await createBooking(bookingData, bookingData.roomId);
@@ -19,12 +25,12 @@ export const POST = async (request) => {
       });
     }
 
-    const booking = bookingData;;
+    const booking = bookingData;
     let room = null;
 
     // Fetch room details if roomId exists
     if (booking.roomId) {
-      const roomResult = await fetchBooking(booking.roomId);
+      const roomResult = await fetchRoom(booking.roomId);
       if (roomResult && !roomResult.error) {
         room = roomResult.room || roomResult;
       }

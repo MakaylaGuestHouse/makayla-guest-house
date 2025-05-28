@@ -165,10 +165,6 @@ const CreateRoomPage = () => {
       }
    };
 
-
-   console.log(formData);
-
-
    const handleSubmit = async () => {
       const validation = validateRoom(formData);
 
@@ -180,8 +176,6 @@ const CreateRoomPage = () => {
       setIsSubmitting(true);
 
       try {
-         console.log('Room Data:', formData);
-         // Handle actual submission here
 
          await createRoom(formData)
 

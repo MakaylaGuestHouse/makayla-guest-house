@@ -5,7 +5,6 @@ import React from 'react'
 const page = async () => {
    const inquiries = await fetchInquiries({ query: '', limit: 100, page: 1 });
 
-   console.log(inquiries);
    return (
       <div><Inquiries inquiries={inquiries.data} /></div>
    )

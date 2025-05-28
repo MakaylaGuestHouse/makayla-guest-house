@@ -15,11 +15,6 @@ import { animateVariants, staggerContainer } from '@/lib/constants/animation'; i
    MapPin
 } from 'lucide-react';
 
-const fetchData = async ({ type }) => {
-   // This function would fetch real data from your API
-   return [];
-};
-
 const BookingCard = ({ booking, onView }) => {
    const [isExpanded, setIsExpanded] = useState(false);
 
@@ -62,7 +57,7 @@ const BookingCard = ({ booking, onView }) => {
             <div className="flex items-start justify-between mb-4">
                <div className="flex-1">
                   <h3 className="text-xl font-serif text-stone-800 mb-2">{booking.fullName}</h3>
-                  <div className="flex items-center gap-4 text-sm text-stone-600 mb-2">
+                  <div className="flex items-center gap-4 text-sm text-stone-900 mb-2">
                      <span className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
                         {booking.checkInDate ? new Date(booking.checkInDate).toLocaleDateString() : 'Check-in date'}
@@ -134,35 +129,35 @@ const BookingCard = ({ booking, onView }) => {
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                         <div className="flex items-center gap-2">
                            <Mail className="w-4 h-4 text-stone-500" />
-                           <span className="text-stone-600">{booking.email}</span>
+                           <span className="text-stone-900">{booking.email}</span>
                         </div>
-                        <div className="flex items-center gap-2">
+                        <a href={`tel:${booking.phoneNumber}`} className="flex items-center gap-2">
                            <Phone className="w-4 h-4 text-stone-500" />
-                           <span className="text-stone-600">{booking.phoneNumber}</span>
-                        </div>
+                           <span className="text-stone-900">{booking.phoneNumber}</span>
+                        </a>
                      </div>
                   </div>
 
                   <div>
                      <h4 className="font-semibold text-stone-800 mb-2">Booking Details</h4>
                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                        <div>
-                           <span className="text-stone-600">Check-in:</span> {booking.checkInDate ? new Date(booking.checkInDate).toLocaleDateString() : 'Not set'}
+                        <div className="text-stone-900">
+                           <span className="text-stone-900">Check-in:</span> {booking.checkInDate ? new Date(booking.checkInDate).toLocaleDateString() : 'Not set'}
                         </div>
-                        <div>
-                           <span className="text-stone-600">Check-out:</span> {booking.checkOutDate ? new Date(booking.checkOutDate).toLocaleDateString() : 'Not set'}
+                        <div className="text-stone-900">
+                           <span className="text-stone-900">Check-out:</span> {booking.checkOutDate ? new Date(booking.checkOutDate).toLocaleDateString() : 'Not set'}
                         </div>
-                        <div>
-                           <span className="text-stone-600">Adults:</span> {booking.adults}
+                        <div className="text-stone-900">
+                           <span className="text-stone-900">Adults:</span> {booking.adults}
                         </div>
-                        <div>
-                           <span className="text-stone-600">Children:</span> {booking.children}
+                        <div className="text-stone-900">
+                           <span className="text-stone-900">Children:</span> {booking.children}
                         </div>
-                        <div>
-                           <span className="text-stone-600">Total Nights:</span> {booking.totalNights}
+                        <div className="text-stone-900">
+                           <span className="text-stone-900">Total Nights:</span> {booking.totalNights}
                         </div>
-                        <div>
-                           <span className="text-stone-600">Room Type:</span> {booking.roomType}
+                        <div className="text-stone-900">
+                           <span className="text-stone-900">Room Type:</span> {booking.roomType}
                         </div>
                      </div>
                   </div>
@@ -170,7 +165,7 @@ const BookingCard = ({ booking, onView }) => {
                   {booking.specialRequests && (
                      <div>
                         <h4 className="font-semibold text-stone-800 mb-2">Special Requests</h4>
-                        <p className="text-sm text-stone-600 leading-relaxed">{booking.specialRequests}</p>
+                        <p className="text-sm text-stone-900 leading-relaxed">{booking.specialRequests}</p>
                      </div>
                   )}
 
@@ -198,16 +193,7 @@ const Bookings = ({ bookings }) => {
 
    const handleView = (booking) => {
       // Show detailed view or navigate to booking details
-      console.log('View booking details:', booking);
    };
-
-   // if (loading) {
-   //    return (
-   //       <div className="min-h-screen bg-stone-50 p-4 flex items-center justify-center">
-   //          <div className="text-stone-600">Loading bookings?...</div>
-   //       </div>
-   //    );
-   // }
 
    return (
       <div className="min-h-screen bg-stone-50 p-4 md:p-6">
@@ -224,7 +210,7 @@ const Bookings = ({ bookings }) => {
                   <Calendar className="w-8 h-8 text-amber-700" />
                   <h1 className="text-4xl font-serif text-stone-800">Bookings Management</h1>
                </div>
-               <p className="text-stone-600">View and manage all guest bookings</p>
+               <p className="text-stone-900">View and manage all guest bookings</p>
             </motion.div>
 
             {/* Stats */}
@@ -237,7 +223,7 @@ const Bookings = ({ bookings }) => {
                         </div>
                         <div>
                            <p className="text-2xl font-bold text-stone-800">{bookings?.length}</p>
-                           <p className="text-sm text-stone-600">Total Bookings</p>
+                           <p className="text-sm text-stone-900">Total Bookings</p>
                         </div>
                      </div>
                   </div>
@@ -250,7 +236,7 @@ const Bookings = ({ bookings }) => {
                            <p className="text-2xl font-bold text-stone-800">
                               {bookings?.filter(b => b.bookingStatus === 'confirmed').length}
                            </p>
-                           <p className="text-sm text-stone-600">Confirmed</p>
+                           <p className="text-sm text-stone-900">Confirmed</p>
                         </div>
                      </div>
                   </div>
@@ -263,7 +249,7 @@ const Bookings = ({ bookings }) => {
                            <p className="text-2xl font-bold text-stone-800">
                               {bookings?.filter(b => b.bookingStatus === 'pending').length}
                            </p>
-                           <p className="text-sm text-stone-600">Pending</p>
+                           <p className="text-sm text-stone-900">Pending</p>
                         </div>
                      </div>
                   </div>
@@ -276,7 +262,7 @@ const Bookings = ({ bookings }) => {
                            <p className="text-2xl font-bold text-stone-800">
                               {bookings?.filter(b => b.paymentStatus === 'paid').length}
                            </p>
-                           <p className="text-sm text-stone-600">Paid</p>
+                           <p className="text-sm text-stone-900">Paid</p>
                         </div>
                      </div>
                   </div>
@@ -299,7 +285,7 @@ const Bookings = ({ bookings }) => {
                   <div className="bg-white rounded-lg shadow-sm p-12 text-center">
                      <Calendar className="w-12 h-12 text-stone-400 mx-auto mb-4" />
                      <h3 className="text-xl font-serif text-stone-800 mb-2">No Bookings Found</h3>
-                     <p className="text-stone-600">No bookings have been made yet</p>
+                     <p className="text-stone-900">No bookings have been made yet</p>
                   </div>
                )}
             </motion.div>

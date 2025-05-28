@@ -224,7 +224,6 @@ export const loginAdminUser = async (email, password) => {
 
     // Return user without password
     const { password: _, ...userWithoutPassword } = user.toObject();
-    console.log(userWithoutPassword, "userWithoutPassword");
 
     return JSON.parse(JSON.stringify(userWithoutPassword));
   } catch (error) {

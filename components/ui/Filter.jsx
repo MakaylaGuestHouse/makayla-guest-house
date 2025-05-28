@@ -28,7 +28,7 @@ export default function RoomFilter() {
     e.preventDefault();
     // Would normally send data to an API
     console.log("Searching with parameters:", formData);
-    alert("✨ Luxury Search Initiated ✨\n" + JSON.stringify(formData, null, 2));
+    alert("✨ earch Initiated ✨\n" + JSON.stringify(formData, null, 2));
   };
   
   const fieldHoverStyles = (fieldName) => 

@@ -45,7 +45,7 @@ export const fetchRoom = async (id) => {
   try {
     await connectDb();
 
-    const room = await Room.findOne({ id: id });
+    const room = await Room.findOne({ _id: id });
 
     revalidatePath("/");
     revalidatePath("/room");

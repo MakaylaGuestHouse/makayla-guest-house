@@ -232,23 +232,11 @@ export const RoomsAdmin = ({ rooms }) => {
   if (!isAuthenticated) {
     return <div>Please log in</div>;
   }
- 
 
-  const handleEdit = (room) => {
-    // Navigate to edit page or open edit modal
-    console.log('Edit room:', room);
-  };
 
-  const handleDelete = (room) => {
-    // Show confirmation dialog and delete
-    console.log('Delete room:', room);
-  };
-
-  const handleView = (room) => {
-    // Expand card or show detailed view
-    console.log('View room details:', room);
-  };
-
+  const handleEdit = (room) => { };
+  const handleDelete = (room) => { };
+  const handleView = (room) => { };
 
   return (
     <div className="min-h-screen bg-stone-50 p-4 md:p-6">

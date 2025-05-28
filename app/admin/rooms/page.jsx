@@ -4,7 +4,6 @@ import React from 'react'
 
 const page = async () => {
    const rooms = await fetchRooms({ query: '', limit: 50, page: 1 });
-   console.log(rooms);
    return (
       <div>
          <RoomsAdmin rooms={rooms.data} />

@@ -1,5 +1,4 @@
 "use client";
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { useAnimateInView } from '@/hooks/useAnimateInView';
@@ -11,54 +10,21 @@ import {
    Mail,
    UserPlus,
    Plus,
-   Eye,
-   Users,
-   TrendingUp
+   Users
 } from 'lucide-react';
 import { animateVariants, staggerContainer } from '@/lib/constants/animation';
+import useAuth from '@/hooks/useAuth';
 
-const fetchData = async ({ type }) => {
-   // This function would fetch real data from your API
-   // For now, it returns empty array to avoid mock data as requested
-   return [];
-};
-
-const Dashboard = ({ user }) => {
+const Dashboard = ({ rooms, inquiries, bookings, newsletters }) => {
    const router = useRouter();
+   const { user, loading } = useAuth();
    const { ref, controls } = useAnimateInView();
-   const [stats, setStats] = useState({
-      rooms: [],
-      bookings: [],
-      inquiries: [],
-      newsletters: []
-   });
-   const [loading, setLoading] = useState(true);
-
-   useEffect(() => {
-      const loadData = async () => {
-         try {
-            const [rooms, bookings, inquiries, newsletters] = await Promise.all([
-               fetchData({ type: 'rooms' }),
-               fetchData({ type: 'bookings' }),
-               fetchData({ type: 'inquiries' }),
-               fetchData({ type: 'newsletters' })
-            ]);
-
-            setStats({
-               rooms: rooms.slice(0, 10),
-               bookings: bookings.slice(0, 10),
-               inquiries: inquiries.slice(0, 10),
-               newsletters: newsletters.slice(0, 10)
-            });
-         } catch (error) {
-            console.error('Error loading dashboard data:', error);
-         } finally {
-            setLoading(false);
-         }
-      };
-
-      loadData();
-   }, []);
+   const stats = {
+      rooms: rooms?.data,
+      bookings: bookings?.data,
+      inquiries: inquiries?.data,
+      newsletters: newsletters?.data
+   };
 
    const quickActions = [
       {
@@ -72,6 +38,12 @@ const Dashboard = ({ user }) => {
          icon: UserPlus,
          color: 'bg-stone-700 hover:bg-stone-800',
          onClick: () => router.push('/admin/users/create')
+      },
+      {
+         title: 'Users',
+         icon: Users,
+         color: 'bg-yellow-700 hover:bg-yellow-800',
+         onClick: () => router.push('/admin/users/')
       }
    ];
 
@@ -79,28 +51,28 @@ const Dashboard = ({ user }) => {
       {
          title: 'Rooms',
          icon: Bed,
-         count: stats.rooms.length,
+         count: rooms.totalPages,
          color: 'border-amber-200 bg-amber-50',
          onClick: () => router.push('/admin/rooms')
       },
       {
          title: 'Bookings',
          icon: Calendar,
-         count: stats.bookings.length,
+         count: bookings.totalPages,
          color: 'border-stone-200 bg-stone-50',
          onClick: () => router.push('/admin/bookings')
       },
       {
          title: 'Inquiries',
          icon: MessageSquare,
-         count: stats.inquiries.length,
+         count: inquiries.totalPages,
          color: 'border-blue-200 bg-blue-50',
          onClick: () => router.push('/admin/inquiries')
       },
       {
          title: 'Newsletters',
          icon: Mail,
-         count: stats.newsletters.length,
+         count: newsletters.totalPages,
          color: 'border-green-200 bg-green-50',
          onClick: () => router.push('/admin/newsletters')
       }
@@ -140,7 +112,7 @@ const Dashboard = ({ user }) => {
                      <button
                         key={index}
                         onClick={action.onClick}
-                        className={`${action.color} text-white px-6 py-3 rounded-lg transition-colors duration-300 flex items-center gap-2 hover:shadow-md`}
+                        className={`${action.color} text-white px-6 py-3 rounded-lg transition-colors duration-300 flex items-center gap-2 hover:shadow-md cursor-pointer`}
                      >
                         <action.icon className="w-5 h-5" />
                         {action.title}
@@ -172,13 +144,46 @@ const Dashboard = ({ user }) => {
 
             {/* Recent Data Sections */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+               {/* Recent Bookings */}
+               <motion.div variants={animateVariants.fadeInRight} className="bg-white rounded-lg shadow-sm p-6">
+                  <div className="flex items-center justify-between mb-4">
+                     <h3 className="text-xl font-serif text-stone-800">Recent Bookings</h3>
+                     <button
+                        onClick={() => router.push('/admin/bookings')}
+                        className="text-amber-700 hover:text-amber-800 font-medium cursor-pointer"
+                     >
+                        View All
+                     </button>
+                  </div>
+                  {stats.bookings.length > 0 ? (
+                     <div className="space-y-3">
+                        {stats.bookings.slice(0, 5).map((booking, index) => (
+                           <div key={index} className="flex items-center justify-between p-3 border border-stone-200 rounded-lg">
+                              <div>
+                                 <p className="font-medium text-stone-800">{booking.fullName || 'Guest Name'}</p>
+                                 <p className="text-sm text-stone-600">{booking.roomType || 'Room Type'}</p>
+                              </div>
+                              <span className={`px-2 py-1 rounded-full text-xs ${booking.bookingStatus === 'confirmed' ? 'bg-green-100 text-green-800' :
+                                 booking.bookingStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                    'bg-stone-100 text-stone-800'
+                                 }`}>
+                                 {booking.bookingStatus || 'pending'}
+                              </span>
+                           </div>
+                        ))}
+                     </div>
+                  ) : (
+                     <p className="text-stone-500 text-center py-4">No bookings available</p>
+                  )}
+               </motion.div>
+
                {/* Recent Rooms */}
                <motion.div variants={animateVariants.fadeInLeft} className="bg-white rounded-lg shadow-sm p-6">
                   <div className="flex items-center justify-between mb-4">
                      <h3 className="text-xl font-serif text-stone-800">Recent Rooms</h3>
                      <button
                         onClick={() => router.push('/admin/rooms')}
-                        className="text-amber-700 hover:text-amber-800 font-medium"
+                        className="text-amber-700 hover:text-amber-800 font-medium cursor-pointer"
                      >
                         View All
                      </button>
@@ -200,46 +205,13 @@ const Dashboard = ({ user }) => {
                   )}
                </motion.div>
 
-               {/* Recent Bookings */}
-               <motion.div variants={animateVariants.fadeInRight} className="bg-white rounded-lg shadow-sm p-6">
-                  <div className="flex items-center justify-between mb-4">
-                     <h3 className="text-xl font-serif text-stone-800">Recent Bookings</h3>
-                     <button
-                        onClick={() => router.push('/admin/bookings')}
-                        className="text-amber-700 hover:text-amber-800 font-medium"
-                     >
-                        View All
-                     </button>
-                  </div>
-                  {stats.bookings.length > 0 ? (
-                     <div className="space-y-3">
-                        {stats.bookings.slice(0, 5).map((booking, index) => (
-                           <div key={index} className="flex items-center justify-between p-3 border border-stone-200 rounded-lg">
-                              <div>
-                                 <p className="font-medium text-stone-800">{booking.fullName || 'Guest Name'}</p>
-                                 <p className="text-sm text-stone-600">{booking.roomType || 'Room Type'}</p>
-                              </div>
-                              <span className={`px-2 py-1 rounded-full text-xs ${booking.bookingStatus === 'confirmed' ? 'bg-green-100 text-green-800' :
-                                    booking.bookingStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                                       'bg-stone-100 text-stone-800'
-                                 }`}>
-                                 {booking.bookingStatus || 'pending'}
-                              </span>
-                           </div>
-                        ))}
-                     </div>
-                  ) : (
-                     <p className="text-stone-500 text-center py-4">No bookings available</p>
-                  )}
-               </motion.div>
-
                {/* Recent Inquiries */}
                <motion.div variants={animateVariants.fadeInLeft} className="bg-white rounded-lg shadow-sm p-6">
                   <div className="flex items-center justify-between mb-4">
                      <h3 className="text-xl font-serif text-stone-800">Recent Inquiries</h3>
                      <button
                         onClick={() => router.push('/admin/inquiries')}
-                        className="text-amber-700 hover:text-amber-800 font-medium"
+                        className="text-amber-700 hover:text-amber-800 font-medium cursor-pointer"
                      >
                         View All
                      </button>
@@ -270,7 +242,7 @@ const Dashboard = ({ user }) => {
                      <h3 className="text-xl font-serif text-stone-800">Newsletter Subscribers</h3>
                      <button
                         onClick={() => router.push('/admin/newsletters')}
-                        className="text-amber-700 hover:text-amber-800 font-medium"
+                        className="text-amber-700 hover:text-amber-800 font-medium cursor-pointer"
                      >
                         View All
                      </button>
