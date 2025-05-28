@@ -58,7 +58,7 @@ const FeaturedRoomsSection = () => {
 
    // Filter system
    const [activeFilter, setActiveFilter] = useState("all");
-   const filters = ["all", "ocean view", "garden", "beachfront"];
+   // const filters = ["all", "ocean view", "garden", "beachfront"];
 
    const filteredRooms = activeFilter === "all"
       ? featuredRooms
@@ -84,14 +84,14 @@ const FeaturedRoomsSection = () => {
             >
             </motion.div>
 
-            <SectionHeader 
+            <SectionHeader
                title="Accommodations"
                subTitle="Exceptional Spaces for Your Stay"
                description="Discover our meticulously designed rooms and suites, each offering a perfect blend of comfort, elegance, and distinctive character."
             />
 
             {/* Filter buttons */}
-            <motion.div
+            {/* <motion.div
                initial="hidden"
                animate={sectionControls}
                variants={{
@@ -107,15 +107,15 @@ const FeaturedRoomsSection = () => {
                   <button
                      key={filter}
                      onClick={() => setActiveFilter(filter)}
-                     className={`px-6 py-2 text-sm transition-all duration-300 border ${activeFilter === filter
-                           ? 'border-amber-400 bg-amber-50 text-amber-800'
-                           : 'border-stone-200 text-stone-500 hover:border-stone-300'
+                     className={`px-4 py-2 rounded-full text-sm transition-all duration-300 border ${activeFilter === filter
+                           ? 'bg-stone-800 text-white border-stone-800'
+                           : 'bg-white text-stone-600 border-stone-200 hover:border-amber-400'
                         }`}
                   >
                      {filter.charAt(0).toUpperCase() + filter.slice(1)}
                   </button>
                ))}
-            </motion.div>
+            </motion.div> */}
 
             {/* Room cards */}
             <motion.div

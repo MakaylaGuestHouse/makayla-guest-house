@@ -1,9 +1,9 @@
-import RoomGrid from '@/components/ui/rooms/RoomGrid'
+import RoomsPage from '@/components/ui/rooms/RoomsPage'
 import React from 'react'
 
 const Rooms = () => {
    return (
-      <div><RoomGrid /></div>
+      <div><RoomsPage /></div>
    )
 }
 

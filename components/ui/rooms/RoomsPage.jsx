@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { staggerContainer } from '@/lib/constants/animation';
 import { ChevronRight } from 'lucide-react';
@@ -7,12 +7,27 @@ import { RoomCard } from './RoomCard';
 import { RoomFilter } from './RoomFilter';
 import { roomsData } from '@/data';
 import { PagesHero } from '@/components/common/PagesHero';
+import { useSearchParams } from 'next/navigation';
 
-// Updated Room Page Component with Hero, Filter and Grid
-export const RoomsGrid = () => {
+export const RoomsPage = () => {
   const [filteredRooms, setFilteredRooms] = useState(roomsData);
   const [activeFilters, setActiveFilters] = useState({});
-  const [filterFormData, setFilterFormData] = useState(null);
+
+  const searchParams = useSearchParams();
+
+  // Extract initial filter values from URL parameters
+  const location = searchParams.get('location');
+  const roomType = searchParams.get('roomType');
+  const bedType = searchParams.get('bedType');
+  const isFromHomePage = searchParams.get('isFromHomePage');
+
+  const [filterFormData, setFilterFormData] = useState({
+    location: location || "All Locations",
+    roomType: roomType || "All Types",
+    bedType: bedType || "All Beds",
+    amenities: [],
+    roomSize: "Any Size",
+  });
 
   // Add a key state to force re-render of all room cards when filters change
   const [animationKey, setAnimationKey] = useState(0);
@@ -23,9 +38,9 @@ export const RoomsGrid = () => {
     setActiveFilters(filters);
 
     // Apply filtering logic based on the form data
-    const filtered = roomsData.filter(room => {
+    const filtered = roomsData?.filter(room => {
       // Location filter
-      if (formData.location !== "All Locations" && !room.name.includes(formData.location)) {
+      if (formData.location !== "All Locations" && !room.name?.includes(formData.location)) {
         return false;
       }
 
@@ -96,10 +111,19 @@ export const RoomsGrid = () => {
     setAnimationKey(prevKey => prevKey + 1);
   };
 
+  // Extract URL parameters on component mount
+  useEffect(() => {
+    if (isFromHomePage === "true") {
+      handleFiltersApplied(filterFormData, filterFormData)
+    }
+  }, []);
+
   // Function to reset filters
   const resetFilters = () => {
     setFilteredRooms(roomsData);
     setActiveFilters({});
+    setFilterFormData(null);
+    // setInitialFiltersFromURL(null);
     // Increment the animation key to force re-render with fresh animation states
     setAnimationKey(prevKey => prevKey + 1);
   };
@@ -114,9 +138,9 @@ export const RoomsGrid = () => {
   return (
     <>
       {/* Hero Section */}
-      <PagesHero onClick={scrollToRooms } />
+      <PagesHero onClick={scrollToRooms} />
 
-      {/* Room Filter */}
+      {/* Room Filter - Pass the URL filters as initialFilters */}
       <RoomFilter
         isRoomPage={true}
         initialFilters={filterFormData}
@@ -196,4 +220,4 @@ export const RoomsGrid = () => {
   );
 };
 
-export default RoomsGrid;
+export default RoomsPage;

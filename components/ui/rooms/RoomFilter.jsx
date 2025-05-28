@@ -152,7 +152,7 @@ export const RoomFilter = ({
       onFiltersApplied(defaultFormData, {});
     }
 
-      router.push("/rooms/#room-listings");
+    router.push("/rooms/#room-listings");
   };
 
   // Remove filter handler - Now applies changes immediately
@@ -207,9 +207,44 @@ export const RoomFilter = ({
     const newActiveFilters = getActiveFilters(pendingFormData);
     setActiveFilters(newActiveFilters);
 
-    // Navigate to rooms page with filters
-   
-      router.push("/rooms/#room-listings");
+    // Build URL with parameters
+    let targetUrl = "/rooms/";
+
+    if (!isRoomPage) {
+      // Create URL search params for non-room pages
+      const urlParams = new URLSearchParams();
+
+      // Add basic filter parameters
+      if (pendingFormData.location !== FILTER_CONFIGS.defaults.location) {
+        urlParams.append('location', pendingFormData.location);
+      }
+
+      if (pendingFormData.guests !== FILTER_CONFIGS.defaults.guests) {
+        urlParams.append('guests', pendingFormData.guests);
+      }
+
+      if (pendingFormData.roomType !== FILTER_CONFIGS.defaults.roomType) {
+        urlParams.append('roomType', pendingFormData.roomType);
+      }
+
+      if (pendingFormData.bedType !== FILTER_CONFIGS.defaults.bedType) {
+        urlParams.append('bedType', pendingFormData.bedType);
+      }
+
+      // Add flag to indicate this came from home page
+      urlParams.append('isFromHomePage', 'true');
+
+      // Append params to URL if any exist
+      const paramString = urlParams.toString();
+      if (paramString) {
+        targetUrl += `?${paramString}#room-listings`;
+      }
+      // Navigate to rooms page with or without filters
+      router.push(`${targetUrl}#room-listings`);
+    }
+
+    // Navigate to rooms page with or without filters
+    router.push(targetUrl);
 
     // Call the callback if provided
     if (onFiltersApplied) {

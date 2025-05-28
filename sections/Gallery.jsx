@@ -91,7 +91,7 @@ const galleryImages = [
   }
 ];
 
-const categories = ["All", ...new Set(galleryImages.map(img => img.category))];
+// const categories = ["All", ...new Set(galleryImages.map(img => img.category))];
 
 // Lightbox component
 const Lightbox = ({ image, onClose, onNext, onPrevious, currentIndex, totalImages }) => {
@@ -377,7 +377,7 @@ export default function GallerySection() {
         />
 
         {/* Category filters - Scrollable on mobile */}
-        <motion.div
+        {/* <motion.div
           className="flex flex-nowrap md:flex-wrap justify-start md:justify-center gap-4 mb-16 overflow-x-auto pb-4 md:pb-0 scrollbar-hide"
           variants={staggerContainer}
           // initial="hidden"
@@ -396,7 +396,7 @@ export default function GallerySection() {
               {category}
             </motion.button>
           ))}
-        </motion.div>
+        </motion.div> */}
 
         {/* Gallery grid - Adjusted for mobile */}
         <motion.div

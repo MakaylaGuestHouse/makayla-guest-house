@@ -79,16 +79,16 @@ const amenities = [
 ];
 
 
-const categories = [
-  { id: "all", name: "All Amenities" },
-  { id: "connectivity", name: "Connectivity" },
-  { id: "comfort", name: "Comfort" },
-  { id: "dining", name: "Dining" },
-  { id: "service", name: "Guest Services" },
-  { id: "entertainment", name: "Entertainment" },
-  { id: "convenience", name: "Convenience" },
-  { id: "safety", name: "Safety & Security" }
-];
+// const categories = [
+//   { id: "all", name: "All Amenities" },
+//   { id: "connectivity", name: "Connectivity" },
+//   { id: "comfort", name: "Comfort" },
+//   { id: "dining", name: "Dining" },
+//   { id: "service", name: "Guest Services" },
+//   { id: "entertainment", name: "Entertainment" },
+//   { id: "convenience", name: "Convenience" },
+//   { id: "safety", name: "Safety & Security" }
+// ];
 
 // Amenity card component
 const AmenityCard = ({ amenity }) => {
@@ -173,7 +173,7 @@ export default function Amenities() {
         </motion.div>
         
         {/* Category filter */}
-        <div className="flex flex-wrap justify-center gap-3 mb-16">
+        {/* <div className="flex flex-wrap justify-center gap-3 mb-16">
           {categories.map(category => (
             <button
               key={category.id}
@@ -187,7 +187,7 @@ export default function Amenities() {
               {category.name}
             </button>
           ))}
-        </div>
+        </div> */}
         
         {/* Amenities grid */}
         <motion.div

@@ -17,7 +17,7 @@ export const createAdminUser = async (userData, currentUserId) => {
     // Check if current user is admin
     const currentUser = await AdminUser.findById(currentUserId);
 
-      if (
+    if (
       !currentUser ||
       currentUser.role !== "admin" ||
       !currentUser.isSuperAdmin
