@@ -6,6 +6,7 @@ import { animateVariants, staggerContainer } from '@/lib/constants/animation';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import routes from '@/lib/routes';
 import { useAppRouter } from '@/hooks/useAppRouter';
+import { faqData } from '@/data';
 
 // Custom hook for FAQ item animation
 const useFaqAnimation = () => {
@@ -110,34 +111,6 @@ const Faqs = () => {
   const { navigateTo } = useAppRouter();
   const { ref, controls } = useAnimateInView();
 
-  // FAQ data
-  const faqData = [
-    {
-      question: "What time is check-in and check-out?",
-      answer: "Check-in is available from 3:00 PM, and check-out is until 11:00 AM. Early check-in or late check-out may be available upon request, subject to availability and additional charges."
-    },
-    {
-      question: "Do you offer airport transfers?",
-      answer: "Yes, we offer luxury airport transfers in our premium vehicles. Please provide your flight details at least 48 hours before arrival so we can arrange your pickup. Additional charges apply based on distance and vehicle type."
-    },
-    {
-      question: "Are pets allowed in the guest house?",
-      answer: "We welcome well-behaved pets in select rooms with prior arrangement. A pet fee applies per stay. Please inform us about your pet when booking so we can prepare accordingly and provide our pet amenities package."
-    },
-    {
-      question: "Is breakfast included in the room rate?",
-      answer: "Yes, a gourmet breakfast featuring local and seasonal ingredients is included in your stay. It's served daily in our dining room from 7:00 AM to 10:30 AM. Special dietary requirements can be accommodated with advance notice."
-    },
-    {
-      question: "Do you have facilities for events or celebrations?",
-      answer: "Our guest house features elegant spaces for intimate gatherings, celebrations, and small events. Our event coordinator can help arrange custom experiences, from private dinners to garden ceremonies. Please contact us for details and availability."
-    },
-    {
-      question: "What amenities are available in the rooms?",
-      answer: "All rooms feature luxury linens, premium bath products, complimentary high-speed WiFi, smart TVs, Nespresso machines, minibars, air conditioning, and in-room safes. Select suites also include private balconies, fireplaces, or soaking tubs."
-    },
-  ];
-
   return (
     <motion.section
       ref={ref}
@@ -210,9 +183,9 @@ const Faqs = () => {
               or to arrange bespoke experiences tailored to your preferences.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button className="bg-stone-800 hover:bg-amber-700 text-white py-3 px-8 rounded-md transition-colors duration-300 shadow-md hover:shadow-lg w-full sm:w-auto cursor-pointer">
+              <a href='#form' className="bg-stone-800 hover:bg-amber-700 text-white py-3 px-8 rounded-md transition-colors duration-300 shadow-md hover:shadow-lg w-full sm:w-auto cursor-pointer">
                 Contact Us
-              </button>
+              </a>
               <button onClick={() => navigateTo(`${routes.rooms}`)}
                 className="bg-transparent border border-stone-800 hover:bg-stone-50 text-stone-800 py-3 px-8 rounded-md transition-colors duration-300 shadow-sm hover:shadow-md w-full sm:w-auto cursor-pointer">
                 View Rooms

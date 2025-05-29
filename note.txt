@@ -1,15 +1,16 @@
 AMENITIES
 
+HERO SECTION 
+Pass the appropriate props for each page
+
 Reason you'll love staying with us
 Our hotel, Your home.
-
 scroll to top button
 
 add: get direction button to the hero section
 
-FAQS
 
-
+SEO CONFIG
 
 # Luxury Guest House Website Styling Guide ## Color Palette - Primary: Stone/Neutral tones (stone-800, stone-600, stone-400) - Used for text, borders, and backgrounds to create an elegant, timeless feel - Accent: Amber/Gold tones (amber-700, amber-400, amber-50) - Used sparingly for highlights, CTAs, and decorative elements - Background: Whites and soft neutrals (white, stone-50) - Creates a clean, spacious canvas for content - Text: Rich dark tones for headings (stone-800), softer tones for body text (stone-600) ## Typography - Headings: Serif fonts (font-serif) for sophistication and luxury feel - Section titles: 4xl-5xl size, stone-800 color - Subheadings: 2xl-3xl size, stone-800 color - Body text: Sans-serif for readability - stone-600 color with appropriate line height (leading-relaxed) - Decorative text: Light weight (font-light) uppercase with wide tracking for labels/categories ## Layout Elements - Subtle background patterns/shapes for depth - Thin decorative lines/dividers (w-20 h-px bg-amber-400) - Generous white space between sections (py-24) - Grid-based layouts with consistent gaps - Container widths: max-w-6xl for content, max-w-7xl for featured elements ## Component Styling - Cards: Clean white backgrounds with subtle shadows (shadow-sm, hover:shadow-md) - Buttons: - Primary: Dark background (bg-stone-800) with white text, hover to accent (amber-700) - Secondary: White background with dark border, hover to fill - Images: Consistent aspect ratios with overflow hidden and hover scale effects - Decorative elements: Subtle border accents, especially positioned frames ## Animation Principles - Subtle fade-ins on scroll using staggered timing - Gentle hover effects (scale 1.05-1.1 for images) - Smooth color transitions for buttons/interactive elements - Animation durations: 300-700ms - Ease functions: easeOut for natural movement ## UI/UX Guidelines - Clear visual hierarchy with prominent headings - Consistent spacing between elements - Important information (pricing, room details) easily scannable - Interactive elements have clear hover states - CTAs are prominent and action-oriented - Mobile responsiveness with appropriate grid adjustments ## Design Motifs - Thin gold/amber accent lines - Subtle background shapes for visual interest - Frame borders for important images - Consistent iconography style (stroke weight 2, rounded caps)
 

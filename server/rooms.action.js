@@ -1,5 +1,4 @@
 "use server";
-import { revalidatePath } from "next/cache";
 import { connectDb } from "@/db";
 import Room from "@/db/models/roomSchema.model";
 import AdminUser from "@/db/models/adminUser.model";
@@ -32,8 +31,6 @@ export const createRoom = async (room, creator_id) => {
 
     await Room.create(room);
 
-    revalidatePath("/");
-
     return JSON.parse(JSON.stringify({ status: "ok" }));
   } catch (error) {
     logger(error.message);
@@ -46,9 +43,6 @@ export const fetchRoom = async (id) => {
     await connectDb();
 
     const room = await Room.findOne({ _id: id });
-
-    revalidatePath("/");
-    revalidatePath("/room");
 
     return JSON.parse(JSON.stringify(room));
   } catch (error) {
@@ -75,8 +69,6 @@ export async function updateRoom(room, creator_id) {
       new: true,
     });
 
-    // revalidatePath(`${.room}/${room.id}`)
-
     return JSON.parse(JSON.stringify(updatedRoom));
   } catch (error) {
     logger(error.message);
@@ -100,8 +92,6 @@ export const deleteRoom = async (id, creator_id) => {
     }
 
     await Room.deleteOne({ _id: id });
-
-    revalidatePath("/");
 
     return { status: 200 };
   } catch (error) {
@@ -168,7 +158,6 @@ export const fetchRoomsBySearch = async ({ query, page, limit }) => {
     ]);
 
     const totalCount = roomsCount[0] ? roomsCount[0].totalCount : 0;
-    revalidatePath(`${clientRoutes.search}?q'`);
     return {
       data: JSON.parse(JSON.stringify(rooms)),
       totalPages: Math.ceil(totalCount),

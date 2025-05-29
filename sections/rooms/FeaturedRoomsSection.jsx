@@ -4,8 +4,12 @@ import { useAnimateInView } from '@/hooks/useAnimateInView';
 import { animateVariants, staggerContainer } from '@/lib/constants/animation';
 import { SectionHeader } from '@/components/common/SectionHeader';
 import { WhatsAppLink } from '@/components/common/WhatsApp';
+import routes from '@/lib/routes';
+import { useAppRouter } from '@/hooks/useAppRouter';
+import { APP_PHONE_NUMBER } from '@/lib/constants';
 
 const FeaturedRoomsSection = () => {
+   const { navigateTo } = useAppRouter();
    const { ref: sectionRef, controls: sectionControls } = useAnimateInView(0.1);
 
    // Featured rooms data
@@ -70,8 +74,8 @@ const FeaturedRoomsSection = () => {
    return (
       <section className="py-24 bg-white relative">
          {/* Subtle background elements */}
-         <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-stone-50 rounded-bl-full opacity-70" />
-         <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-amber-50 rounded-tr-full opacity-70" />
+         <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-stone-50 rounded-bl-full opacity-20" />
+         <div className="absolute bottom-0 left-0 w-1/4 h-1/4 bg-amber-50 rounded-tr-full opacity-20" />
 
          <div className="container mx-auto px-6 max-w-7xl relative">
             {/* Section heading */}
@@ -143,7 +147,7 @@ const FeaturedRoomsSection = () => {
                }}
                className="mt-16 text-center"
             >
-               <button className="px-8 py-3 bg-white border-2 border-stone-800 text-stone-800 hover:bg-stone-800 hover:text-white transition-colors duration-300">
+               <button onClick={() => navigateTo(routes.rooms)} className="px-8 py-3 bg-white border-2 border-stone-800 text-stone-800 hover:bg-stone-800 hover:text-white transition-colors duration-300 cursor-pointer">
                   Explore All Accommodations
                </button>
             </motion.div>
@@ -162,19 +166,19 @@ const FeaturedRoomsSection = () => {
             }}
             className="mt-24 py-12 bg-stone-50 w-full max-w-7xl mx-auto"
          >
-            <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8 z-30">
                <div>
                   <h4 className="text-2xl font-serif text-stone-800 mb-2">Need assistance with your booking?</h4>
                   <p className="text-stone-600">Our concierge team is available 24/7 to help you select the perfect accommodation.</p>
                </div>
                <div className="flex gap-4">
-                  <a href="tel:+18005551234" className="flex items-center gap-2 px-5 py-3 bg-white border border-stone-200 text-stone-800 hover:border-amber-400 transition-colors">
+                  <a href={`tel:${APP_PHONE_NUMBER}`} className="flex items-center gap-2 px-5 py-3 bg-white border border-stone-200 text-stone-800 hover:border-amber-400 transition-colors">
                      <span className="w-5 h-5 flex items-center justify-center rounded-full bg-amber-100 text-amber-700">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3 h-3">
                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                         </svg>
                      </span>
-                     +233-595631886
+                     {APP_PHONE_NUMBER}
                   </a>
                   <WhatsAppLink />
                </div>

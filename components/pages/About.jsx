@@ -109,13 +109,13 @@ const StatCounter = ({ value, label, suffix = "", delay = 0 }) => {
 
 export default function AboutUs() {
   return (
-    <main className="font-sans text-stone-600 bg-stone-50">
+    <main className="font-sans text-stone-600 bg-stone-50 overflow-hidden">
 
-        <SectionHeader
-          title="Our Ethos"
-          subTitle="Crafting moments of refined luxury6"
-          description=""
-        />
+      <SectionHeader
+        title="Our Ethos"
+        subTitle="Crafting moments of refined luxury6"
+        description=""
+      />
 
       {/* Our Vision & Mission Section */}
       <section className="pb-18">

@@ -4,33 +4,32 @@ import { Menu, X, Phone, Calendar, ChevronRight, MapPin } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Logo } from "./Logo";
+import routes, { MAP_URL } from "@/lib/routes";
+import { APP_NAME, APP_PHONE_NUMBER } from "@/lib/constants";
+
+// Navigation items
+const navItems = [
+   { name: "Home", href: routes.home },
+   { name: "Rooms", href: routes.rooms },
+   { name: "Gallery", href: routes.gallery },
+   { name: "About", href: routes.about },
+   { name: "Contact", href: routes.contact },
+];
 
 export default function Header() {
-   // State for tracking scroll position
    const [scrollY, setScrollY] = useState(0);
-   const [showHeader, setShowHeader] = useState(false);
-   const [lastScrollY, setLastScrollY] = useState(0);
-
-   // State for mobile sidebar
    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-   // Navigation items
-   const navItems = ["Home", "Rooms", "Gallery", "About", "Contact"];
+   const openInNewTab = () => {
+      window.open(MAP_URL, '_blank');
+   };
 
    // Handle scroll events
    useEffect(() => {
       const handleScroll = () => {
          const currentScrollY = window.scrollY;
 
-         // Show header when scrolling down past threshold
-         if (currentScrollY > 20) {
-            setShowHeader(true);
-         } else {
-            setShowHeader(false);
-         }
-
          setScrollY(currentScrollY);
-         setLastScrollY(currentScrollY);
       };
 
       window.addEventListener('scroll', handleScroll, { passive: true });
@@ -97,30 +96,32 @@ export default function Header() {
                <nav className="hidden lg:flex items-center space-x-8">
                   {navItems.map((item, index) => (
                      <a
-                        key={item}
-                        href={`/${item.toLowerCase()}`}
+                        key={item.href}
+                        href={item.href}
                         className={`text-sm uppercase tracking-wider font-medium transition-all duration-300 relative group ${scrollY > 20
                            ? 'text-gray-800 hover:text-amber-500'
                            : 'text-white hover:text-amber-400'
                            }`}
                      >
-                        {item}
+                        {item.name}
                         <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-amber-500 group-hover:w-full transition-all duration-300"></span>
                      </a>
                   ))}
 
                   {/* Book Now CTA (Desktop) */}
-                  <motion.button
-                     whileHover={{ scale: 1.05 }}
-                     whileTap={{ scale: 0.95 }}
-                     className={`ml-4 px-6 py-2 rounded-full cursor-pointer font-medium tracking-wide transition-all duration-300 flex items-center ${scrollY > 20
-                        ? 'bg-gradient-to-r from-amber-500 to-rose-500 text-white shadow-lg shadow-amber-200/30'
-                        : 'bg-white/20 text-white backdrop-blur-sm border border-white/30 hover:bg-white/30'
-                        }`}
-                  >
-                     <Calendar className="h-4 w-4 mr-2" />
-                     Book Now
-                  </motion.button>
+                  <a href={routes.bookNow} className="w-full">
+                     <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`ml-4 px-6 py-2 rounded-full cursor-pointer font-medium tracking-wide transition-all duration-300 flex items-center ${scrollY > 20
+                           ? 'bg-gradient-to-r from-amber-500 to-rose-500 text-white shadow-lg shadow-amber-200/30'
+                           : 'bg-white/20 text-white backdrop-blur-sm border border-white/30 hover:bg-white/30'
+                           }`}
+                     >
+                        <Calendar className="h-4 w-4 mr-2" />
+                        Book Now
+                     </motion.button>
+                  </a>
                </nav>
 
                {/* Mobile Menu Button */}
@@ -162,6 +163,7 @@ export default function Header() {
                      exit={{ x: "100%" }}
                      transition={{ type: "spring", damping: 25, stiffness: 300 }}
                      className="fixed top-0 right-0 h-full w-[80%] max-w-md bg-gradient-to-b from-white to-rose-50/90 shadow-2xl z-50 overflow-y-auto"
+                     onClick={() => setIsSidebarOpen(prev => !prev)}
                   >
                      {/* Sidebar Header with Close Button */}
                      <div className="flex justify-between items-center p-6 border-b border-gray-100">
@@ -189,21 +191,21 @@ export default function Header() {
                         <nav className="space-y-1">
                            {navItems.map((item, index) => (
                               <motion.a
-                                 key={item}
-                                 href={`#${item.toLowerCase()}`}
+                                 key={item.href}
+                                 href={item.href}
                                  onClick={() => setIsSidebarOpen(false)}
                                  className="flex items-center text-gray-800 hover:text-amber-600 py-3 px-4 rounded-lg hover:bg-white/80 transition-all duration-300 text-lg font-medium relative overflow-hidden group"
                                  initial={{ opacity: 0, y: 20 }}
                                  animate={{ opacity: 1, y: 0 }}
                                  transition={{ delay: index * 0.1 }}
                               >
-                                 <span className="relative z-10">{item}</span>
+                                 <span className="relative z-10">{item.name}</span>
                                  <ChevronRight className="h-5 w-5 ml-auto text-amber-500 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
 
                                  {/* Hover effect background */}
                                  <motion.div
                                     className="absolute inset-0 w-full h-full bg-gradient-to-r from-amber-100/40 to-rose-100/40 rounded-lg -z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                                    layoutId={`nav-bg-${item}`}
+                                    layoutId={`nav-bg-${item.name}`}
                                  />
                               </motion.a>
                            ))}
@@ -229,16 +231,17 @@ export default function Header() {
                               <div className="flex items-center justify-center h-10 w-10 rounded-full bg-amber-100 text-amber-600 mr-3">
                                  <Phone className="h-5 w-5" />
                               </div>
-                              <a href="tel:+233595631886" className="hover:text-amber-600 transition-colors">
-                                 +233 595 631 886
+                              <a href={`tel:${APP_PHONE_NUMBER}`} className="hover:text-amber-600 transition-colors">
+                                 {APP_PHONE_NUMBER}
                               </a>
                            </motion.div>
 
-                           <motion.div
-                              className="flex items-center text-gray-700 mb-8"
+                           <motion.button
+                              className="flex items-center text-gray-700 mb-8 cursor-pointer"
                               initial={{ opacity: 0, x: -20 }}
                               animate={{ opacity: 1, x: 0 }}
                               transition={{ delay: 0.8 }}
+                              onClick={openInNewTab}
                            >
                               <div className="flex items-center justify-center h-10 w-10 rounded-full bg-amber-100 text-amber-600 mr-3">
                                  <MapPin className="h-5 w-5" />
@@ -246,25 +249,28 @@ export default function Header() {
                               <address className="not-italic">
                                  Abesim, Sunyani, Ghana
                               </address>
-                           </motion.div>
+                           </motion.button>
 
                            {/* Book Now CTA (Mobile) */}
-                           <motion.button
-                              whileHover={{ scale: 1.02 }}
-                              whileTap={{ scale: 0.98 }}
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: 0.9 }}
-                              className="w-full relative py-4 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-rose-500 text-white font-medium tracking-wide shadow-lg shadow-amber-200/30 flex items-center justify-center overflow-hidden group cursor-pointer"
-                           >
-                              {/* Shimmer effect */}
-                              <div className="absolute inset-0 w-full h-full">
-                                 <div className="absolute top-0 left-0 w-1/2 h-full bg-white/20 skew-x-12 transform -translate-x-full group-hover:translate-x-[200%] transition-all duration-1000 ease-out"></div>
-                              </div>
+                           <a href={routes.bookNow} className="w-full">
+                              <motion.button
+                                 whileHover={{ scale: 1.02 }}
+                                 whileTap={{ scale: 0.98 }}
+                                 initial={{ opacity: 0, y: 20 }}
+                                 animate={{ opacity: 1, y: 0 }}
+                                 transition={{ delay: 0.9 }}
+                                 className="w-full relative py-4 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-rose-500 text-white font-medium tracking-wide shadow-lg shadow-amber-200/30 flex items-center justify-center overflow-hidden group cursor-pointer"
+                              >
 
-                              <Calendar className="h-5 w-5 mr-2 relative" />
-                              <span className="relative">Book Your Stay Now</span>
-                           </motion.button>
+                                 {/* Shimmer effect */}
+                                 <div className="absolute inset-0 w-full h-full">
+                                    <div className="absolute top-0 left-0 w-1/2 h-full bg-white/20 skew-x-12 transform -translate-x-full group-hover:translate-x-[200%] transition-all duration-1000 ease-out"></div>
+                                 </div>
+
+                                 <Calendar className="h-5 w-5 mr-2 relative" />
+                                 <span className="relative">Book Your Stay Now</span>
+                              </motion.button>
+                           </a>
                         </div>
                      </div>
 
@@ -275,7 +281,7 @@ export default function Header() {
                         animate={{ opacity: 1 }}
                         transition={{ delay: 1 }}
                      >
-                        <p>© 2025 Makayla Guest House</p>
+                        <p>© {new Date().getFullYear()} {APP_NAME}</p>
                         <p>All rights reserved</p>
                      </motion.div>
                   </motion.div>

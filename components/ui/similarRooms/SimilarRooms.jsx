@@ -27,7 +27,7 @@ export const SimilarRooms = ({ rooms }) => {
                   <div className="h-px bg-amber-300 w-32 ml-6"></div>
                </div>
                <Link
-                  href="/rooms"
+                  href={routes.rooms}
                   className="flex items-center text-amber-700 hover:text-amber-600 transition-colors font-medium group"
                >
                   View all rooms
@@ -36,17 +36,17 @@ export const SimilarRooms = ({ rooms }) => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-               {rooms.map((room) => (
+               {rooms?.map((room) => (
                   <motion.div
-                     key={room.id}
+                     key={room._id}
                      variants={animateVariants.fadeIn}
                      className="group"
-                     onClick={() => navigateTo(`${routes.roomDetails(room.id)}`)}
+                     onClick={() => navigateTo(`${routes.roomDetails(room._id)}`)}
                   >
                      <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 border border-stone-100 group-hover:border-amber-200 cursor-pointer">
                         <div className="relative h-48 lg:h-56">
                            <Image
-                              src={room.image}
+                              src={room?.images[0]?.image}
                               alt={room.name}
                               fill
                               className="object-cover transition-all duration-500 group-hover:scale-105"
@@ -60,12 +60,16 @@ export const SimilarRooms = ({ rooms }) => {
                         </div>
                         <div className="p-5">
                            <h3 className="font-serif text-xl text-stone-800 mb-1 group-hover:text-amber-700 transition-colors">{room.name}</h3>
-                           <p className="text-stone-500 font-light tracking-wide uppercase text-xs mb-3">{room.type}</p>
+                           <p className="text-stone-500 font-light tracking-wide uppercase text-xs mb-3">{room.roomType}</p>
                            <div className="flex items-center justify-between">
                               <div className="flex items-center gap-2 text-stone-600 text-sm">
-                                 <span>{room.size}</span>
+                                 <span>{room.roomSize}</span>
                                  <span className="w-1 h-1 rounded-full bg-stone-400"></span>
-                                 <span>{room.bed}</span>
+                                 <span>   {room.bedTypes.map((bed, i) => (
+                                    <span key={i}>
+                                       {bed.quantity} {bed.type} {i < room.bedTypes.length - 1 ? ' & ' : ''}
+                                    </span>
+                                 ))}</span>
                               </div>
                               <button className="text-amber-700 hover:text-amber-600 transition-colors text-sm font-medium flex items-center">
                                  View

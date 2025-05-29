@@ -3,7 +3,8 @@ export const roomsData = [
     id: "deluxe-suite-001",
     name: "Veloria Deluxe Suite",
     roomType: "Suite",
-    description: "Experience the height of comfort in our Veloria Deluxe Suite, featuring floor-to-ceiling windows with panoramic views, custom furniture, and a spa-inspired ensuite bathroom.",
+    description:
+      "Experience the height of comfort in our Veloria Deluxe Suite, featuring floor-to-ceiling windows with panoramic views, custom furniture, and a spa-inspired ensuite bathroom.",
     images: ["/room10.jpg", "/room12.jpg", "/room13.jpg", "/room14.jpg"],
     pricePerNight: 320,
     roomSize: "42 m²",
@@ -11,7 +12,7 @@ export const roomsData = [
       totalBeds: 1,
       types: [{ type: "King", quantity: 1 }],
       sofaBed: false,
-      extraBedAvailable: false
+      extraBedAvailable: false,
     },
     maxGuests: 3,
     maxAdults: 2,
@@ -25,16 +26,24 @@ export const roomsData = [
     rating: 4.9,
     tags: ["Popular", "Best Seller"],
     amenities: [
-      "Free High-Speed Wi-Fi", "Smart TV with Streaming Services", "Air Conditioning & Heating",
-      "Complimentary Breakfast", "In-Room Safe & Security Features", "Room Service",
-      "Mini Bar", "Luxury Bath Products", "Daily Housekeeping", "24/7 Reception or Concierge Service"
-    ]
+      "Free High-Speed Wi-Fi",
+      "Smart TV with Streaming Services",
+      "Air Conditioning & Heating",
+      "Complimentary Breakfast",
+      "In-Room Safe & Security Features",
+      "Room Service",
+      "Mini Bar",
+      "Luxury Bath Products",
+      "Daily Housekeeping",
+      "24/7 Reception or Concierge Service",
+    ],
   },
   {
     id: "standard-suite-002",
     name: "City View Standard",
     roomType: "Standard Suite",
-    description: "Modern design with cozy comfort and city views. Ideal for solo travelers or couples.",
+    description:
+      "Modern design with cozy comfort and city views. Ideal for solo travelers or couples.",
     images: ["/room12.jpg", "/room10.jpg", "/room14.jpg"],
     pricePerNight: 180,
     roomSize: "28 m²",
@@ -42,7 +51,7 @@ export const roomsData = [
       totalBeds: 1,
       types: [{ type: "Queen", quantity: 1 }],
       sofaBed: false,
-      extraBedAvailable: true
+      extraBedAvailable: true,
     },
     maxGuests: 2,
     maxAdults: 2,
@@ -56,23 +65,31 @@ export const roomsData = [
     rating: 4.3,
     tags: [],
     amenities: [
-      "Free High-Speed Wi-Fi", "Smart TV with Streaming Services", "Air Conditioning & Heating",
-      "In-Room Safe & Security Features", "Room Service", "Daily Housekeeping"
-    ]
+      "Free High-Speed Wi-Fi",
+      "Smart TV with Streaming Services",
+      "Air Conditioning & Heating",
+      "In-Room Safe & Security Features",
+      "Room Service",
+      "Daily Housekeeping",
+    ],
   },
   {
     id: "exec-suite-003",
     name: "Executive Skyline Suite",
     roomType: "Executive Suite",
-    description: "Spacious and stylish suite with a large living area and skyline views.",
+    description:
+      "Spacious and stylish suite with a large living area and skyline views.",
     images: ["/room13.jpg", "/room10.jpg", "/room14.jpg"],
     pricePerNight: 390,
     roomSize: "50 m²",
     bedInfo: {
       totalBeds: 2,
-      types: [{ type: "King", quantity: 1 }, { type: "Twin", quantity: 1 }],
+      types: [
+        { type: "King", quantity: 1 },
+        { type: "Twin", quantity: 1 },
+      ],
       sofaBed: true,
-      extraBedAvailable: true
+      extraBedAvailable: true,
     },
     maxGuests: 4,
     maxAdults: 3,
@@ -86,15 +103,21 @@ export const roomsData = [
     rating: 4.7,
     tags: ["Popular"],
     amenities: [
-      "Free High-Speed Wi-Fi", "Smart TV with Streaming Services", "Complimentary Breakfast",
-      "Mini Bar", "Luxury Bath Products", "Room Service", "Daily Housekeeping"
-    ]
+      "Free High-Speed Wi-Fi",
+      "Smart TV with Streaming Services",
+      "Complimentary Breakfast",
+      "Mini Bar",
+      "Luxury Bath Products",
+      "Room Service",
+      "Daily Housekeeping",
+    ],
   },
   {
     id: "pres-suite-004",
     name: "Presidential Oceanfront",
     roomType: "Presidential Suite",
-    description: "Unparalleled luxury with ocean views, private dining area, and premium services.",
+    description:
+      "Unparalleled luxury with ocean views, private dining area, and premium services.",
     images: ["/room14.jpg", "/room13.jpg", "/room12.jpg"],
     pricePerNight: 750,
     roomSize: "80 m²",
@@ -102,7 +125,7 @@ export const roomsData = [
       totalBeds: 2,
       types: [{ type: "King", quantity: 2 }],
       sofaBed: true,
-      extraBedAvailable: true
+      extraBedAvailable: true,
     },
     maxGuests: 6,
     maxAdults: 4,
@@ -116,16 +139,23 @@ export const roomsData = [
     rating: 5.0,
     tags: ["Best Seller", "Luxury"],
     amenities: [
-      "Free High-Speed Wi-Fi", "Smart TV with Streaming Services", "Air Conditioning & Heating",
-      "Complimentary Breakfast", "Private Butler", "Mini Bar", "Luxury Bath Products",
-      "Daily Housekeeping", "24/7 Concierge Service"
-    ]
+      "Free High-Speed Wi-Fi",
+      "Smart TV with Streaming Services",
+      "Air Conditioning & Heating",
+      "Complimentary Breakfast",
+      "Private Butler",
+      "Mini Bar",
+      "Luxury Bath Products",
+      "Daily Housekeeping",
+      "24/7 Concierge Service",
+    ],
   },
   {
     id: "deluxe-suite-005",
     name: "Garden View Deluxe",
     roomType: "Deluxe Suite",
-    description: "Tranquil garden view with elegant furnishings and serene ambiance.",
+    description:
+      "Tranquil garden view with elegant furnishings and serene ambiance.",
     images: ["/room12.jpg", "/room10.jpg"],
     pricePerNight: 280,
     roomSize: "38 m²",
@@ -133,7 +163,7 @@ export const roomsData = [
       totalBeds: 1,
       types: [{ type: "King", quantity: 1 }],
       sofaBed: false,
-      extraBedAvailable: true
+      extraBedAvailable: true,
     },
     maxGuests: 3,
     maxAdults: 2,
@@ -147,9 +177,12 @@ export const roomsData = [
     rating: 4.6,
     tags: ["Popular"],
     amenities: [
-      "Free High-Speed Wi-Fi", "Smart TV with Streaming Services", "Complimentary Breakfast",
-      "Luxury Bath Products", "Daily Housekeeping"
-    ]
+      "Free High-Speed Wi-Fi",
+      "Smart TV with Streaming Services",
+      "Complimentary Breakfast",
+      "Luxury Bath Products",
+      "Daily Housekeeping",
+    ],
   },
   // Add 10 more rooms similarly...
   {
@@ -164,7 +197,7 @@ export const roomsData = [
       totalBeds: 1,
       types: [{ type: "Queen", quantity: 1 }],
       sofaBed: false,
-      extraBedAvailable: true
+      extraBedAvailable: true,
     },
     maxGuests: 2,
     maxAdults: 2,
@@ -178,14 +211,18 @@ export const roomsData = [
     rating: 4.4,
     tags: [],
     amenities: [
-      "Free High-Speed Wi-Fi", "Air Conditioning & Heating", "Luxury Bath Products", "Room Service"
-    ]
+      "Free High-Speed Wi-Fi",
+      "Air Conditioning & Heating",
+      "Luxury Bath Products",
+      "Room Service",
+    ],
   },
   {
     id: "suite-007",
     name: "Mountain Escape Suite",
     roomType: "Suite",
-    description: "Rustic charm meets modern luxury with panoramic mountain views.",
+    description:
+      "Rustic charm meets modern luxury with panoramic mountain views.",
     images: ["/room13.jpg", "/room10.jpg"],
     pricePerNight: 340,
     roomSize: "45 m²",
@@ -193,7 +230,7 @@ export const roomsData = [
       totalBeds: 1,
       types: [{ type: "King", quantity: 1 }],
       sofaBed: true,
-      extraBedAvailable: false
+      extraBedAvailable: false,
     },
     maxGuests: 3,
     maxAdults: 2,
@@ -207,22 +244,29 @@ export const roomsData = [
     rating: 4.8,
     tags: ["Popular"],
     amenities: [
-      "Free High-Speed Wi-Fi", "Smart TV with Streaming Services", "Room Service", "Luxury Bath Products"
-    ]
+      "Free High-Speed Wi-Fi",
+      "Smart TV with Streaming Services",
+      "Room Service",
+      "Luxury Bath Products",
+    ],
   },
   {
     id: "exec-suite-008",
     name: "Skyline Executive Suite",
     roomType: "Executive Suite",
-    description: "Stylish, spacious, and perfect for business or luxury leisure stays.",
+    description:
+      "Stylish, spacious, and perfect for business or luxury leisure stays.",
     images: ["/room10.jpg", "/room12.jpg"],
     pricePerNight: 410,
     roomSize: "52 m²",
     bedInfo: {
       totalBeds: 2,
-      types: [{ type: "King", quantity: 1 }, { type: "Double", quantity: 1 }],
+      types: [
+        { type: "King", quantity: 1 },
+        { type: "Double", quantity: 1 },
+      ],
       sofaBed: true,
-      extraBedAvailable: true
+      extraBedAvailable: true,
     },
     maxGuests: 4,
     maxAdults: 3,
@@ -236,8 +280,11 @@ export const roomsData = [
     rating: 4.9,
     tags: ["Best Seller"],
     amenities: [
-      "Free High-Speed Wi-Fi", "Air Conditioning & Heating", "Complimentary Breakfast", "Mini Bar"
-    ]
+      "Free High-Speed Wi-Fi",
+      "Air Conditioning & Heating",
+      "Complimentary Breakfast",
+      "Mini Bar",
+    ],
   },
   // Repeat structure for rooms 9 to 15, just change:
   // - id, name, price, roomSize, rating
@@ -245,4 +292,38 @@ export const roomsData = [
   // - tags/amenities per room for variation
 
   // You can continue from here or ask me to generate the remaining 6 rooms to complete the set.
+];
+
+// FAQ data
+export const faqData = [
+  {
+    question: "What time is check-in and check-out?",
+    answer:
+      "Check-in is available from 3:00 PM, and check-out is until 11:00 AM. Early check-in or late check-out may be available upon request, subject to availability and additional charges.",
+  },
+  {
+    question: "Do you offer airport transfers?",
+    answer:
+      "Yes, we offer luxury airport transfers in our premium vehicles. Please provide your flight details at least 48 hours before arrival so we can arrange your pickup. Additional charges apply based on distance and vehicle type.",
+  },
+  {
+    question: "Are pets allowed in the guest house?",
+    answer:
+      "We welcome well-behaved pets in select rooms with prior arrangement. A pet fee applies per stay. Please inform us about your pet when booking so we can prepare accordingly and provide our pet amenities package.",
+  },
+  {
+    question: "Is breakfast included in the room rate?",
+    answer:
+      "Yes, a gourmet breakfast featuring local and seasonal ingredients is included in your stay. It's served daily in our dining room from 7:00 AM to 10:30 AM. Special dietary requirements can be accommodated with advance notice.",
+  },
+  {
+    question: "Do you have facilities for events or celebrations?",
+    answer:
+      "Our guest house features elegant spaces for intimate gatherings, celebrations, and small events. Our event coordinator can help arrange custom experiences, from private dinners to garden ceremonies. Please contact us for details and availability.",
+  },
+  {
+    question: "What amenities are available in the rooms?",
+    answer:
+      "All rooms feature luxury linens, premium bath products, complimentary high-speed WiFi, smart TVs, Nespresso machines, minibars, air conditioning, and in-room safes. Select suites also include private balconies, fireplaces, or soaking tubs.",
+  },
 ];

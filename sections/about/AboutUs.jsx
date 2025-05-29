@@ -1,23 +1,20 @@
 import { SectionHeader } from '@/components/common/SectionHeader';
 import { useAnimateInView } from '@/hooks/useAnimateInView';
+import { useAppRouter } from '@/hooks/useAppRouter';
 import { animateVariants } from '@/lib/constants/animation';
+import routes from '@/lib/routes';
 import { motion } from 'framer-motion';
 
 const AboutUsSection = () => {
+  const { navigateTo } = useAppRouter();
   const { ref: sectionRef, controls: sectionControls } = useAnimateInView(0.1);
   const { ref: imageRef, controls: imageControls } = useAnimateInView(0.2);
   const { ref: quoteRef, controls: quoteControls } = useAnimateInView(0.3);
 
   return (
     <section className="relative pb-24 bg-neutral-50 overflow-hidden">
-      {/* Subtle background pattern */}
-      <div className="absolute top-0 left-0 w-full h-full opacity-5">
-        <div className="absolute top-0 left-0 w-64 h-64 rounded-full bg-amber-200 blur-3xl -translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-stone-300 blur-3xl translate-x-1/2 translate-y-1/2" />
-      </div>
-
       <div className="container mx-auto px-6 max-w-6xl">
-        <motion.div 
+        <motion.div
           ref={sectionRef}
           initial="hidden"
           animate={sectionControls}
@@ -35,7 +32,7 @@ const AboutUsSection = () => {
         {/* Main content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Image with border frame */}
-          <motion.div 
+          <motion.div
             ref={imageRef}
             initial="hidden"
             animate={imageControls}
@@ -44,19 +41,19 @@ const AboutUsSection = () => {
           >
             <div className="absolute inset-0 border border-amber-200 translate-x-4 translate-y-4"></div>
             <div className="relative bg-stone-100 aspect-square overflow-hidden">
-              <img 
-                src="/rear-view-woman.avif" 
-                alt="Emmanuel Owusu, Founder and Creative Director" 
+              <img
+                src="/rear-view-woman.avif"
+                alt="Emmanuel Owusu, Founder and Creative Director"
                 className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
               />
             </div>
             <div className="absolute -bottom-6 -right-6 bg-white p-4 shadow-lg">
-              <p className="text-stone-500 font-light italic">Est. 2010</p>
+              <p className="text-stone-500 font-light italic">Est. 2018</p>
             </div>
           </motion.div>
 
           {/* Text content */}
-          <motion.div 
+          <motion.div
             ref={quoteRef}
             initial="hidden"
             animate={quoteControls}
@@ -101,9 +98,9 @@ const AboutUsSection = () => {
               animate={sectionControls}
               variants={{
                 hidden: { opacity: 0, y: 20 },
-                visible: { 
-                  opacity: 1, 
-                  y: 0, 
+                visible: {
+                  opacity: 1,
+                  y: 0,
                   transition: { delay: item.delay, duration: 0.6, ease: "easeOut" }
                 }
               }}
@@ -122,16 +119,16 @@ const AboutUsSection = () => {
           animate={sectionControls}
           variants={{
             hidden: { opacity: 0, y: 20 },
-            visible: { 
-              opacity: 1, 
-              y: 0, 
+            visible: {
+              opacity: 1,
+              y: 0,
               transition: { delay: 0.7, duration: 0.6, ease: "easeOut" }
             }
           }}
           className="mt-16 text-center"
         >
-          <button className="px-8 py-3 bg-stone-800 text-white hover:bg-amber-700 transition-colors duration-300">
-            Schedule a Consultation
+          <button onClick={() => navigateTo(routes.bookNow)} className="px-8 py-3 bg-stone-800 text-white hover:bg-amber-700 transition-colors duration-300 cursor-pointer rounded-sm">
+            Reserve a Room Today
           </button>
         </motion.div>
       </div>

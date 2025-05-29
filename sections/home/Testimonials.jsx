@@ -50,28 +50,23 @@ const testimonials = [
    }
 ];
 
-// Custom animations for testimonials
+// Fixed animations that don't affect layout
 const testimonialAnimations = {
    initial: {
       opacity: 0,
-      scale: 0.95,
-      y: 0
+      // Removed scale and y to prevent layout shifts
    },
    animate: {
       opacity: 1,
-      scale: 1,
-      y: 0,
       transition: {
-         duration: 0.8,
-         ease: [0.16, 1, 0.3, 1], // Custom cubic-bezier for smooth, luxurious feel
+         duration: 0.6,
+         ease: [0.16, 1, 0.3, 1],
       }
    },
    exit: {
       opacity: 0,
-      scale: 0.95,
-      y: 0,
       transition: {
-         duration: 0.6,
+         duration: 0.4,
          ease: [0.16, 1, 0.3, 1],
       }
    }
@@ -101,7 +96,7 @@ const TestimonialCard = ({ testimonial }) => {
    return (
       <div
          className="relative overflow-hidden rounded-lg p-8 shadow-lg transition-all duration-500 
-        hover:shadow-xl border border-stone-100 h-full"
+        hover:shadow-xl border border-stone-100 h-96"
          style={{
             background: "linear-gradient(145deg, rgba(255,255,255,0.98), rgba(250,250,249,0.92))",
             backdropFilter: "blur(10px)",
@@ -195,9 +190,8 @@ export default function Testimonials() {
       return () => clearInterval(interval);
    }, [activeIndex]);
 
-
    return (
-      <section className="py-24 bg-stone-50 relative overflow-hidden" >
+      <section className="py-24 bg-stone-50 relative overflow-hidden">
          <div className="container mx-auto max-w-6xl px-4">
             <SectionHeader
                title="Testimonials"
@@ -214,8 +208,9 @@ export default function Testimonials() {
             >
                {/* Desktop view - 2 testimonials at a time */}
                <div className="hidden md:block relative" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-                  <div className="grid grid-cols-2 gap-8 min-h-80">
-                     <AnimatePresence mode="sync">
+                  {/* Fixed height container to prevent layout shifts */}
+                  <div className="grid grid-cols-2 gap-8" style={{ minHeight: '400px' }}>
+                     <AnimatePresence mode="wait">
                         {getVisibleTestimonials().map((testimonial, idx) => (
                            <motion.div
                               key={`desktop-${testimonial.id}-${activeIndex}-${idx}`}
@@ -223,7 +218,11 @@ export default function Testimonials() {
                               animate="animate"
                               exit="exit"
                               variants={testimonialAnimations}
-                              className="h-full"
+                              className="h-96 absolute inset-0"
+                              style={{
+                                 left: idx === 0 ? '0' : 'calc(50% + 1rem)',
+                                 width: idx === 0 ? 'calc(50% - 0.5rem)' : 'calc(50% - 0.5rem)',
+                              }}
                            >
                               <TestimonialCard testimonial={testimonial} />
                            </motion.div>
@@ -276,14 +275,16 @@ export default function Testimonials() {
 
                {/* Mobile view - Single testimonial carousel */}
                <div className="md:hidden" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-                  <div className="relative min-h-96">
-                     <AnimatePresence mode="sync">
+                  {/* Fixed height container for mobile */}
+                  <div className="relative" style={{ minHeight: '420px' }}>
+                     <AnimatePresence mode="wait">
                         <motion.div
                            key={`mobile-${testimonials[activeIndex].id}-${activeIndex}`}
                            variants={testimonialAnimations}
                            initial="initial"
                            animate="animate"
                            exit="exit"
+                           className="absolute inset-0"
                         >
                            <TestimonialCard testimonial={testimonials[activeIndex]} />
                         </motion.div>

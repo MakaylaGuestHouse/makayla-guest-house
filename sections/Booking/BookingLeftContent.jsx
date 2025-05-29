@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { Phone, Star } from 'lucide-react';
 import { useAnimateInView } from '@/hooks/useAnimateInView';
 import { animateVariants, staggerContainer } from '@/lib/constants/animation';
+import { APP_PHONE_NUMBER } from '@/lib/constants';
 
 export const BookingLeftContent = () => {
    const { ref, controls } = useAnimateInView();
@@ -60,10 +61,10 @@ export const BookingLeftContent = () => {
                   <Phone size={20} className="text-amber-400" />
                </div>
             </div>
-            <div>
+            <a href={`tel:${APP_PHONE_NUMBER}`} className="flex flex-col">
                <p className="font-light text-stone-400 text-sm tracking-wider uppercase mb-1">Reservation</p>
-               <p className="font-serif text-2xl text-white">+233 595 631 886</p>
-            </div>
+               <p className="font-serif text-2xl text-white">{APP_PHONE_NUMBER}</p>
+            </a>
          </motion.div>
       </motion.div>
    )

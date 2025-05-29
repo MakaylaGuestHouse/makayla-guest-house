@@ -2,33 +2,33 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { animateVariants } from '@/lib/constants/animation';
-import { Star, Users, Wifi, Coffee, Wind, ChevronRight, Heart } from 'lucide-react';
+import { Star, Users, Wifi, Coffee, Wind, ChevronRight } from 'lucide-react';
 import { useAppRouter } from '@/hooks/useAppRouter';
 import routes from '@/lib/routes';
 
 // Room Card Component
 export const RoomCard = ({ room }) => {
    const [isHovered, setIsHovered] = useState(false);
-   const [isFavorite, setIsFavorite] = useState(false);
 
    const { navigateTo } = useAppRouter();
 
    // Format bed information for display
    const formatBedInfo = () => {
-      return room.bedInfo.types.map(bed => `${bed.quantity} ${bed.type} Bed${bed.quantity > 1 ? 's' : ''}`).join(', ');
+      return room.bedTypes.map(bed => `${bed.quantity} ${bed.type} Bed${bed.quantity > 1 ? 's' : ''}`).join(', ');
    };
 
    const bookNow = (e) => {
       e.stopPropagation();
-      navigateTo(`${routes.roomDetails(room.id)}/#reserve`)
+      navigateTo(`${routes.roomDetails(room._id)}/#reserve`)
    }
 
    return (
       <motion.div
-         className="relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500"
+         className="relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-500 cursor-pointer"
          variants={animateVariants.fadeIn}
          onMouseEnter={() => setIsHovered(true)}
          onMouseLeave={() => setIsHovered(false)}
+         onClick={() => navigateTo(routes.roomDetails(room._id))}
       >
          {/* Tag badge */}
          {room.tags && room.tags.length > 0 && (
@@ -39,17 +39,6 @@ export const RoomCard = ({ room }) => {
             </div>
          )}
 
-         {/* Favorite button */}
-         <button
-            className="absolute top-4 right-4 z-10 bg-white bg-opacity-80 backdrop-blur-sm p-2 rounded-full shadow-sm hover:bg-opacity-100 transition-all"
-            onClick={() => setIsFavorite(!isFavorite)}
-         >
-            <Heart
-               size={18}
-               className={`transition-colors ${isFavorite ? 'fill-amber-500 text-amber-500' : 'text-stone-400'}`}
-            />
-         </button>
-
          {/* Room image with zoom effect */}
          <div className="relative h-64 w-full overflow-hidden">
             <motion.div
@@ -58,7 +47,7 @@ export const RoomCard = ({ room }) => {
                transition={{ duration: 0.4 }}
             >
                <Image
-                  src={room.images[0]}
+                  src={room?.images[0]?.image}
                   alt={room.name}
                   fill
                   className="object-cover"
@@ -70,7 +59,7 @@ export const RoomCard = ({ room }) => {
             {/* Price tag */}
             <div className="absolute bottom-0 right-0 bg-stone-800 bg-opacity-90 backdrop-blur-sm px-4 py-2 text-white">
                <p className="text-sm font-light uppercase tracking-wider">From</p>
-               <p className="text-xl font-serif">${room.pricePerNight}<span className="text-sm font-light"> / night</span></p>
+               <p className="text-xl font-serif">${room.price}<span className="text-sm font-light"> / night</span></p>
             </div>
          </div>
 
@@ -155,7 +144,7 @@ export const RoomCard = ({ room }) => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.98 }}
                   className="flex items-center justify-center bg-white border border-stone-200 text-stone-800 py-3 px-4 rounded-md hover:border-amber-400 transition-colors duration-300 cursor-pointer"
-                  onClick={() => navigateTo(`${routes.roomDetails(room.id)}`)}
+                  onClick={() => navigateTo(`${routes.roomDetails(room._id)}`)}
                >
                   <span className="text-sm font-medium mr-1">Details</span>
                   <ChevronRight size={16} />

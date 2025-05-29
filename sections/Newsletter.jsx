@@ -122,7 +122,7 @@ const Newsletter = () => {
 
                     <button
                       onClick={handleSubscribe}
-                      className="w-full cursor-pointer py-4 px-6 bg-amber-600 hover:bg-amber-500 text-stone-900 font-medium rounded-md transition-colors duration-300 flex items-center justify-center group"
+                      className="w-full cursor-pointer py-4 px-6 bg-amber-600 hover:bg-amber-500 text-stone-100 font-medium rounded-md transition-colors duration-300 flex items-center justify-center group"
                     >
                       <span>Join Our Exclusive Circle</span>
                       <Send size={18} className="ml-2 transform group-hover:translate-x-1 transition-transform duration-300" />

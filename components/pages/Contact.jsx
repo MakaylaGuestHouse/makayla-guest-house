@@ -84,7 +84,7 @@ const ContactPage = () => {
   return (
     <div className="bg-white text-stone-600 ">
       {/* Contact Form & Information */}
-      <section className="py-20 md:py-24 lg:py-32 bg-stone-50 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <section id="form" className="py-20 md:py-24 lg:py-32 bg-stone-50 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         {/* SectionHeader for Contact Us page */}
         <SectionHeader
           title="Contact Us"
@@ -245,13 +245,13 @@ const ContactPage = () => {
                         <p className="text-stone-700 font-medium">{contact.value}</p>
                       </a>
                     ))}
-                    <div className="grid grid-cols-2 items-center max-w-[90%] gap-3 ">
+                    <div className="grid grid-cols-2 md:grid-cols-1 lg:grid-cols-2 items-center w-full md:max-w-[90%] gap-3 ">
                       <a
                         href="tel:0553383460"
                         className="inline-flex items-center px-6 py-3 bg-amber-700 text-white rounded-lg hover:bg-amber-800 font-medium text-sm shadow-md hover:shadow-lg transform transition-all duration-300"
                       >
                         <Phone className="mr-2 h-4 w-4" />
-                        Contact Front Desk
+                        Call Us
                       </a>
                       <WhatsAppLink />
                     </div>

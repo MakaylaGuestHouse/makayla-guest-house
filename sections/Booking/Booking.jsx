@@ -6,6 +6,7 @@ export default function BookingSection() {
 
    return (
       <section
+         id='book-now'
          className="relative min-h-screen bg-stone-900 overflow-hidden"
          style={{
             backgroundImage: 'url(/tourist.jpg)',

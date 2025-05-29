@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { useAnimateInView } from '@/hooks/useAnimateInView';
 import { animateVariants, staggerContainer } from '@/lib/constants/animation';
 import { Brush, Car, Clock, Coffee, ShieldCheck, ShirtIcon, Snowflake, Tv, UtensilsCrossed, Wifi } from "lucide-react";
+import routes from "@/lib/routes";
+import { useAppRouter } from "@/hooks/useAppRouter";
 
 const amenities = [
   {
@@ -94,7 +96,7 @@ const amenities = [
 const AmenityCard = ({ amenity }) => {
   const [isHovered, setIsHovered] = useState(false);
   const Icon = amenity.icon;
-  
+
   return (
     <motion.div
       className="relative bg-white border border-stone-100 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
@@ -106,21 +108,21 @@ const AmenityCard = ({ amenity }) => {
     >
       {/* Decorative background elements */}
       <div className="absolute top-0 right-0 w-24 h-24 bg-amber-50 rounded-full -mr-12 -mt-12 opacity-20"></div>
-      
+
       <div className="p-6 relative z-10">
         <div className="flex flex-col items-center text-center">
           <div className={`mb-5 rounded-full p-4 ${isHovered ? 'bg-amber-100' : 'bg-stone-50'} transition-colors duration-300`}>
             <Icon size={32} className={`${isHovered ? 'text-amber-700' : 'text-stone-600'} transition-colors duration-300`} />
           </div>
-          
+
           <h3 className="font-serif text-xl text-stone-800 mb-2">{amenity.title}</h3>
-          
+
           <p className={`text-sm text-stone-500 leading-relaxed transition-all duration-300 ${isHovered ? 'opacity-100 max-h-20' : 'opacity-0 max-h-0 overflow-hidden'}`}>
             {amenity.description}
           </p>
         </div>
       </div>
-      
+
       {/* Decorative accent line */}
       <div className={`h-1 bg-amber-400 transition-all duration-300 ${isHovered ? 'w-full' : 'w-0'}`}></div>
     </motion.div>
@@ -129,14 +131,15 @@ const AmenityCard = ({ amenity }) => {
 
 // Main component
 export default function Amenities() {
+  const { navigateTo } = useAppRouter();
   const { ref, controls } = useAnimateInView();
   const [activeCategory, setActiveCategory] = useState("all");
-  
+
   // Filter amenities based on selected category
-  const filteredAmenities = activeCategory === "all" 
-    ? amenities 
+  const filteredAmenities = activeCategory === "all"
+    ? amenities
     : amenities.filter(amenity => amenity.category === activeCategory);
-  
+
   return (
     <section id="amenities" className="py-24 relative overflow-hidden">
       {/* Background styling */}
@@ -144,19 +147,19 @@ export default function Amenities() {
       <div className="absolute top-0 left-0 w-full h-full">
         <div className="absolute top-20 right-20 w-72 h-72 rounded-full bg-amber-50 opacity-20 blur-3xl"></div>
         <div className="absolute bottom-40 left-40 w-80 h-80 rounded-full bg-stone-100 opacity-30 blur-3xl"></div>
-        
+
         {/* Decorative pattern */}
-        <div className="absolute inset-0 opacity-5" 
+        <div className="absolute inset-0 opacity-5"
           style={{
             backgroundImage: `radial-gradient(circle at 1rem 1rem, stone-400 1px, transparent 0)`,
             backgroundSize: '3rem 3rem'
           }}>
         </div>
       </div>
-      
+
       <div className="container mx-auto max-w-7xl px-4 relative z-10">
         {/* Section header */}
-        <motion.div 
+        <motion.div
           className="text-center mb-16"
           variants={animateVariants.fadeIn}
           initial="hidden"
@@ -171,7 +174,7 @@ export default function Amenities() {
             Indulge in our comprehensive suite of premium amenities designed to elevate your stay from exceptional to unforgettable
           </p>
         </motion.div>
-        
+
         {/* Category filter */}
         {/* <div className="flex flex-wrap justify-center gap-3 mb-16">
           {categories.map(category => (
@@ -188,7 +191,7 @@ export default function Amenities() {
             </button>
           ))}
         </div> */}
-        
+
         {/* Amenities grid */}
         <motion.div
           ref={ref}
@@ -201,9 +204,9 @@ export default function Amenities() {
             <AmenityCard key={amenity.id} amenity={amenity} />
           ))}
         </motion.div>
-        
+
         {/* Call to action */}
-        <motion.div 
+        <motion.div
           className="mt-16 text-center"
           variants={animateVariants.fadeIn}
           initial="hidden"
@@ -218,12 +221,12 @@ export default function Amenities() {
             <p className="text-stone-600 mb-6">
               Book your stay today and immerse yourself in the epitome of comfort and luxury
             </p>
-            <button className="bg-amber-700 hover:bg-stone-800 text-white px-6 py-3 rounded transition-colors duration-300 font-medium cursor-pointer">
+            <button onClick={() => navigateTo(routes.bookNow)} className="bg-amber-700 hover:bg-stone-800 text-white px-6 py-3 rounded transition-colors duration-300 font-medium cursor-pointer">
               Book Your Luxurious Stay
             </button>
           </div>
         </motion.div>
-      </div>
-    </section>
+      </div >
+    </section >
   );
 }

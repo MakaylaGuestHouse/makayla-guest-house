@@ -6,61 +6,69 @@ import { animateVariants, staggerContainer } from '@/lib/constants/animation';
 import { Instagram, Facebook, Twitter, MapPin, Mail, Phone, Send } from "lucide-react";
 import { Logo } from "./Logo";
 import { WhatsAppLink } from "./WhatsApp";
+import routes, { MAP_URL } from "@/lib/routes";
+import { APP_NAME, APP_PHONE_NUMBER } from "@/lib/constants";
+import { sendEmail } from "@/lib/sendEmail";
 
+const quickLinks = [
+  {
+    title: "Home",
+    href: routes.home
+  },
+  {
+    title: "Accommodations",
+    href: routes.rooms
+  },
+  {
+    title: "Gallery",
+    href: routes.gallery
+  },
+  {
+    title: "Reservations",
+    href: routes.booking
+  }
+]
 
-//  {/* Column 4: Hours & Recognition */}
-//  <motion.div
-//    initial={{ opacity: 0, y: 20 }}
-//    animate={isFooterVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-//    transition={{ duration: 0.5, delay: 0.4 }}
-//  >
-//    <h4 className="font-serif text-xl text-white mb-6 relative">
-//      <span className="relative z-10">Reception Hours</span>
-//      <span className="absolute bottom-0 left-0 w-12 h-px bg-amber-400"></span>
-//    </h4>
-//    <ul className="space-y-2 mb-8">
-//      <li className="flex justify-between text-stone-300">
-//        <span>Monday - Friday:</span>
-//        <span>8:00 AM - 10:00 PM</span>
-//      </li>
-//      <li className="flex justify-between text-stone-300">
-//        <span>Saturday:</span>
-//        <span>9:00 AM - 11:00 PM</span>
-//      </li>
-//      <li className="flex justify-between text-stone-300">
-//        <span>Sunday:</span>
-//        <span>9:00 AM - 9:00 PM</span>
-//      </li>
-//    </ul>
-
-//    <h4 className="font-serif text-xl text-white mb-4 relative">
-//      <span className="relative z-10">Recognition</span>
-//      <span className="absolute bottom-0 left-0 w-12 h-px bg-amber-400"></span>
-//    </h4>
-//    <div className="flex flex-wrap gap-3">
-//      <div className="bg-stone-800 p-2 rounded-md">
-//        <img src="/api/placeholder/50/30" alt="Award" className="h-8" />
-//      </div>
-//      <div className="bg-stone-800 p-2 rounded-md">
-//        <img src="/api/placeholder/50/30" alt="Award" className="h-8" />
-//      </div>
-//      <div className="bg-stone-800 p-2 rounded-md">
-//        <img src="/api/placeholder/50/30" alt="Award" className="h-8" />
-//      </div>
-//    </div>
-//  </motion.div>
+const moreLinks = [
+  {
+    title: "About Us",
+    href: routes.about
+  },
+  {
+    title: "Blog",
+    href: routes.blog
+  },
+  {
+    title: "Contact",
+    href: routes.contact
+  }
+]
 
 const Footer = () => {
   const { ref, controls } = useAnimateInView();
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
-  const handleSubscribe = (e) => {
-    if (email) {
-      setSubscribed(true);
-      setEmail("");
-      setTimeout(() => setSubscribed(false), 3000);
+  const openInNewTab = () => {
+    window.open(MAP_URL, '_blank');
+  };
+
+  const handleSubscribe = async (e) => {
+    // validate email input
+    if (!email.trim()) {
+      return;
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return;
+      }
     }
+
+    await sendEmail(email, '/api/mail/newsletter');
+
+    setSubscribed(true);
+    setEmail("");
+    setSubscribed(false)
   };
 
   return (
@@ -148,7 +156,7 @@ const Footer = () => {
               Experience the pinnacle of luxury accommodations in our exquisite guest house. Each space is meticulously designed to blend comfort with sophistication, creating an unforgettable retreat for the discerning traveler.
             </p>
             <div className="bg-stone-800/50 backdrop-blur-sm p-6 rounded-lg border border-stone-700/50">
-              <div className="flex items-center mb-4">
+              <div className="flex items-center mb-4 cursor-pointer" onClick={openInNewTab}>
                 <div className="w-10 h-10 rounded-full bg-amber-400/20 flex items-center justify-center mr-4">
                   <MapPin size={16} className="text-amber-400" />
                 </div>
@@ -157,15 +165,15 @@ const Footer = () => {
                   <p className="text-stone-400 text-sm">Abesim, Sunyani, Ghana</p>
                 </div>
               </div>
-              <div className="flex items-center">
+              <a href={`tel:${APP_PHONE_NUMBER}`} className="flex items-center">
                 <div className="w-10 h-10 rounded-full bg-amber-400/20 flex items-center justify-center mr-4">
                   <Phone size={16} className="text-amber-400" />
                 </div>
                 <div>
                   <h4 className="text-white text-sm font-medium mb-1">Call Us</h4>
-                  <p className="text-stone-400 text-sm">+233 595 631 886</p>
+                  <p className="text-stone-400 text-sm">{APP_PHONE_NUMBER}</p>
                 </div>
-              </div>
+              </a>
             </div>
           </motion.div>
 
@@ -176,14 +184,14 @@ const Footer = () => {
               <span className="absolute -bottom-2 left-0 w-12 h-0.5 bg-amber-400"></span>
             </h3>
             <ul className="space-y-4">
-              {["Home", "Accommodations", "Gallery", "Reservations"].map((link) => (
-                <li key={link}>
+              {quickLinks.map((link) => (
+                <li key={link.href}>
                   <a
-                    href="#"
+                    href={link.href}
                     className="text-stone-300 hover:text-amber-400 transition-all duration-300 flex items-center group"
                   >
                     <span className="w-2 h-2 bg-amber-700 group-hover:bg-amber-400 rounded-full mr-3 transition-all duration-300"></span>
-                    <span className="border-b border-transparent group-hover:border-amber-400/30">{link}</span>
+                    <span className="border-b border-transparent group-hover:border-amber-400/30">{link.title}</span>
                   </a>
                 </li>
               ))}
@@ -197,14 +205,14 @@ const Footer = () => {
               <span className="absolute -bottom-2 left-0 w-12 h-0.5 bg-amber-400"></span>
             </h3>
             <ul className="space-y-4">
-              {["About Us", "Services", "Our Team", "Blog", "Contact"].map((link) => (
-                <li key={link}>
+              {moreLinks.map((link) => (
+                <li key={link.title}>
                   <a
-                    href="#"
+                    href={link.href}
                     className="text-stone-300 hover:text-amber-400 transition-all duration-300 flex items-center group"
                   >
                     <span className="w-2 h-2 bg-amber-700 group-hover:bg-amber-400 rounded-full mr-3 transition-all duration-300"></span>
-                    <span className="border-b border-transparent group-hover:border-amber-400/30">{link}</span>
+                    <span className="border-b border-transparent group-hover:border-amber-400/30">{link.title}</span>
                   </a>
                 </li>
               ))}
@@ -236,7 +244,7 @@ const Footer = () => {
                   />
                   <button
                     onClick={handleSubscribe}
-                    className="absolute right-1 top-1 bg-amber-600 hover:bg-amber-500 text-stone-900 p-2 rounded-md transition-colors duration-300"
+                    className="absolute right-1 top-1 bg-amber-600 hover:bg-amber-500 text-stone-100 p-2 rounded-md transition-colors duration-300"
                     aria-label="Subscribe"
                   >
                     <Send size={16} />
@@ -269,12 +277,11 @@ const Footer = () => {
           className="text-center"
         >
           <p className="text-stone-400 uppercase tracking-widest text-xs font-light mb-4">
-            © {new Date().getFullYear()} Luxury Guest House. All rights reserved.
+            © {new Date().getFullYear()}{APP_NAME}. All rights reserved.
           </p>
           <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-xs">
-            <a href="#" className="text-stone-400 hover:text-amber-400 transition-colors duration-300">Privacy Policy</a>
-            <a href="#" className="text-stone-400 hover:text-amber-400 transition-colors duration-300">Terms of Service</a>
-            <a href="#" className="text-stone-400 hover:text-amber-400 transition-colors duration-300">Cookies Policy</a>
+            <a href={routes.privacy} className="text-stone-400 hover:text-amber-400 transition-colors duration-300">Privacy Policy</a>
+            <a href={routes.terms} className="text-stone-400 hover:text-amber-400 transition-colors duration-300">Terms of Service</a>
           </div>
         </motion.div>
       </div>

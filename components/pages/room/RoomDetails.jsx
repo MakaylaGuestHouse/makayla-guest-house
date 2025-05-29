@@ -28,84 +28,7 @@ import { AddressCTA } from "@/components/ui/AddressCTA";
 import { SiteAttraction } from "@/components/ui/SiteAttraction";
 import { SimilarRooms } from "@/components/ui/similarRooms/SimilarRooms";
 
-const room = {
-   _id: "68340fe04c91afa0271611dd",
-   id: "deluxe-suite-001",
-   name: "Veloria Deluxe Suite",
-   roomType: "Suite",
-   description: "Experience the height of comfort in our Veloria Deluxe Suite, featuring floor-to-ceiling windows with panoramic views, custom furniture, and a spa-inspired ensuite bathroom.",
-   images: [
-      "/room10.jpg",
-      "/room11.jpg",
-      "/room12.jpg",
-      "/room13.jpg",
-      "/room13.jpg",
-      "/room13.jpg",
-      "/room14.jpg",
-      "/room11.jpg"
-   ],
-   pricePerNight: 320,
-   roomSize: "42 m²",
-   totalBeds: 1,
-   bedTypes: [{ type: "King", quantity: 1 }],
-   sofaBed: false,
-   extraBedAvailable: false,
-   maxGuests: 3,
-   maxAdults: 2,
-   maxChildren: 1,
-   hasBalcony: true,
-   bathroomType: "Private Bathroom",
-   isSmokingAllowed: false,
-   hasClimateControl: true,
-   housekeepingFrequency: "Daily",
-   availability: true,
-   rating: 4.9,
-   tags: ["Popular", "Best Seller"],
-   amenities: [
-      { name: "Free High-Speed Wi-Fi", icon: Wifi },
-      { name: "Smart TV with Streaming Services", icon: Tv },
-      { name: "Air Conditioning & Heating", icon: Wind },
-      { name: "Complimentary Breakfast", icon: Coffee },
-      { name: "In-Room Safe & Security Features", icon: Lock },
-      { name: "Room Service", icon: Truck },
-      { name: "Mini Bar", icon: Wine },
-      { name: "Luxury Bath Products", icon: Bath },
-      { name: "Daily Housekeeping", icon: Sparkles },
-      { name: "24/7 Reception or Concierge Service", icon: Clock }
-   ]
-};
-
-const similarRooms = [
-   {
-      id: "harmony-deluxe-001",
-      name: "Harmony Deluxe Room",
-      type: "Room",
-      price: 280,
-      size: "35 m²",
-      bed: "Queen Bed",
-      image: "/room10.jpg"
-   },
-   {
-      id: "serenity-premium-001",
-      name: "Serenity Premium Suite",
-      type: "Suite",
-      price: 340,
-      size: "48 m²",
-      bed: "King Bed",
-      image: "/room11.jpg"
-   },
-   {
-      id: "tranquility-suite-001",
-      name: "Tranquility Executive Suite",
-      type: "Executive Suite",
-      price: 380,
-      size: "52 m²",
-      bed: "King Bed",
-      image: "/room12.jpg"
-   }
-];
-
-const RoomDetails = () => {
+const RoomDetails = ({ room, similarRooms }) => {
    const [activeSlide, setActiveSlide] = useState(0);
    const [isDragging, setIsDragging] = useState(false);
    const [startX, setStartX] = useState(0);
@@ -200,7 +123,7 @@ const RoomDetails = () => {
 
             <div className="flex flex-col lg:flex-row gap-8 px-4 lg:px-8 w-full">
                {/* Main Content */}
-               <div className="flex flex-col w-full lg:w-[60%]">
+               <div className="flex flex-col w-full lg:w-3/5">
                   {/* Image Slider */}
                   <div className="relative overflow-hidden rounded-2xl mb-6 shadow-lg bg-white">
                      <div
@@ -225,8 +148,8 @@ const RoomDetails = () => {
                               transition={{ duration: 0.5 }}
                            >
                               <Image
-                                 src={image}
-                                 alt={`Room view ${index + 1}`}
+                                 src={image.image}
+                                 alt={room.name}
                                  fill
                                  priority={index === 0}
                                  className="object-cover"
@@ -257,7 +180,7 @@ const RoomDetails = () => {
                         {/* Status tag */}
                         <div className="absolute top-6 left-6 z-20">
                            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium text-white bg-amber-600 shadow-md">
-                              {room.availability ? 'Available Now' : 'Fully Booked'}
+                              {room.isAvailable ? 'Available Now' : 'Fully Booked'}
                            </span>
                         </div>
                      </div>
@@ -293,8 +216,8 @@ const RoomDetails = () => {
                               >
                                  <div className="relative h-20 w-32">
                                     <Image
-                                       src={image}
-                                       alt={`Room thumbnail ${index + 1}`}
+                                       src={image.image}
+                                       alt={`Room thumbnail ${index + 1} - ${room.name}`}
                                        fill
                                        className="object-cover snap-center"
                                     />
@@ -347,7 +270,7 @@ const RoomDetails = () => {
                               </div>
                            </div>
                            <div className="flex items-baseline justify-end">
-                              <span className="text-3xl font-serif text-stone-800 font-medium">${room.pricePerNight}</span>
+                              <span className="text-3xl font-serif text-stone-800 font-medium">${room.price}</span>
                               <span className="text-stone-600 ml-1">/ night</span>
                            </div>
                         </div>
@@ -431,10 +354,10 @@ const RoomDetails = () => {
                                  variants={animateVariants.fadeIn}
                                  className="flex items-center gap-3 p-4 rounded-xl bg-stone-50 border border-stone-100 transition-all hover:border-amber-200 hover:shadow-sm"
                               >
-                                 <div className="flex items-center justify-center w-10 h-10 rounded-full bg-amber-100 text-amber-700">
+                                 {/* <div className="flex items-center justify-center w-10 h-10 rounded-full bg-amber-100 text-amber-700">
                                     <Icon className="w-5 h-5" />
-                                 </div>
-                                 <span className="text-stone-700 font-medium">{amenity.name}</span>
+                                 </div> */}
+                                 <span className="text-stone-700 font-medium">{amenity}</span>
                               </motion.div>
                            );
                         })}
@@ -536,7 +459,7 @@ const RoomDetails = () => {
                </div>
 
                {/* Sidebar */}
-               <div className="w-full lg:w-460]">
+               <div className="w-full lg:w-2/5">
                   <div className="lg:sticky lg:top-8">
                      {/* Booking Form */}
                      <div id="reserve" className="bg-white shadow-lg rounded-2xl border border-stone-100 overflow-hidden mb-8">

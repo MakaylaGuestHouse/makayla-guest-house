@@ -5,12 +5,11 @@ import { staggerContainer } from '@/lib/constants/animation';
 import { ChevronRight } from 'lucide-react';
 import { RoomCard } from './RoomCard';
 import { RoomFilter } from './RoomFilter';
-import { roomsData } from '@/data';
 import { PagesHero } from '@/components/common/PagesHero';
 import { useSearchParams } from 'next/navigation';
 
-export const RoomsPage = () => {
-  const [filteredRooms, setFilteredRooms] = useState(roomsData);
+export const RoomsPage = ({ rooms, roomsCount }) => {
+  const [filteredRooms, setFilteredRooms] = useState(rooms);
   const [activeFilters, setActiveFilters] = useState({});
 
   const searchParams = useSearchParams();
@@ -38,7 +37,7 @@ export const RoomsPage = () => {
     setActiveFilters(filters);
 
     // Apply filtering logic based on the form data
-    const filtered = roomsData?.filter(room => {
+    const filtered = rooms?.filter(room => {
       // Location filter
       if (formData.location !== "All Locations" && !room.name?.includes(formData.location)) {
         return false;
@@ -51,7 +50,7 @@ export const RoomsPage = () => {
 
       // Bed type filter
       if (formData.bedType !== "All Beds" &&
-        !room.bedInfo.types.some(bed => bed.type === formData.bedType)) {
+        !room.bedTypes.some(bed => bed.type === formData.bedType)) {
         return false;
       }
 
@@ -120,7 +119,7 @@ export const RoomsPage = () => {
 
   // Function to reset filters
   const resetFilters = () => {
-    setFilteredRooms(roomsData);
+    setFilteredRooms(rooms);
     setActiveFilters({});
     setFilterFormData(null);
     // setInitialFiltersFromURL(null);
@@ -172,15 +171,15 @@ export const RoomsPage = () => {
               viewport={{ once: false }} // Changed from true to false
             >
               <AnimatePresence>
-                {filteredRooms.map((room) => (
+                {filteredRooms.map((room, index) => (
                   <motion.div
-                    key={room.id}
+                    key={`${room._id}-${index}`}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <RoomCard room={room} />
+                    <RoomCard key={room._id} room={room} />
                   </motion.div>
                 ))}
               </AnimatePresence>
@@ -190,7 +189,7 @@ export const RoomsPage = () => {
               <p className="text-stone-600 text-lg mb-6">No rooms match your current filters.</p>
               <button
                 onClick={resetFilters}
-                className="inline-flex items-center bg-amber-700 text-white hover:bg-amber-800 transition-colors duration-300 py-2 px-6 rounded-md"
+                className="inline-flex items-center bg-amber-700 text-white hover:bg-amber-800 transition-colors duration-300 py-2 px-6 rounded-md cursor-pointer"
               >
                 View All Rooms
               </button>
@@ -198,10 +197,10 @@ export const RoomsPage = () => {
           )}
 
           {/* Conditional "View All" button - only show if filters are active and not all rooms are showing */}
-          {Object.keys(activeFilters).length > 0 && filteredRooms.length < roomsData.length && filteredRooms.length > 0 && (
+          {Object.keys(activeFilters).length > 0 && filteredRooms.length < rooms.length && filteredRooms.length > 0 && (
             <div className="text-center mt-12">
               <p className="text-stone-600 mb-2">
-                Showing {filteredRooms.length} of {roomsData.length} rooms
+                Showing {filteredRooms.length} of {roomsCount} rooms
               </p>
               <motion.button
                 onClick={resetFilters}

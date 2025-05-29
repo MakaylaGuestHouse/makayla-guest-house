@@ -3,7 +3,13 @@ import { motion } from 'framer-motion';
 import { animateVariants } from '@/lib/constants/animation';
 import { useAnimateInView } from '@/hooks/useAnimateInView';
 
-export const PagesHero = ({onClick}) => {
+export const PagesHero = ({
+   title = "Discover Our Signature Stays",
+   description = "Every room is a masterpiece of comfort, elegance, and sophistication.",
+   buttonLabel = "View All Rooms",
+   showButton = true,
+   onClick
+}) => {
    const { ref: heroRef, controls: heroControls } = useAnimateInView();
 
    return (
@@ -31,22 +37,24 @@ export const PagesHero = ({onClick}) => {
                   variants={animateVariants.scaleIn}
                   className="font-serif text-4xl md:text-6xl text-white mb-4"
                >
-                  Discover Our Signature Stays
+                  {title}
                </motion.h1>
                <motion.p
                   variants={animateVariants.fadeIn}
                   className="text-white/90 text-lg md:text-xl mb-8 max-w-2xl mx-auto"
                >
-                  Every room is a masterpiece of comfort, elegance, and sophistication.
+                  {description}
                </motion.p>
-               <motion.button
-                  onClick={onClick}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="bg-amber-700 hover:bg-amber-800 text-white py-3 px-8 rounded-md transition-colors duration-300 cursor-pointer"
-               >
-                  View All Rooms
-               </motion.button>
+               {showButton && (
+                  <motion.button
+                     onClick={onClick}
+                     whileHover={{ scale: 1.05 }}
+                     whileTap={{ scale: 0.98 }}
+                     className="bg-amber-700 hover:bg-amber-800 text-white py-3 px-8 rounded-md transition-colors duration-300 cursor-pointer"
+                  >
+                     {buttonLabel}
+                  </motion.button>
+               )}
             </div>
          </motion.section>
       </div>
