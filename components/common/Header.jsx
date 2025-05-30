@@ -178,7 +178,7 @@ export default function Header() {
                         </div>
                         <motion.button
                            whileTap={{ scale: 0.9 }}
-                           onClick={() => setIsSidebarOpen(false)}
+                           // onClick={() => setIsSidebarOpen((prev) => !prev)}
                            className="text-gray-500 cursor-pointer hover:text-gray-800 p-2 rounded-full hover:bg-gray-100 transition-colors"
                            aria-label="Close menu"
                         >

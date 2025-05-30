@@ -52,7 +52,7 @@ export default function ServicesSection() {
   ];
 
   return (
-    <section className="py-24 bg-white">
+    <section className="mt-32 md:mt-0 py-24 bg-white">
       <div className="max-w-6xl mx-auto px-4">
         <motion.div 
           ref={ref}
@@ -63,7 +63,7 @@ export default function ServicesSection() {
         >
           <motion.h2 
             variants={animateVariants.fadeIn}
-            className="font-serif text-5xl text-stone-800 mb-3"
+            className="font-serif text-3xl md:text-5xl text-stone-800 mb-3"
           >
             YOU'LL NEVER WANT TO LEAVE
           </motion.h2>

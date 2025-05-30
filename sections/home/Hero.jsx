@@ -5,8 +5,11 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { heroTransitions } from './config';
 import { carouselImages } from './constants';
 import { RoomFilter } from '@/components/ui/rooms/RoomFilter';
+import routes from '@/lib/routes';
+import { useAppRouter } from '@/hooks/useAppRouter';
 
 const Hero = () => {
+   const { navigateTo } = useAppRouter();
    const [currentIndex, setCurrentIndex] = useState(0);
    const [isChanging, setIsChanging] = useState(false);
    const [currentTransition, setCurrentTransition] = useState({});
@@ -179,7 +182,7 @@ const Hero = () => {
                            whileHover={{ scale: 1.02 }}
                            whileTap={{ scale: 0.99 }}
                         >
-                           <button className="bg-amber-500 text-gray-100 px-8 py-3 mt-6 rounded-full font-medium tracking-wide uppercase text-sm hover:bg-amber-400 transition-all duration-300 shadow-xl hover:shadow-xl backdrop-blur-sm cursor-pointer">
+                           <button onClick={() => navigateTo(routes.bookNow)} className="bg-amber-500 text-gray-100 px-8 py-3 mt-6 rounded-full font-medium tracking-wide uppercase text-sm hover:bg-amber-400 transition-all duration-300 shadow-xl hover:shadow-xl backdrop-blur-sm cursor-pointer">
                               Book Your Stay
                            </button>
                         </motion.div>

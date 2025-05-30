@@ -1,34 +1,40 @@
 "use client";
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { User, Mail, Lock, Eye, EyeOff, UserPlus, AlertCircle, CheckCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { User, Mail, Lock, Eye, EyeOff, UserPlus, AlertCircle, CheckCircle, Save } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAnimateInView } from '@/hooks/useAnimateInView';
 import { animateVariants } from '@/lib/constants/animation';
 import { InputField } from '@/components/ui/forms/InputField';
-import { createAdminUser } from '@/server/adminUser.action';
+import { createAdminUser, getAdminUser, updateAdminUser } from '@/server/adminUser.action';
 import { Dropdown } from '@/components/ui/forms/DropDown';
 import { validateSignUpForm } from '@/utils/validators';
 
-export default function SignUpPage() {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    role: 'Select Role'
-  });
+export default function SignUpPage({ userToUpdate, userId }) {
+  const [formData, setFormData] = useState(userToUpdate);
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(userId ?? false);
 
   const roleOptions = ['admin', 'editor'];
   const router = useRouter();
   const { ref, controls } = useAnimateInView();
+
+  // Check for edit mode and fetch user data
+  useEffect(() => {
+
+    // Get current user from auth
+    const authData = localStorage.getItem('guesthouse_admin_auth');
+    if (authData) {
+      const { user } = JSON.parse(authData);
+      setCurrentUser(user);
+    }
+  }, [userId]);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -46,8 +52,13 @@ export default function SignUpPage() {
     setAuthError('');
     setSuccessMessage('');
 
+    // For update mode, password is optional
+    const validationData = isEditMode ?
+      { ...formData, password: formData.password || 'd@A1ummypass', confirmPassword: formData.confirmPassword || 'd@A1ummypass' } :
+      formData;
+
     // Validate form
-    const validationErrors = validateSignUpForm(formData);
+    const validationErrors = validateSignUpForm(validationData, isEditMode);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       setIsLoading(false);
@@ -55,10 +66,10 @@ export default function SignUpPage() {
     }
 
     try {
-      // Get current user ID from auth session (admin must be logged in to create users)
+      // Check authentication
       const authData = localStorage.getItem('guesthouse_admin_auth');
       if (!authData) {
-        setAuthError('You must be logged in as an admin to create users');
+        setAuthError('You must be logged in as an admin');
         setIsLoading(false);
         return;
       }
@@ -66,44 +77,46 @@ export default function SignUpPage() {
       const { user } = JSON.parse(authData);
 
       if ((user.role !== 'admin') || !user.isSuperAdmin) {
-        setAuthError('Only admins can create new users');
+        setAuthError('Only super admins can create/update users');
         setIsLoading(false);
         return;
       }
 
       // Prepare user data
       const userData = {
+        _id: userToUpdate?._id,
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
-        password: formData.password,
-        role: formData.role
+        role: formData.role,
+        isSuperAdmin: formData.isSuperAdmin
       };
 
-      // Call server action
-      const result = await createAdminUser(userData, user?._id);
+      // Only include password if it's provided
+      if (formData.password) {
+        userData.password = formData.password;
+      }
+
+      let result;
+      if (isEditMode) {
+        // Update existing user
+        result = await updateAdminUser(userData, currentUser?._id);
+      } else {
+        // Create new user
+        result = await createAdminUser(userData, currentUser?._id);
+      }
 
       if (result.error) {
         setAuthError(result.error);
       } else {
-        setSuccessMessage('Admin user created successfully!');
-        // Reset form
-        setFormData({
-          firstName: '',
-          lastName: '',
-          email: '',
-          password: '',
-          confirmPassword: '',
-          role: 'Select Role'
-        });
+        setSuccessMessage(isEditMode ? 'User updated successfully!' : 'Admin user created successfully!');
 
-        // Redirect after success
-        // setTimeout(() => {
-        //   router.push('/admin/users');
-        // }, 2000);
+        // Redirect to users page
+        router.push('/admin/users');
+
       }
     } catch (error) {
-      setAuthError('Network error. Please try again.');
+      setAuthError(`Error: ${error.message}`);
     } finally {
       setIsLoading(false);
     }
@@ -129,21 +142,13 @@ export default function SignUpPage() {
           {/* Header */}
           <div className="text-center mb-8">
             <div className="w-16 h-px bg-gradient-to-r from-transparent via-amber-400 to-transparent mx-auto mb-6"></div>
-            <h1 className="text-3xl font-serif text-stone-800 mb-2">Create Admin Account</h1>
-            <p className="text-stone-600 font-light">Add a new administrator to the system</p>
+            <h1 className="text-3xl font-serif text-stone-800 mb-2">
+              {isEditMode ? 'Update Admin Account' : 'Create Admin Account'}
+            </h1>
+            <p className="text-stone-600 font-light">
+              {isEditMode ? 'Update administrator information' : 'Add a new administrator to the system'}
+            </p>
           </div>
-
-          {/* Success Message */}
-          {successMessage && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-green-50 border border-green-200 rounded-lg p-3 mb-6 flex items-center gap-2 text-green-600"
-            >
-              <CheckCircle className="w-4 h-4 flex-shrink-0" />
-              <span className="text-sm">{successMessage}</span>
-            </motion.div>
-          )}
 
           {/* Form */}
           <div className="space-y-6">
@@ -187,50 +192,68 @@ export default function SignUpPage() {
               error={errors.role}
             />
 
-            <div className="relative">
-              <InputField
-                label="Password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Create a strong password"
-                icon={<Lock className="w-5 h-5" />}
-                value={formData.password}
-                onChange={(value) => handleInputChange('password', value)}
-                error={errors.password}
+            {/* Super Admin Dropdown - Only show if user exists and current user is super admin */}
+            {isEditMode && currentUser?.isSuperAdmin && (
+              <Dropdown
+                label="Super Admin Status"
+                selected={formData.isSuperAdmin ? 'Yes' : 'No'}
+                options={['Yes', 'No']}
+                onChange={(value) => handleInputChange('isSuperAdmin', value === 'Yes')}
+                error={errors.isSuperAdmin}
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-9 text-stone-400 hover:text-stone-600 transition-colors cursor-pointer"
-              >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
-            </div>
+            )}
 
-            <div className="relative">
-              <InputField
-                label="Confirm Password"
-                type={showConfirmPassword ? "text" : "password"}
-                placeholder="Confirm your password"
-                icon={<Lock className="w-5 h-5" />}
-                value={formData.confirmPassword}
-                onChange={(value) => handleInputChange('confirmPassword', value)}
-                error={errors.confirmPassword}
-              />
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-4 top-9 text-stone-400 hover:text-stone-600 transition-colors cursor-pointer"
-              >
-                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              </button>
-            </div>
+            {!isEditMode && (
+              <div className="relative">
+                <InputField
+                  label={isEditMode ? "New Password (Optional)" : "Password"}
+                  type={showPassword ? "text" : "password"}
+                  placeholder={isEditMode ? "Leave blank to keep current password" : "Create a strong password"}
+                  icon={<Lock className="w-5 h-5" />}
+                  value={formData.password}
+                  onChange={(value) => handleInputChange('password', value)}
+                  error={errors.password}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-9 text-stone-400 hover:text-stone-600 transition-colors cursor-pointer"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+            )
+            }
+
+            {!isEditMode && (
+              <div className="relative">
+                <InputField
+                  label={isEditMode ? "Confirm New Password" : "Confirm Password"}
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder={isEditMode ? "Confirm new password" : "Confirm your password"}
+                  icon={<Lock className="w-5 h-5" />}
+                  value={formData.confirmPassword}
+                  onChange={(value) => handleInputChange('confirmPassword', value)}
+                  error={errors.confirmPassword}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-4 top-9 text-stone-400 hover:text-stone-600 transition-colors cursor-pointer"
+                >
+                  {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+            )}
 
             {/* Password Requirements */}
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-              <p className="text-xs text-stone-600 font-light">
-                Password must contain at least 8 characters with uppercase, lowercase, and numbers.
-              </p>
-            </div>
+            {(!isEditMode || formData.password) && (
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                <p className="text-xs text-stone-600 font-light">
+                  Password must contain at least 8 characters with uppercase, lowercase, and numbers.
+                </p>
+              </div>
+            )}
 
             {/* Submit Button */}
             <button
@@ -242,8 +265,8 @@ export default function SignUpPage() {
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
               ) : (
                 <>
-                  <UserPlus className="w-5 h-5" />
-                  Create Admin Account
+                  {isEditMode ? <Save className="w-5 h-5" /> : <UserPlus className="w-5 h-5" />}
+                  {isEditMode ? 'Update Admin Account' : 'Create Admin Account'}
                 </>
               )}
             </button>
@@ -259,28 +282,28 @@ export default function SignUpPage() {
                 <span className="text-sm">{successMessage}</span>
               </motion.div>
             )}
-          </div>
 
-          {/* Auth Error */}
-          {authError && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-red-50 border border-red-200 rounded-lg p-3 mb-6 flex items-center gap-2 text-red-600"
-            >
-              <AlertCircle className="w-4 h-4 flex-shrink-0" />
-              <span className="text-sm">{authError}</span>
-            </motion.div>
-          )}
+            {/* Auth Error */}
+            {authError && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-red-50 border border-red-200 rounded-lg p-3 mb-6 flex items-center gap-2 text-red-600"
+              >
+                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                <span className="text-sm">{authError}</span>
+              </motion.div>
+            )}
+          </div>
 
           {/* Footer */}
           <div className="mt-8 text-center">
             <div className="w-16 h-px bg-gradient-to-r from-transparent via-amber-400 to-transparent mx-auto mb-4"></div>
             <button
-              onClick={() => router.push('/admin/sign-in')}
+              onClick={() => router.push('/admin/users')}
               className="text-stone-500 text-sm font-light hover:text-amber-600 transition-colors cursor-pointer"
             >
-              Back to Sign In
+              {isEditMode ? 'Back to Users' : 'Back to Users'}
             </button>
           </div>
         </div>

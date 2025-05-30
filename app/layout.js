@@ -6,6 +6,7 @@ import { ScrollToTopButton } from "@/components/common/ScrollToTopButton";
 import { APP_NAME } from "@/lib/constants";
 import routes from "@/lib/routes";
 import { seoRobot_config } from "@/lib/seo/seoConfig";
+import GoogleAnalyticsWrapper from "@/components/GoogleAnalyticsWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,6 +43,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <GoogleAnalyticsWrapper />
         <Header />
         {children}
         <ScrollToTopButton />

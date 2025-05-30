@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { connectDb } from "@/db";
 import AdminUser from "@/db/models/adminUser.model";
 import { logger } from "@/utils/log";
+import mongoose from "mongoose";
 
 const limitNumber = (value) => {
   const defaultLimit = value || 20;
@@ -55,7 +56,7 @@ export const fetchAdminUser = async (id) => {
   try {
     await connectDb();
 
-    const user = await AdminUser.findById(id).select("-password");
+    const user = await AdminUser.findOne({ _id: id }).select("-password");
 
     return JSON.parse(JSON.stringify(user));
   } catch (error) {
@@ -68,15 +69,13 @@ export const updateAdminUser = async (userData, currentUserId) => {
     await connectDb();
 
     // Check if current user is admin or updating own profile
-    const currentUser = await AdminUser.findById(currentUserId);
-    if (
-      !currentUser ||
-      (currentUser.role !== "admin" && currentUserId !== userData._id)
-    ) {
+    const currentUser = await AdminUser.findOne({ _id: currentUserId });
+
+    if (!currentUser || !currentUser?.isSuperAdmin) {
       throw new Error("Unauthorized access");
     }
 
-    const userToUpdate = await AdminUser.findById(userData._id);
+    const userToUpdate = await AdminUser.findOne({ _id: userData?._id });
     if (!userToUpdate) {
       throw new Error("User not found");
     }
@@ -109,7 +108,7 @@ export const deleteAdminUser = async (id, currentUserId) => {
 
     // Check if current user is admin
     const currentUser = await AdminUser.findById(currentUserId);
-    if (!currentUser || currentUser.role !== "admin") {
+    if (!currentUser || !currentUser.isSuperAdmin) {
       throw new Error("Unauthorized access - Admin only");
     }
 
