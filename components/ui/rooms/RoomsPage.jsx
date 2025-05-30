@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { staggerContainer } from '@/lib/constants/animation';
 import { ChevronRight } from 'lucide-react';
@@ -7,8 +7,10 @@ import { RoomCard } from './RoomCard';
 import { RoomFilter } from './RoomFilter';
 import { PagesHero } from '@/components/common/PagesHero';
 import { useSearchParams } from 'next/navigation';
+import { heroSectionData } from '@/data';
 
-export const RoomsPage = ({ rooms, roomsCount }) => {
+// Separate component that uses useSearchParams
+const RoomsPageContent = ({ rooms, roomsCount }) => {
   const [filteredRooms, setFilteredRooms] = useState(rooms);
   const [activeFilters, setActiveFilters] = useState({});
 
@@ -137,7 +139,12 @@ export const RoomsPage = ({ rooms, roomsCount }) => {
   return (
     <>
       {/* Hero Section */}
-      <PagesHero onClick={scrollToRooms} />
+      <PagesHero
+        title={heroSectionData.rooms.title}
+        description={heroSectionData.rooms.description}
+        buttonLabel='View Our Rooms'
+        onClick={scrollToRooms}
+      />
 
       {/* Room Filter - Pass the URL filters as initialFilters */}
       <RoomFilter
@@ -151,13 +158,25 @@ export const RoomsPage = ({ rooms, roomsCount }) => {
         <div className="max-w-7xl mx-auto">
           {/* Section header */}
           <div className="text-center mb-16">
-            <p className="font-light text-amber-700 text-sm tracking-wider uppercase mb-2">Luxury Accommodations</p>
-            <h2 className="font-serif text-4xl md:text-5xl text-stone-800 mb-6">Our Exclusive Rooms</h2>
-            <div className="w-20 h-px bg-amber-400 mx-auto mb-6"></div>
+            <p className="font-light text-amber-700 text-sm tracking-wider uppercase mb-2">
+              Luxury Accommodations
+            </p>
+            <h2 className="font-serif text-4xl md:text-5xl text-stone-800 mb-6">
+              Our Exclusive Rooms
+            </h2>
+            <div className="w-20 h-px bg-amber-400 mx-auto mb-6" aria-hidden="true"></div>
             <p className="text-stone-600 max-w-2xl mx-auto">
               Experience unparalleled comfort and elegance in our thoughtfully designed spaces,
               where every detail has been carefully considered for your perfect stay.
             </p>
+          </div>
+
+          {/* Screen reader announcement for filter results */}
+          <div aria-live="polite" className="sr-only" id="filter-results">
+            {filteredRooms.length === 0
+              ? "No rooms match your current filters."
+              : `Showing ${filteredRooms.length} of ${roomsCount} rooms`
+            }
           </div>
 
           {/* Room grid */}
@@ -169,6 +188,8 @@ export const RoomsPage = ({ rooms, roomsCount }) => {
               initial="hidden"
               animate="visible" // Changed from whileInView to animate
               viewport={{ once: false }} // Changed from true to false
+              role="region"
+              aria-label="Available rooms"
             >
               <AnimatePresence>
                 {filteredRooms.map((room, index) => (
@@ -185,37 +206,68 @@ export const RoomsPage = ({ rooms, roomsCount }) => {
               </AnimatePresence>
             </motion.div>
           ) : (
-            <div className="text-center py-16">
-              <p className="text-stone-600 text-lg mb-6">No rooms match your current filters.</p>
+            <div className="text-center py-16" role="region" aria-label="No rooms found">
+              <p className="text-stone-600 text-lg mb-6">
+                No rooms match your current filters.
+              </p>
               <button
                 onClick={resetFilters}
-                className="inline-flex items-center bg-amber-700 text-white hover:bg-amber-800 transition-colors duration-300 py-2 px-6 rounded-md cursor-pointer"
+                className="inline-flex items-center bg-amber-700 text-white hover:bg-amber-800 transition-colors duration-300 py-2 px-6 rounded-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+                aria-describedby="reset-filters-help"
               >
                 View All Rooms
               </button>
+              <div id="reset-filters-help" className="sr-only">
+                This will clear all filters and show all available rooms
+              </div>
             </div>
           )}
 
           {/* Conditional "View All" button - only show if filters are active and not all rooms are showing */}
           {Object.keys(activeFilters).length > 0 && filteredRooms.length < rooms.length && filteredRooms.length > 0 && (
             <div className="text-center mt-12">
-              <p className="text-stone-600 mb-2">
+              <p className="text-stone-600 mb-2" aria-live="polite">
                 Showing {filteredRooms.length} of {roomsCount} rooms
               </p>
               <motion.button
                 onClick={resetFilters}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
-                className="inline-flex items-center bg-transparent border-2 border-stone-800 text-stone-800 hover:bg-stone-800 hover:text-white transition-colors duration-300 py-3 px-8 rounded-md font-medium"
+                className="inline-flex items-center bg-transparent border-2 border-stone-800 text-stone-800 hover:bg-stone-800 hover:text-white transition-colors duration-300 py-3 px-8 rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-stone-500 focus:ring-offset-2"
+                aria-describedby="view-all-help"
               >
                 View All Rooms
-                <ChevronRight size={18} className="ml-2" />
+                <ChevronRight size={18} className="ml-2" aria-hidden="true" />
+                <span className="sr-only">Clear all filters and show all rooms</span>
               </motion.button>
+              <div id="view-all-help" className="sr-only">
+                Currently showing filtered results. Click to see all available rooms.
+              </div>
             </div>
           )}
         </div>
       </section>
     </>
+  );
+};
+
+// Loading component for Suspense fallback
+const RoomsPageLoading = () => (
+  <div className="min-h-screen bg-stone-50 flex items-center justify-center">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-700 mx-auto mb-4"></div>
+      <p className="text-stone-600">Loading rooms...</p>
+      <span className="sr-only">Please wait while we load the room listings</span>
+    </div>
+  </div>
+);
+
+// Main component with Suspense wrapper
+export const RoomsPage = ({ rooms, roomsCount }) => {
+  return (
+    <Suspense fallback={<RoomsPageLoading />}>
+      <RoomsPageContent rooms={rooms} roomsCount={roomsCount} />
+    </Suspense>
   );
 };
 

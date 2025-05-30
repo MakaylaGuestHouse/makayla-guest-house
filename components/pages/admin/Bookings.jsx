@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAnimateInView } from '@/hooks/useAnimateInView';
 import { animateVariants, staggerContainer } from '@/lib/constants/animation'; import {
@@ -12,8 +12,10 @@ import { animateVariants, staggerContainer } from '@/lib/constants/animation'; i
    ChevronUp,
    Phone,
    Mail,
-   MapPin
 } from 'lucide-react';
+import useAuth from '@/hooks/useAuth';
+import routes from '@/lib/routes';
+import { useAppRouter } from '@/hooks/useAppRouter';
 
 const BookingCard = ({ booking, onView }) => {
    const [isExpanded, setIsExpanded] = useState(false);
@@ -190,13 +192,18 @@ const BookingCard = ({ booking, onView }) => {
 
 const Bookings = ({ bookings }) => {
    const { ref, controls } = useAnimateInView();
+   const { isAuthenticated, loading } = useAuth();
+   const { navigateTo } = useAppRouter();
+
+   if (!isAuthenticated && !loading) {
+      navigateTo(routes.admin.signin)
+   }
 
    const handleView = (booking) => {
       // Show detailed view or navigate to booking details
    };
-
    return (
-      <div className="min-h-screen bg-stone-50 p-4 md:p-6">
+      <div className="min-h-screen bg-stone-50 p-4 md:p-6 mt-24">
          <motion.div
             ref={ref}
             //   initial="hidden"

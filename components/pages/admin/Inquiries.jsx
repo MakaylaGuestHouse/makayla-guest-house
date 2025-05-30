@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAnimateInView } from '@/hooks/useAnimateInView';
 import { animateVariants, staggerContainer } from '@/lib/constants/animation';
@@ -15,6 +15,8 @@ import {
    User
 } from 'lucide-react';
 import useAuth from '@/hooks/useAuth';
+import routes from '@/lib/routes';
+import { useRouter } from "next/navigation";
 
 const InquiryCard = ({ inquiry, onView }) => {
    const [isExpanded, setIsExpanded] = useState(false);
@@ -31,7 +33,7 @@ const InquiryCard = ({ inquiry, onView }) => {
                   <div className="flex items-center gap-4 text-sm text-stone-600 mb-2">
                      <span className="flex items-center gap-1">
                         <Mail className="w-4 h-4" />
-                        {inquiry.email} 
+                        {inquiry.email}
                      </span>
                      {inquiry.phone && (
                         <span className="flex items-center gap-1">
@@ -162,17 +164,16 @@ const InquiryCard = ({ inquiry, onView }) => {
 
 const Inquiries = ({ inquiries }) => {
    const { ref, controls } = useAnimateInView();
-
-   const { user, loading, isAuthenticated } = useAuth();
+   const router = useRouter();
+   const { loading, isAuthenticated } = useAuth();
 
    if (loading) {
       return <div>Loading...</div>;
    }
 
-   if (!isAuthenticated) {
-      return <div>Please log in</div>;
+   if (!isAuthenticated & !loading) {
+      router.push(routes.admin.signin)
    }
-
 
    const handleView = (inquiry) => {
       // Show detailed view or open inquiry in modal
@@ -187,7 +188,7 @@ const Inquiries = ({ inquiries }) => {
    }
 
    return (
-      <div className="min-h-screen bg-stone-50 p-4 md:p-6">
+      <div className="min-h-screen bg-stone-50 p-4 md:p-6 mt-24">
          <motion.div
             ref={ref}
             // initial="hidden"

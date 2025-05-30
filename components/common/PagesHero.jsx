@@ -1,16 +1,29 @@
+"use client"
 import React from 'react'
 import { motion } from 'framer-motion';
 import { animateVariants } from '@/lib/constants/animation';
 import { useAnimateInView } from '@/hooks/useAnimateInView';
+import { useAppRouter } from '@/hooks/useAppRouter';
+import routes from '@/lib/routes';
 
 export const PagesHero = ({
    title = "Discover Our Signature Stays",
    description = "Every room is a masterpiece of comfort, elegance, and sophistication.",
    buttonLabel = "View All Rooms",
    showButton = true,
-   onClick
+   onClick = null
 }) => {
    const { ref: heroRef, controls: heroControls } = useAnimateInView();
+
+   const { navigateTo } = useAppRouter();
+
+   const handleBtnClick = () => {
+      if (onClick) {
+         onClick();
+      } else {
+         navigateTo(routes.rooms)
+      }
+   };
 
    return (
       <div>
@@ -19,7 +32,7 @@ export const PagesHero = ({
             initial="hidden"
             animate={heroControls}
             variants={animateVariants.fadeIn}
-            className="relative h-[60vh] flex items-center justify-center overflow-hidden"
+            className="relative h-[80vh] flex items-center justify-center overflow-hidden"
          >
             {/* Background Image with Parallax Effect */}
             <div className="absolute inset-0 z-0">
@@ -47,7 +60,7 @@ export const PagesHero = ({
                </motion.p>
                {showButton && (
                   <motion.button
-                     onClick={onClick}
+                     onClick={handleBtnClick}
                      whileHover={{ scale: 1.05 }}
                      whileTap={{ scale: 0.98 }}
                      className="bg-amber-700 hover:bg-amber-800 text-white py-3 px-8 rounded-md transition-colors duration-300 cursor-pointer"

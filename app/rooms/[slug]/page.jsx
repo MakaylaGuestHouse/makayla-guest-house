@@ -1,11 +1,30 @@
 import RoomDetails from '@/components/pages/room/RoomDetails'
+import { APP_NAME } from '@/lib/constants';
+import routes from '@/lib/routes';
+import { seoConfig } from '@/lib/seo/seoConfig';
 import { fetchRoom, fetchRooms } from '@/server/rooms.action';
 import React from 'react'
 
-const Room = async ({ params }) => {
-  // Fetch the room by id
-  const roomPromise = await fetchRoom(params.slug);
+export async function generateMetadata({ params }, parent) {
+  const { slug } = await params;
+  const room = (await fetchRoom(slug)) || {};
+  const url = `${routes.roomDetails(slug)}`;
 
+  return seoConfig({
+    url: url,
+    image: room?.images[0]?.image,
+    title: `${room?.name} - ${APP_NAME}`,
+    keywords: room?.tags,
+    description: room?.description,
+    publishedAt: room?.createdAt,
+  });
+}
+
+const page = async ({ params }) => {
+  const { slug } = await params;
+
+  // Fetch the room by id
+  const roomPromise = await fetchRoom(slug);
 
   // Fetch similar in parallel with the article
   const similarRoomsPromise = fetchRooms({
@@ -26,4 +45,4 @@ const Room = async ({ params }) => {
   )
 }
 
-export default Room
+export default page

@@ -6,43 +6,9 @@ import { animateVariants, staggerContainer } from '@/lib/constants/animation';
 import { Instagram, Facebook, Twitter, MapPin, Mail, Phone, Send } from "lucide-react";
 import { Logo } from "./Logo";
 import { WhatsAppLink } from "./WhatsApp";
-import routes, { MAP_URL } from "@/lib/routes";
+import routes, { MAP_URL, moreLinks, quickLinks } from "@/lib/routes";
 import { APP_NAME, APP_PHONE_NUMBER } from "@/lib/constants";
 import { sendEmail } from "@/lib/sendEmail";
-
-const quickLinks = [
-  {
-    title: "Home",
-    href: routes.home
-  },
-  {
-    title: "Accommodations",
-    href: routes.rooms
-  },
-  {
-    title: "Gallery",
-    href: routes.gallery
-  },
-  {
-    title: "Reservations",
-    href: routes.booking
-  }
-]
-
-const moreLinks = [
-  {
-    title: "About Us",
-    href: routes.about
-  },
-  {
-    title: "Blog",
-    href: routes.blog
-  },
-  {
-    title: "Contact",
-    href: routes.contact
-  }
-]
 
 const Footer = () => {
   const { ref, controls } = useAnimateInView();
@@ -113,7 +79,7 @@ const Footer = () => {
             </div>
             <div className="ml-4">
               <h2 className="font-serif text-2xl text-white mb-1">Makayla Guest House</h2>
-              <p className="text-amber-400/80 text-sm uppercase tracking-widest font-light">Unparalleled Elegance</p>
+              <p className="text-amber-400/80 text-sm uppercase tracking-widest font-light">YOU'LL NEVER WANT TO LEAVE</p>
             </div>
           </motion.div>
 
@@ -153,7 +119,7 @@ const Footer = () => {
               <span className="absolute -bottom-2 left-0 w-12 h-0.5 bg-amber-400"></span>
             </h3>
             <p className="text-stone-300 leading-relaxed mb-6">
-              Experience the pinnacle of luxury accommodations in our exquisite guest house. Each space is meticulously designed to blend comfort with sophistication, creating an unforgettable retreat for the discerning traveler.
+              {APP_NAME} is a trusted guest house in Sunyani, Ghana, offering clean rooms, warm service, and a peaceful place to stay.
             </p>
             <div className="bg-stone-800/50 backdrop-blur-sm p-6 rounded-lg border border-stone-700/50">
               <div className="flex items-center mb-4 cursor-pointer" onClick={openInNewTab}>
@@ -277,7 +243,7 @@ const Footer = () => {
           className="text-center"
         >
           <p className="text-stone-400 uppercase tracking-widest text-xs font-light mb-4">
-            © {new Date().getFullYear()}{APP_NAME}. All rights reserved.
+            © {new Date().getFullYear()}{" "}{APP_NAME}. All rights reserved.
           </p>
           <div className="flex flex-wrap justify-center gap-x-8 gap-y-2 text-xs">
             <a href={routes.privacy} className="text-stone-400 hover:text-amber-400 transition-colors duration-300">Privacy Policy</a>

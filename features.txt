@@ -4,9 +4,9 @@ Perfect for small guest houses looking for a simple and effective online presenc
 Features Included:
 ✅ Professional Homepage – clean, welcoming landing page with highlights
 ✅ Room Listings Page –  with descriptions, rates, and photos
- Contact Page – phone, email, location, and contact form
+✅ Contact Page – phone, email, location, and contact form
 ✅ Google Maps Integration – help guests locate you easily
- About Us Page – share your story or background
+✅ About Us Page – share your story or background
 ✅ Photo Gallery – showcase up to 30 curated images
 ✅ Mobile-Friendly Design – works seamlessly on all devices
 ✅ Social Media Links – connect to platforms like Facebook and Instagram
@@ -18,8 +18,8 @@ Features Included:
 For established or expanding guest houses seeking advanced features and automation.
 
  Everything in the Starter Package, PLUS:
- ✅Advanced Room Listings – unlimited rooms, filter by price or amenities
- Automated Booking System – guests check availability & reserve
+ ✅ Advanced Room Listings – unlimited rooms, filter by price or amenities
+ ✅ Automated Booking System – guests check availability & reserve
  Blog Section – share updates, travel tips, or local events
  Events & Activities Page – highlight nearby attractions or in-house events
  Special Offers Page – display seasonal discounts or packages

@@ -27,14 +27,21 @@ import { deleteCloudinaryImg } from '@/server/cloudinary.action';
 import { ROOM_INITIAL_VALUES } from '@/lib/constants/initialValues';
 import { amenityOptions, bathroomOptions, bedQuantityOptions, bedTypeOptions, guestChildOptions, guestOptions, housekeepingOptions, ratingOptions, roomNameOptions, roomSizeOptions, roomTypeOptions, tagOptions } from './constants';
 import { createRoom } from '@/server/rooms.action';
+import { useAppRouter } from '@/hooks/useAppRouter';
+import useAuth from '@/hooks/useAuth';
+import routes from '@/lib/routes';
 
 const CreateRoomPage = () => {
-   const { files, uploadError, handleFileSelect, removeFile, clearFiles } = useFileUpload(8);
-
    const [formData, setFormData] = useState(ROOM_INITIAL_VALUES);
-
    const [errors, setErrors] = useState({});
    const [isSubmitting, setIsSubmitting] = useState(false);
+   const { files, uploadError, handleFileSelect, removeFile, clearFiles } = useFileUpload(8);
+   const { goBack, navigateTo } = useAppRouter();
+   const { isAuthenticated, loading } = useAuth();
+
+   if (!isAuthenticated && !loading) {
+      navigateTo(routes.admin.signin)
+   }
 
    const handleInputChange = (field, value) => {
       setFormData(prev => {
@@ -191,13 +198,13 @@ const CreateRoomPage = () => {
    const showSameConfigToggle = totalBeds > 1 && formData.bedTypes[0]?.type && formData.bedTypes[0]?.quantity;
 
    return (
-      <div className="min-h-screen bg-stone-50">
+      <div className="min-h-screen bg-stone-50 mt-24">
          {/* Page Header */}
          <div className="bg-white border-b border-stone-200">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
-                     <button className="p-2 hover:bg-stone-100 rounded-lg transition-colors cursor-pointer">
+                     <button onClick={goBack} className="p-2 hover:bg-stone-100 rounded-lg transition-colors cursor-pointer">
                         <ArrowLeft size={20} className="text-stone-600" />
                      </button>
                      <div>

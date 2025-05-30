@@ -17,24 +17,8 @@ import {
   Car
 } from 'lucide-react';
 import useAuth from '@/hooks/useAuth';
-
-const fetchData = async ({ type }) => {
-  // This function would fetch real data from your API
-  return [];
-};
-
-const isAuthorized = (user, requiredLevel) => {
-  if (!user?.isActive) throw new Error("User inactive");
-  if (user.isSuperAdmin) return;
-
-  const roles = { editor: 1, admin: 2, superAdmin: 3 };
-  const userLevel = user.isSuperAdmin ? 3 : roles[user.role] || 0;
-  const required = roles[requiredLevel] || 0;
-
-  if (userLevel < required) {
-    throw new Error(`${requiredLevel} access required`);
-  }
-};
+import { useRouter } from "next/navigation";
+import routes from '@/lib/routes';
 
 const RoomCard = ({ room, user, onEdit, onDelete, onView }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -221,25 +205,24 @@ const RoomCard = ({ room, user, onEdit, onDelete, onView }) => {
 };
 
 export const RoomsAdmin = ({ rooms }) => {
+  const router = useRouter();
   const { ref, controls } = useAnimateInView();
-
   const { user, loading, isAuthenticated } = useAuth();
 
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  if (!isAuthenticated) {
-    return <div>Please log in</div>;
+  if (!isAuthenticated & !loading) {
+    router.push(routes.admin.signin)
   }
-
 
   const handleEdit = (room) => { };
   const handleDelete = (room) => { };
   const handleView = (room) => { };
 
   return (
-    <div className="min-h-screen bg-stone-50 p-4 md:p-6">
+    <div className="min-h-screen bg-stone-50 p-4 md:p-6 mt-24">
       <motion.div
         ref={ref}
         //   initial="hidden"

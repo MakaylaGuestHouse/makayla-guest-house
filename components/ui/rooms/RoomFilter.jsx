@@ -336,6 +336,7 @@ export const RoomFilter = ({
                   onMouseLeave={() => setHoveredField(null)}
                 >
                   <MapPin className={`h-4 w-4 ${hoveredField === "location" ? "text-rose-500" : "text-amber-500"} transition-colors duration-300 mr-2`} />
+                  <label htmlFor="location" className="sr-only">Location</label>
                   <select
                     name="location"
                     value={pendingFormData.location}
@@ -365,6 +366,7 @@ export const RoomFilter = ({
                   onMouseLeave={() => setHoveredField(null)}
                 >
                   <Users className={`h-4 w-4 ${hoveredField === "guests" ? "text-rose-500" : "text-amber-500"} transition-colors duration-300 mr-2`} />
+                  <label htmlFor="guests" className="sr-only">Guests</label>
                   <select
                     name="guests"
                     value={pendingFormData.guests}
@@ -394,6 +396,8 @@ export const RoomFilter = ({
                   onMouseLeave={() => setHoveredField(null)}
                 >
                   <Home className={`h-4 w-4 ${hoveredField === "roomType" ? "text-rose-500" : "text-amber-500"} transition-colors duration-300 mr-2`} />
+                  <label htmlFor="roomType" className="sr-only">Room Type</label>
+
                   <select
                     name="roomType"
                     value={pendingFormData.roomType}
@@ -423,6 +427,7 @@ export const RoomFilter = ({
                   onMouseLeave={() => setHoveredField(null)}
                 >
                   <Bed className={`h-4 w-4 ${hoveredField === "bedType" ? "text-rose-500" : "text-amber-500"} transition-colors duration-300 mr-2`} />
+                  <label htmlFor="bedType" className="sr-only">Bed Type</label>
                   <select
                     name="bedType"
                     value={pendingFormData.bedType}
@@ -575,7 +580,9 @@ export const RoomFilter = ({
                   </label>
                   <div className="flex items-center border-b border-gray-200 pb-2 hover:border-rose-300 transition-all duration-300">
                     <DoorClosed className="h-4 w-4 text-amber-500 mr-2" />
+                    <label htmlFor="roomSize" className="sr-only">Room Size</label>
                     <select
+                      id="roomSize"
                       name="roomSize"
                       value={pendingFormData.roomSize}
                       onChange={(e) => handleFieldChange("roomSize", e.target.value)}
@@ -595,7 +602,9 @@ export const RoomFilter = ({
                   </label>
                   <div className="flex items-center border-b border-gray-200 pb-2 hover:border-rose-300 transition-all duration-300">
                     <Bed className="h-4 w-4 text-amber-500 mr-2" />
+                    <label htmlFor="totalBeds" className="sr-only">Total Beds</label>
                     <select
+                      id="totalBeds"
                       name="totalBeds"
                       value={pendingFormData.totalBeds}
                       onChange={(e) => handleFieldChange("totalBeds", e.target.value)}

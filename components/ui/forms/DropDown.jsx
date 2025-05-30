@@ -30,6 +30,7 @@ export const Dropdown = ({ label, selected, options, error, onChange }) => {
          </label>
          <div className="relative">
             <button
+               aria-label={`selected filter - ${selected}`}
                type="button"
                onClick={() => setIsOpen(!isOpen)}
                className="w-full bg-white cursor-pointer border border-stone-200 py-3 px-4 text-left text-stone-800 rounded-md flex items-center justify-between transition-all hover:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400"

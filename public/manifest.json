@@ -1,0 +1,75 @@
+{
+  "name": "Makayla Guest House",
+  "short_name": "Makayla",
+  "theme_color": "#fff",
+  "background_color": "#fff",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "id": "/",
+  "icons": [
+    {
+      "src": "/makayla-logo.jpg",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/makayla-logo.jpg",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/makayla-logo.jpg",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/makayla-logo.jpg",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/makayla-logo.jpg",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/makayla-logo.jpg",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/makayla-logo.jpg",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/makayla-logo.jpg",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/makayla-logo.jpg",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/makayla-logo.jpg",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Makayla Guest House"
+    },
+    {
+      "src": "/makayla-logo.jpg",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Makayla Guest House"
+    }
+  ]
+}

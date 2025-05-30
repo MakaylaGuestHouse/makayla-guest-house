@@ -14,10 +14,11 @@ import {
 } from 'lucide-react';
 import { animateVariants, staggerContainer } from '@/lib/constants/animation';
 import useAuth from '@/hooks/useAuth';
+import routes from '@/lib/routes';
 
 const Dashboard = ({ rooms, inquiries, bookings, newsletters }) => {
    const router = useRouter();
-   const { user, loading } = useAuth();
+   const { user, isAuthenticated, loading } = useAuth();
    const { ref, controls } = useAnimateInView();
    const stats = {
       rooms: rooms?.data,
@@ -31,7 +32,7 @@ const Dashboard = ({ rooms, inquiries, bookings, newsletters }) => {
          title: 'Create Room',
          icon: Plus,
          color: 'bg-amber-700 hover:bg-amber-800',
-         onClick: () => router.push('/admin/rooms/create')
+         onClick: () => router.push('/admin/rooms/create-room')
       },
       {
          title: 'Add User',
@@ -78,6 +79,7 @@ const Dashboard = ({ rooms, inquiries, bookings, newsletters }) => {
       }
    ];
 
+   
    if (loading) {
       return (
          <div className="min-h-screen bg-stone-50 p-4 flex items-center justify-center">
@@ -85,9 +87,13 @@ const Dashboard = ({ rooms, inquiries, bookings, newsletters }) => {
          </div>
       );
    }
+   
+   if (!isAuthenticated && !loading) {
+      router.push(routes.admin.signin)
+   }
 
    return (
-      <div className="min-h-screen bg-stone-50 p-4 md:p-6">
+      <div className="min-h-screen mt-24 bg-stone-50 p-4 md:p-6">
          <motion.div
             ref={ref}
             //   initial="hidden"

@@ -210,7 +210,7 @@ export default function Testimonials() {
                <div className="hidden md:block relative" style={{ fontFamily: "'Montserrat', sans-serif" }}>
                   {/* Fixed height container to prevent layout shifts */}
                   <div className="grid grid-cols-2 gap-8" style={{ minHeight: '400px' }}>
-                     <AnimatePresence mode="wait">
+                     <AnimatePresence mode="async">
                         {getVisibleTestimonials().map((testimonial, idx) => (
                            <motion.div
                               key={`desktop-${testimonial.id}-${activeIndex}-${idx}`}
@@ -277,7 +277,7 @@ export default function Testimonials() {
                <div className="md:hidden" style={{ fontFamily: "'Montserrat', sans-serif" }}>
                   {/* Fixed height container for mobile */}
                   <div className="relative" style={{ minHeight: '420px' }}>
-                     <AnimatePresence mode="wait">
+                     <AnimatePresence mode="async">
                         <motion.div
                            key={`mobile-${testimonials[activeIndex].id}-${activeIndex}`}
                            variants={testimonialAnimations}

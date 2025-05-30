@@ -99,7 +99,7 @@ const RoomDetails = ({ room, similarRooms }) => {
 
    return (
       <div className="bg-white">
-         <PagesHero />
+         <PagesHero title={room.name} />
 
          {/* Main Content Container */}
          <div className="container w-full pt-12 pb-4">

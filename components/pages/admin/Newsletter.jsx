@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
    Mail,
@@ -14,11 +14,8 @@ import {
 import { animateVariants, staggerContainer } from '@/lib/constants/animation';
 import { useAnimateInView } from '@/hooks/useAnimateInView';
 import useAuth from '@/hooks/useAuth';
-
-const fetchData = async ({ type }) => {
-   // This function would fetch real data from your API
-   return [];
-};
+import { useRouter } from "next/navigation";
+import routes from '@/lib/routes';
 
 const SubscriberCard = ({ subscriber, onView }) => {
    const [isExpanded, setIsExpanded] = useState(false);
@@ -143,24 +140,23 @@ const SubscriberCard = ({ subscriber, onView }) => {
 };
 
 const Newsletters = ({ subscribers }) => {
+   const router = useRouter();
    const { ref, controls } = useAnimateInView();
-
    const { loading, isAuthenticated } = useAuth();
 
    if (loading) {
       return <div>Loading...</div>;
    }
 
-   if (!isAuthenticated) {
-      return <div>Please log in</div>;
+   if (!isAuthenticated & !loading) {
+      router.push(routes.admin.signin)
    }
 
-
-   const handleView = (subscriber) => {};
+   const handleView = (subscriber) => { };
 
    if (loading) {
       return (
-         <div className="min-h-screen bg-stone-50 p-4 flex items-center justify-center">
+         <div className="min-h-screen bg-stone-50 p-4 flex items-center justify-center mt-24">
             <div className="text-stone-600">Loading newsletter subscribers?...</div>
          </div>
       );

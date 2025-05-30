@@ -1,3 +1,4 @@
+"use client"
 import { SectionHeader } from '@/components/common/SectionHeader';
 import { useAnimateInView } from '@/hooks/useAnimateInView';
 import { useAppRouter } from '@/hooks/useAppRouter';
