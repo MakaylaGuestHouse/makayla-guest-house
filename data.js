@@ -4,7 +4,7 @@ export const heroSectionData = {
     description:
       "Step into a space where every detail is intentional. From the crisp linens to the curated ambiance, this is more than just a stay — it's an experience designed to impress, relax, and captivate.",
   },
- rooms: {
+  rooms: {
     title: "Live the Suite Life",
     description:
       "Our rooms aren’t just places to sleep, they’re sanctuaries. Designed with exquisite detail and wrapped in luxury, each space invites you to rest, recharge, and revel in total comfort.",
@@ -57,5 +57,132 @@ export const faqData = [
     question: "What amenities are available in the rooms?",
     answer:
       "All rooms feature luxury linens, premium bath products, complimentary high-speed WiFi, smart TVs, Nespresso machines, minibars, air conditioning, and in-room safes. Select suites also include private balconies, fireplaces, or soaking tubs.",
+  },
+];
+
+// Testimonial data
+export const testimonials = [
+  {
+    id: 1,
+    name: "Akosua Sarah Mensah",
+    role: "Managing Director at GoldLink Group",
+    image: "/owner.jpg",
+    rating: 5,
+    content:
+      "Makayla Guest House was an absolute delight. The environment was peaceful, the rooms were spotless, and the staff treated us like family. I’ll definitely return.",
+    company: "GoldLink Group",
+  },
+  {
+    id: 2,
+    name: "Kwame Daniel Boateng",
+    role: "Founder & Tech Consultant",
+    image: "/owner.jpg",
+    rating: 5,
+    content:
+      "As someone who travels often for business, I was impressed by the professionalism and comfort at Makayla. A perfect balance of local warmth and high standards.",
+    company: "StartUp Ghana",
+  },
+  {
+    id: 3,
+    name: "Esi Clara Owusu",
+    role: "Travel & Lifestyle Blogger",
+    image: "/owner.jpg",
+    rating: 4,
+    content:
+      "Makayla Guest House has a vibe like no other — stylish interiors, delicious meals, and a genuine sense of hospitality that makes you feel at home.",
+    company: "Explore Ghana Now",
+  },
+  {
+    id: 4,
+    name: "Kojo James Addae",
+    role: "Corporate Events Lead",
+    image: "/owner.jpg",
+    rating: 5,
+    content:
+      "We hosted a weekend strategy session here and the setting was perfect. Excellent service, well-equipped rooms, and a relaxing garden area to recharge.",
+    company: "Brong Ahafo Holdings",
+  },
+];
+
+export const galleryImages = [
+  {
+    id: 1,
+    src: "/makayla-exterior.jpg",
+    alt: "Elegant exterior view of Makayla Guest House",
+    category: "Outdoor",
+    width: "wide",
+    featured: true,
+    description:
+      "A grand welcome—Makayla Guest House exterior framed by natural beauty and thoughtful architecture.",
+  },
+  {
+    id: 2,
+    src: "/makayla-room1-sm.jpg",
+    alt: "Comfortable guest room with workspace",
+    category: "Suites",
+    width: "square",
+    featured: true,
+    description:
+      "Individually decorated, individually furnished, desk, laptop workspace",
+  },
+  {
+    id: 3,
+    src: "/makayla-front.jpg",
+    alt: "Front entrance of Makayla Guest House",
+    category: "Outdoor",
+    width: "square",
+    featured: false,
+    description:
+      "Inviting front entrance with lush landscaping and warm ambiance",
+  },
+  {
+    id: 4,
+    src: "/makayla--room2.jpg",
+    alt: "Stylish guest room with desk and seating",
+    category: "Suites",
+    width: "wide",
+    featured: false,
+    description:
+      "Individually decorated, individually furnished, desk, laptop workspace",
+  },
+  {
+    id: 5,
+    src: "/makayla-room1.jpg",
+    alt: "Refined guest room interior with workspace",
+    category: "Suites",
+    width: "wide",
+    featured: false,
+    description:
+      "Individually decorated, individually furnished, desk, laptop workspace",
+  },
+  {
+    id: 6,
+    src: "/makayla-room2-sm.jpg",
+    alt: "Elegant suite with personal workspace",
+    category: "Suites",
+    width: "square",
+    featured: false,
+    description:
+      "Individually decorated, individually furnished, desk, laptop workspace",
+  },
+  {
+    id: 7,
+    src: "/makayla-terrace.avif",
+    alt: "Peaceful terrace at Makayla Guest House",
+    category: "Outdoor",
+    width: "wide",
+    featured: false,
+    description:
+      "A cozy terrace space perfect for relaxing with garden views and a touch of fresh air",
+  },
+  {
+    id: 8,
+    src: "/makayla-terrace2.avif",
+    alt: "Outdoor terrace lounge area",
+    category: "Outdoor",
+    width: "square",
+    featured: false,
+    description:
+      "Relaxed open-air setting with modern comfort—ideal for morning coffee or quiet evenings",
   },
 ];

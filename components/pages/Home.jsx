@@ -13,8 +13,7 @@ import Newsletter from '@/sections/Newsletter';
 import FeaturedRoomsSection from '@/sections/rooms/FeaturedRoomsSection';
 import React from 'react';
 
-
-const HomePage = () => {
+const HomePage = ({ featuredRooms }) => {
 
    return (
       <div className="relative flex flex-col w-full">
@@ -22,12 +21,12 @@ const HomePage = () => {
          <ServicesSection />
          <AboutUsSection />
          <BookingSection />
-         <FeaturedRoomsSection />
+         {featuredRooms.length && (<FeaturedRoomsSection featuredRooms={featuredRooms} />)}
          <Amenities />
          <WhyChooseUs />
          <Testimonials />
          <GallerySection />
-         <CTASection/>
+         <CTASection />
          <Newsletter />
          <LocationSection />
       </div>

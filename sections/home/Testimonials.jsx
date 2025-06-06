@@ -2,53 +2,10 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAnimateInView } from '@/hooks/useAnimateInView';
-import { animateVariants, staggerContainer } from '@/lib/constants/animation';
+import { staggerContainer } from '@/lib/constants/animation';
 import { Star, Quote } from "lucide-react";
 import { SectionHeader } from "@/components/common/SectionHeader";
-
-// Testimonial data
-const testimonials = [
-   {
-      id: 1,
-      name: "Sarah Johnson",
-      role: "CEO at Elevate Group",
-      image: "/owner.jpg",
-      rating: 5,
-      content:
-         "Our stay at this luxury guest house exceeded all expectations. The attention to detail and personalized service made us feel like royalty throughout our visit.",
-      company: "Elevate Group",
-   },
-   {
-      id: 2,
-      name: "Michael Chang",
-      role: "Product Lead at Innovate",
-      image: "/owner.jpg",
-      rating: 5,
-      content:
-         "The level of creativity and technical expertise they brought to our project was exceptional. They didn't just meet our expectations - they completely exceeded them.",
-      company: "Innovate Solutions",
-   },
-   {
-      id: 3,
-      name: "Elena Rodriguez",
-      role: "Travel Blogger",
-      image: "/owner.jpg",
-      rating: 4,
-      content:
-         "As someone who stays in luxury accommodations worldwide, I can confidently say this guest house ranks among the finest. The ambiance is unparalleled and every detail speaks of refined elegance.",
-      company: "Wanderlust Diaries",
-   },
-   {
-      id: 4,
-      name: "James Wilson",
-      role: "Executive Director",
-      image: "/owner.jpg",
-      rating: 5,
-      content:
-         "I've hosted several corporate retreats here and each time has been flawless. The staff anticipates needs before they arise, and the setting inspires creativity and connection.",
-      company: "Strategic Ventures",
-   }
-];
+import { testimonials } from "@/data";
 
 // Fixed animations that don't affect layout
 const testimonialAnimations = {

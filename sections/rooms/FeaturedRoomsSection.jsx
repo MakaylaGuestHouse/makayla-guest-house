@@ -8,57 +8,9 @@ import routes from '@/lib/routes';
 import { useAppRouter } from '@/hooks/useAppRouter';
 import { APP_PHONE_NUMBER } from '@/lib/constants';
 
-const FeaturedRoomsSection = () => {
+const FeaturedRoomsSection = ({ featuredRooms }) => {
    const { navigateTo } = useAppRouter();
    const { ref: sectionRef, controls: sectionControls } = useAnimateInView(0.1);
-
-   // Featured rooms data
-   const featuredRooms = [
-      {
-         id: 1,
-         title: "Oceanview Suite",
-         description: "Luxurious suite with panoramic ocean views, private balcony, and premium amenities for an unforgettable coastal experience.",
-         price: 450,
-         images: ["/room10.jpg", "/room11.jpg"],
-         amenities: ["King Bed", "Ocean View", "Balcony", "Rain Shower"],
-         size: "55 m²",
-         occupancy: "2 Adults",
-         available: true
-      },
-      {
-         id: 2,
-         title: "Garden Villa",
-         description: "Secluded villa surrounded by lush gardens with private pool, outdoor dining area, and direct beach access.",
-         price: 680,
-         images: ["/room12.jpg", "/room13.jpg"],
-         amenities: ["King Bed", "Private Pool", "Garden View", "Outdoor Dining"],
-         size: "85 m²",
-         occupancy: "2 Adults, 2 Children",
-         available: true
-      },
-      {
-         id: 3,
-         title: "Penthouse Suite",
-         description: "Exclusive top-floor suite with 360° views, private terrace, luxury furnishings, and personalized butler service.",
-         price: 890,
-         images: ["/room14.jpg", "/room11.jpg"],
-         amenities: ["King Bed", "Panoramic View", "Private Terrace", "Butler Service"],
-         size: "120 m²",
-         occupancy: "2 Adults",
-         available: false
-      },
-      {
-         id: 4,
-         title: "Beachfront Cottage",
-         description: "Charming standalone cottage steps from the shoreline with private veranda and unobstructed sunset views.",
-         price: 520,
-         images: ["/room13.jpg", "/room14.jpg"],
-         amenities: ["Queen Bed", "Beach Access", "Private Veranda", "Sunset View"],
-         size: "65 m²",
-         occupancy: "2 Adults",
-         available: true
-      }
-   ];
 
    // Filter system
    const [activeFilter, setActiveFilter] = useState("all");
@@ -67,8 +19,8 @@ const FeaturedRoomsSection = () => {
    const filteredRooms = activeFilter === "all"
       ? featuredRooms
       : featuredRooms.filter(room =>
-         room.title.toLowerCase().includes(activeFilter) ||
-         room.description.toLowerCase().includes(activeFilter)
+         room?.name.toLowerCase().includes(activeFilter) ||
+         room?.description.toLowerCase().includes(activeFilter)
       );
 
    return (
@@ -129,7 +81,7 @@ const FeaturedRoomsSection = () => {
                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
             >
                {filteredRooms.map((room, index) => (
-                  <RoomCard key={room.id} room={room} index={index} />
+                  <RoomCard key={room?._id} room={room} index={index} />
                ))}
             </motion.div>
 
@@ -211,19 +163,19 @@ const RoomCard = ({ room, index }) => {
          }}
          initial="hidden"
          animate={controls}
-         className="group bg-white shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col h-full"
+         className="group bg-white shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col h-full cursor-pointer"
       >
          {/* Image */}
          <div className="relative overflow-hidden aspect-[4/3] bg-stone-100">
             <img
-               src={room.images[activeImage]}
-               alt={room.title}
+               src={room?.images[activeImage]?.image}
+               alt={room?.name}
                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             />
 
             {/* Image navigation dots */}
             <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1">
-               {room.images.map((_, imgIndex) => (
+               {room?.images.map((_, imgIndex) => (
                   <button
                      key={imgIndex}
                      onClick={(e) => {
@@ -232,13 +184,13 @@ const RoomCard = ({ room, index }) => {
                      }}
                      className={`w-2 h-2 rounded-full ${activeImage === imgIndex ? 'bg-white' : 'bg-white/50'
                         }`}
-                     aria-label={`View image ${imgIndex + 1} of room ${room.title}`}
+                     aria-label={`View image ${imgIndex + 1} of room ${room?.name}`}
                   />
                ))}
             </div>
 
             {/* Availability tag */}
-            {!room.available && (
+            {!room?.isAvailable && (
                <div className="absolute top-4 right-4 bg-stone-800 text-white text-xs px-3 py-1">
                   Available Soon
                </div>
@@ -247,7 +199,7 @@ const RoomCard = ({ room, index }) => {
             {/* Quick view button */}
             <button
                onClick={() => setShowDetails(!showDetails)}
-               className="absolute bottom-4 right-4 bg-white/90 hover:bg-white text-stone-800 px-3 py-1 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+               className="absolute bottom-4 right-4 bg-white/90 hover:bg-white text-stone-800 px-3 py-1 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer"
             >
                Quick View
             </button>
@@ -256,14 +208,14 @@ const RoomCard = ({ room, index }) => {
          {/* Content */}
          <div className="p-6 flex flex-col flex-grow">
             <div className="flex justify-between items-start mb-3">
-               <h4 className="text-xl font-serif text-stone-800">{room.title}</h4>
+               <h4 className="text-xl font-serif text-stone-800">{room?.name}</h4>
                <div className="text-right">
-                  <span className="text-lg font-medium text-amber-700">${room.price}</span>
+                  <span className="text-lg font-medium text-amber-700">${room?.price}</span>
                   <span className="text-sm text-stone-400 block">per night</span>
                </div>
             </div>
 
-            <p className="text-stone-600 mb-4 line-clamp-2">{room.description}</p>
+            <p className="text-stone-600 mb-4 line-clamp-2">{room?.description}</p>
 
             {/* Room details */}
             <div className={`grid grid-cols-2 gap-2 text-sm text-stone-500 mb-4 ${showDetails ? 'block' : 'hidden'}`}>
@@ -274,18 +226,7 @@ const RoomCard = ({ room, index }) => {
                         <path d="M11 11V5a2 2 0 0 1 4 0v.5"></path>
                      </svg>
                   </span>
-                  {room.size}
-               </div>
-               <div className="flex items-center gap-1">
-                  <span className="w-4 h-4 flex items-center justify-center rounded-full bg-amber-50 text-amber-600">
-                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-3 h-3">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                     </svg>
-                  </span>
-                  {room.occupancy}
+                  {room?.roomSize}
                </div>
             </div>
 
@@ -293,7 +234,7 @@ const RoomCard = ({ room, index }) => {
             <div className={`mb-6 ${showDetails ? 'block' : 'hidden'}`}>
                <div className="text-sm font-medium text-stone-700 mb-2">Amenities</div>
                <div className="flex flex-wrap gap-2">
-                  {room.amenities.map((amenity, i) => (
+                  {room?.amenities.map((amenity, i) => (
                      <span key={i} className="text-xs bg-stone-50 text-stone-600 px-2 py-1">
                         {amenity}
                      </span>
@@ -303,7 +244,7 @@ const RoomCard = ({ room, index }) => {
 
             {/* Button */}
             <div className="mt-auto pt-4 border-t border-stone-100 flex">
-               <a href={`/rooms/${room.id}`} className="inline-block w-full text-center py-3 bg-stone-800 text-white hover:bg-amber-700 transition-colors duration-300">
+               <a href={`/rooms/${room?._id}`} className="inline-block w-full text-center py-3 bg-stone-800 text-white hover:bg-amber-700 transition-colors duration-300">
                   View Details
                </a>
             </div>

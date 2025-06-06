@@ -1,7 +1,7 @@
-import room1 from "@/assets/office-entrance-sm.jpg";
-import room2 from "@/assets/room2.jpg";
-import room3 from "@/assets/room3.jpg";
-import room4 from "@/assets/room4.jpg";
+import room1 from "@/assets/makayla-exterior.jpg";
+import room2 from "@/assets/makayla-room1.jpg";
+import room3 from "@/assets/makayla-front.jpg";
+import room4 from "@/assets/makayla--room2.jpg";
 
 // Array of carousel images with content
 export const carouselImages = [

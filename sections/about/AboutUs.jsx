@@ -43,7 +43,7 @@ const AboutUsSection = () => {
             <div className="absolute inset-0 border border-amber-200 translate-x-4 translate-y-4"></div>
             <div className="relative bg-stone-100 aspect-square overflow-hidden">
               <img
-                src="/rear-view-woman.avif"
+                src='/makayla-exterior.jpg'
                 alt="Emmanuel Owusu, Founder and Creative Director"
                 className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
               />

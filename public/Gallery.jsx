@@ -5,8 +5,91 @@ import { useAnimateInView } from '@/hooks/useAnimateInView';
 import { animateVariants, staggerContainer } from '@/lib/constants/animation';
 import { X, ChevronLeft, ChevronRight, ZoomIn, Info } from "lucide-react";
 import { SectionHeader } from "@/components/common/SectionHeader";
-import { galleryImages } from "@/data";
 
+// Gallery data - Replace with your actual luxury guest house images
+const galleryImages = [
+  {
+    id: 1,
+    src: '/makayla-exterior.jpg',
+    alt: "Luxury Master Suite",
+    category: "Suites",
+    width: "wide", // wide, tall, square
+    featured: true,
+    description: "Our signature Presidential Suite featuring panoramic mountain views and custom furnishings"
+  },
+  {
+    id: 2,
+    src: "/makayla-room1.jpg",
+    alt: "Infinity Pool",
+    category: "Amenities",
+    width: "square",
+    featured: false,
+    description: "Infinity edge pool overlooking the valley with private cabanas"
+  },
+  {
+    id: 3,
+    src: "/makayla-front.jpg",
+    alt: "Fine Dining",
+    category: "Dining",
+    width: "tall",
+    featured: false,
+    description: "Intimate dining area with locally-sourced gourmet cuisine"
+  },
+  {
+    id: 4,
+    src: "makayla--room2.jpg",
+    alt: "Garden Terrace",
+    category: "Outdoor",
+    width: "wide",
+    featured: false,
+    description: "Private garden terrace perfect for morning yoga or evening cocktails"
+  },
+  {
+    id: 5,
+    src: "/room11.jpg",
+    alt: "Spa Treatment",
+    category: "Wellness",
+    width: "square",
+    featured: true,
+    description: "Holistic spa treatments using organic ingredients in a serene setting"
+  },
+  {
+    id: 6,
+    src: "/room13.jpg",
+    alt: "Deluxe Suite",
+    category: "Suites",
+    width: "tall",
+    featured: false,
+    description: "Deluxe suite with king-sized canopy bed and private balcony"
+  },
+  {
+    id: 7,
+    src: "/room10.jpg",
+    alt: "Lounge Area",
+    category: "Common Areas",
+    width: "wide",
+    featured: false,
+    description: "Sophisticated lounge area with fireplace and curated art collection"
+  },
+  {
+    id: 8,
+    src: "/room14.jpg",
+    alt: "Breakfast View",
+    category: "Dining",
+    width: "square",
+    featured: true,
+    description: "Enjoy a gourmet breakfast with breathtaking sunrise views"
+  },
+  {
+    id: 9,
+    src: "/room13.jpg",
+    alt: "Luxury Bathroom",
+    category: "Suites",
+    width: "square",
+    featured: false,
+    description: "Marble bathroom with freestanding soaking tub and premium amenities"
+  }
+];
 
 // const categories = ["All", ...new Set(galleryImages.map(img => img.category))];
 
