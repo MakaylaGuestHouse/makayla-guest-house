@@ -202,7 +202,7 @@ const Dashboard = ({ rooms, inquiries, bookings, newsletters }) => {
                                  <p className="font-medium text-stone-800">{room.name || 'Room Name'}</p>
                                  <p className="text-sm text-stone-600">{room.roomType || 'Room Type'}</p>
                               </div>
-                              <span className="text-amber-700 font-semibold">${room.price || '0'}</span>
+                              <span className="text-amber-700 font-semibold">GHS{room.price || '0'}</span>
                            </div>
                         ))}
                      </div>

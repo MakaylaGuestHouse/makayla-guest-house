@@ -18,7 +18,7 @@ export const createRoom = async (room, creator_id) => {
 
     const user = await AdminUser.findById(creator_id);
 
-    if (!user || !isAuthorized(user.role, "editor")) {
+    if (!user || !isAuthorized(user, "editor")) {
       throw new Error("Unauthorized access");
     }
 
@@ -28,6 +28,7 @@ export const createRoom = async (room, creator_id) => {
       .replace(/[^a-z0-9-]/g, "");
     room.id = sanitizedId;
     room.createdAt = new Date();
+    room.creator = user._id;
 
     await Room.create(room);
 

@@ -11,7 +11,7 @@ export const isAuthorized = (user, requiredLevel) => {
   if (!user?.isActive) throw new Error("User inactive");
 
   // Super admin bypass - isSuperAdmin flag overrides role hierarchy
-  if (user.isSuperAdmin) return;
+  if (user.isSuperAdmin) return true;
 
   // Role hierarchy mapping with numeric levels for comparison
   const roles = { editor: 1, admin: 2, superAdmin: 3 };

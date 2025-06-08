@@ -210,7 +210,7 @@ const RoomCard = ({ room, index }) => {
             <div className="flex justify-between items-start mb-3">
                <h4 className="text-xl font-serif text-stone-800">{room?.name}</h4>
                <div className="text-right">
-                  <span className="text-lg font-medium text-amber-700">${room?.price}</span>
+                  <span className="text-lg font-medium text-amber-700">GHS{room?.price}</span>
                   <span className="text-sm text-stone-400 block">per night</span>
                </div>
             </div>

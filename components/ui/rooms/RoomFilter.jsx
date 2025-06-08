@@ -81,7 +81,7 @@ const getActiveFilters = (formData) => {
   }
 
   if (formData.priceRange !== defaults.priceRange) {
-    activeFilters.priceRange = `$${formData.priceRange}`;
+    activeFilters.priceRange = `GHS${formData.priceRange}`;
   }
 
   if (formData.roomSize !== defaults.roomSize) {
@@ -518,8 +518,8 @@ export const RoomFilter = ({
                     <div className="relative">
                       {/* Price labels */}
                       <div className="absolute -top-6 left-0 right-0 flex justify-between text-xs text-gray-500">
-                        <span>$0</span>
-                        <span>$1000</span>
+                        <span>GHS0</span>
+                        <span>GHS1000</span>
                       </div>
 
                       {/* Single slider */}

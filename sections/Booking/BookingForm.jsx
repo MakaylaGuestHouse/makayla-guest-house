@@ -1,26 +1,29 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { animateVariants } from '@/lib/constants/animation';
-import { Calendar, Phone, Users, Mail } from 'lucide-react';
+import { Calendar, Phone, Users, Mail, CheckCircle } from 'lucide-react';
 import { Dropdown } from '@/components/ui/forms/DropDown';
 import { InputField } from '@/components/ui/forms/InputField';
 import { DateInput } from '@/components/ui/forms/DateInput';
 import { validateBooking } from '@/utils/validators';
-import { createBooking } from '@/server/booking.action';
 import { sendEmail } from '@/lib/sendEmail';
+
+const INITIAL_VALUES = {
+   fullName: '',
+   email: '',
+   phoneNumber: '',
+   checkInDate: '',
+   checkOutDate: ''
+}
 
 export const BookingForm = ({ roomId }) => {
    const [adults, setAdults] = useState('');
    const [children, setChildren] = useState('');
    const [roomType, setRoomType] = useState('');
+   const [isLoading, setIsLoading] = useState(false);
+   const [successMessage, setSuccessMessage] = useState('');
 
-   const [formData, setFormData] = useState({
-      fullName: '',
-      email: '',
-      phoneNumber: '',
-      checkInDate: '',
-      checkOutDate: ''
-   });
+   const [formData, setFormData] = useState(INITIAL_VALUES);
 
    const [errors, setErrors] = useState({});
 
@@ -46,6 +49,13 @@ export const BookingForm = ({ roomId }) => {
       'Luxury Penthouse'
    ];
 
+   const resetForm = () => {
+      setAdults('');
+      setChildren('');
+      setRoomType('');
+      setFormData(INITIAL_VALUES)
+   }
+
    const handleSubmit = async () => {
       const newFormData = {
          ...formData,
@@ -55,12 +65,19 @@ export const BookingForm = ({ roomId }) => {
          roomId: roomId ?? null
       };
 
-
-      if (validateBooking(newFormData, setErrors)) {
-         await sendEmail(newFormData, '/api/mail/booking');
-         // await createBooking(newnewFormData, roomId);
-      } else {
+      try {
+         if (validateBooking(newFormData, setErrors)) {
+            setIsLoading(true)
+            await sendEmail(newFormData, '/api/mail/booking');
+            setSuccessMessage("Booked successfully")
+            resetForm()
+         } else {
+            console.log('Form has errors:', errors);
+         }
+      } catch (error) {
          console.log('Form has errors:', errors);
+      } finally {
+         setIsLoading(false)
       }
    };
 
@@ -156,12 +173,30 @@ export const BookingForm = ({ roomId }) => {
                <div className="pt-4">
                   <button
                      type="button"
+                     disabled={isLoading}
                      onClick={handleSubmit}
-                     className="w-full cursor-pointer bg-stone-800 hover:bg-amber-700 text-white py-4 px-6 rounded-md transition-colors duration-300 font-medium text-center tracking-wide"
+                     className={`w-full ${isLoading ? "cursor-not-allowed" : "cursor-pointer"} bg-stone-800 hover:bg-amber-700 text-white py-4 px-6 rounded-md transition-colors duration-300 font-medium text-center tracking-wide`}
                   >
-                     Check Availability
+                     {isLoading ? (
+                        <div className="w-5 h-5 mx-auto cursor-not-allowed border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                     ) : (
+                        'Check Availability'
+                     )}
                   </button>
                </div>
+
+               {/* Success Message */}
+               {successMessage && (
+                  <motion.div
+                     initial={{ opacity: 0, y: -10 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     className="bg-green-50 border border-green-200 rounded-lg p-3 mb-6 flex items-center gap-2 text-green-600"
+                  >
+                     <CheckCircle className="w-4 h-4 flex-shrink-0" />
+                     <span className="text-sm">{successMessage}</span>
+                  </motion.div>
+               )}
+
             </div>
          </div>
       </motion.div>

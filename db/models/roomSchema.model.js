@@ -35,7 +35,7 @@ const roomSchema = new Schema({
   tags: [{ type: String }],
   amenities: [{ type: String, required: true }],
   createdAt: { type: Date, default: Date.now },
-  creator: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  creator: { type: Schema.Types.ObjectId, ref: "AdminUser", required: true },
 });
 
 const Room = models.Room || model("Room", roomSchema);

@@ -54,7 +54,7 @@ export const SimilarRooms = ({ rooms }) => {
 
                            <div className="absolute bottom-0 right-0 p-4 translate-y-0 transition-transform duration-300">
                               <span className="inline-block bg-white text-stone-800 font-medium px-3 py-1 rounded-md text-sm">
-                                 From ${room.price}/night
+                                 From GHS{room.price}/night
                               </span>
                            </div>
                         </div>

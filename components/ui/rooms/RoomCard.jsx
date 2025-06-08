@@ -59,7 +59,7 @@ export const RoomCard = ({ room }) => {
             {/* Price tag */}
             <div className="absolute bottom-0 right-0 bg-stone-800 bg-opacity-90 backdrop-blur-sm px-4 py-2 text-white">
                <p className="text-sm font-light uppercase tracking-wider">From</p>
-               <p className="text-xl font-serif">${room.price}<span className="text-sm font-light"> / night</span></p>
+               <p className="text-xl font-serif">GHS{room.price}<span className="text-sm font-light"> / night</span></p>
             </div>
          </div>
 

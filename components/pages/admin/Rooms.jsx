@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAnimateInView } from '@/hooks/useAnimateInView';
 import { animateVariants, staggerContainer } from '@/lib/constants/animation';
@@ -10,11 +10,8 @@ import {
   Eye,
   Users,
   MapPin,
-  DollarSign,
   ChevronDown,
   ChevronUp,
-  Wifi,
-  Car
 } from 'lucide-react';
 import useAuth from '@/hooks/useAuth';
 import { useRouter } from "next/navigation";
@@ -49,8 +46,7 @@ const RoomCard = ({ room, user, onEdit, onDelete, onView }) => {
               </span>
             </div>
             <div className="flex items-center gap-2 mb-4">
-              <DollarSign className="w-5 h-5 text-amber-700" />
-              <span className="text-2xl font-bold text-stone-800">{room.price}</span>
+              <span className="text-2xl font-bold text-stone-800">GHS{room.price}</span>
               <span className="text-stone-600">/ night</span>
             </div>
           </div>
@@ -282,11 +278,11 @@ export const RoomsAdmin = ({ rooms }) => {
             <div className="bg-white p-4 rounded-lg shadow-sm border border-stone-200">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-blue-100 rounded-lg">
-                  <DollarSign className="w-5 h-5 text-blue-700" />
+                  <span className="w-5 h-5 text-blue-700" >GHS</span>
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-stone-800">
-                    ${rooms.reduce((sum, r) => sum + (r.price || 0), 0) / (rooms.length || 1)}
+                    GHS{rooms.reduce((sum, r) => sum + (r.price || 0), 0) / (rooms.length || 1)}
                   </p>
                   <p className="text-sm text-stone-600">Avg. Price</p>
                 </div>

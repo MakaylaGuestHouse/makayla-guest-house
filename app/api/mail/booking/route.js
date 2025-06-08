@@ -17,7 +17,7 @@ export const POST = async (request) => {
     const { data: bookingData } = await request.json();
 
     // Create the booking first
-    const bookingResult = await createBooking(bookingData, bookingData.roomId);
+    const bookingResult = await createBooking(bookingData, bookingData?.roomId);
 
     if (bookingResult.error) {
       return new Response(JSON.stringify({ error: bookingResult.error }), {

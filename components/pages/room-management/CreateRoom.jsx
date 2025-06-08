@@ -8,7 +8,6 @@ import { InputField } from '@/components/ui/forms/InputField';
 import { DropdownWithInput } from '@/components/ui/forms/DropdownWithInput';
 import {
    X,
-   Tag,
    Wifi,
    Plus,
    Home,
@@ -18,8 +17,8 @@ import {
    Upload,
    Maximize,
    ArrowLeft,
-   DollarSign,
    CloudUpload,
+   CheckCircle,
 } from 'lucide-react';
 import { validateRoom } from '@/utils/validators';
 import { uploadImageToCloud } from '@/lib/uploadImageToCloud';
@@ -37,10 +36,16 @@ const CreateRoomPage = () => {
    const [isSubmitting, setIsSubmitting] = useState(false);
    const { files, uploadError, handleFileSelect, removeFile, clearFiles } = useFileUpload(8);
    const { goBack, navigateTo } = useAppRouter();
-   const { isAuthenticated, loading } = useAuth();
+   const { user, isAuthenticated, loading } = useAuth();
+   const [successMessage, setSuccessMessage] = useState('');
 
    if (!isAuthenticated && !loading) {
       navigateTo(routes.admin.signin)
+   }
+
+   const clearAllImages = () => {
+      clearFiles()
+      setFormData(prev => ({ ...prev, images: [] }));
    }
 
    const handleInputChange = (field, value) => {
@@ -143,12 +148,20 @@ const CreateRoomPage = () => {
    };
 
    const uploadImages = async () => {
-      const res = await uploadImageToCloud(files)
+      setIsSubmitting(true);
+      try {
+         const res = await uploadImageToCloud(files)
 
-      if (res.success) {
-         setFormData(prev => ({ ...prev, images: res.images }));
-      } else {
+         if (res.success) {
+            setFormData(prev => ({ ...prev, images: res.images }));
+         } else {
+            setErrors(prev => ({ ...prev, images: res.error || 'Failed to upload images' }));
+         }
+      } catch (error) {
          setErrors(prev => ({ ...prev, images: res.error || 'Failed to upload images' }));
+
+      } finally {
+         setIsSubmitting(false);
       }
    };
 
@@ -183,11 +196,11 @@ const CreateRoomPage = () => {
       setIsSubmitting(true);
 
       try {
-
-         await createRoom(formData)
-
+         await createRoom(formData, user?._id)
+         clearFiles()
+         setFormData(ROOM_INITIAL_VALUES)
+         setSuccessMessage("Room created successfully")
       } catch (error) {
-         console.error('Submission error:', error);
          setErrors({ submit: 'Failed to create room. Please try again.' });
       } finally {
          setIsSubmitting(false);
@@ -267,13 +280,13 @@ const CreateRoomPage = () => {
                         />
 
                         <InputField
-                           label="Price per Night ($)"
+                           label="Price per Night (GHS)"
                            type="number"
                            placeholder="299"
                            value={formData.price}
                            onChange={(value) => handleInputChange('price', value)}
                            error={errors.price}
-                           icon={<DollarSign size={18} />}
+                           icon={<span size={18}>GHS</span>}
                         />
                      </div>
 
@@ -343,7 +356,7 @@ const CreateRoomPage = () => {
                               <p className="text-sm text-stone-600">{files.length}/8 image(s) selected</p>
                               <button
                                  type="button"
-                                 onClick={clearFiles}
+                                 onClick={clearAllImages}
                                  className="text-sm text-red-600 hover:text-red-700 cursor-pointer"
                               >
                                  Clear All
@@ -372,20 +385,22 @@ const CreateRoomPage = () => {
                            </div>
 
                            {/* Action Button */}
-                           <motion.div
-                              variants={animateVariants.fadeIn}
-                              className="flex flex-col sm:flex-row justify-end gap-4 pt-6"
-                           >
-                              <button
-                                 type="button"
-                                 onClick={uploadImages}
-                                 disabled={isSubmitting}
-                                 className="px-8 py-3 bg-stone-800 text-white rounded-lg hover:bg-amber-700 transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                           {!formData?.images.length && (
+                              <motion.div
+                                 variants={animateVariants.fadeIn}
+                                 className="flex flex-col sm:flex-row justify-end gap-4 pt-6"
                               >
-                                 <CloudUpload className="mr-2" size={18} />
-                                 {isSubmitting ? 'Uploading...' : "Upload image(s)"}
-                              </button>
-                           </motion.div>
+                                 <button
+                                    type="button"
+                                    onClick={uploadImages}
+                                    disabled={isSubmitting}
+                                    className="px-8 py-3 bg-stone-800 text-white rounded-lg hover:bg-amber-700 transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                                 >
+                                    <CloudUpload className="mr-2" size={18} />
+                                    {isSubmitting ? 'Uploading...' : "Upload image(s)"}
+                                 </button>
+                              </motion.div>
+                           )}
                         </div>
                      )}
                   </div>
@@ -756,6 +771,19 @@ const CreateRoomPage = () => {
                      {isSubmitting ? 'Creating...' : 'Create Room'}
                   </button>
                </motion.div>
+
+               {/* Success Message */}
+               {successMessage && (
+                  <motion.div
+                     initial={{ opacity: 0, y: -10 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     className="bg-green-50 border border-green-200 rounded-lg p-3 mb-6 flex items-center gap-2 text-green-600"
+                  >
+                     <CheckCircle className="w-4 h-4 flex-shrink-0" />
+                     <span className="text-sm">{successMessage}</span>
+                  </motion.div>
+               )}
+
             </motion.div>
          </div>
       </div>

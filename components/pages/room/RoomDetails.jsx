@@ -270,7 +270,7 @@ const RoomDetails = ({ room, similarRooms }) => {
                               </div>
                            </div>
                            <div className="flex items-baseline justify-end">
-                              <span className="text-3xl font-serif text-stone-800 font-medium">${room.price}</span>
+                              <span className="text-3xl font-serif text-stone-800 font-medium">GHS{room.price}</span>
                               <span className="text-stone-600 ml-1">/ night</span>
                            </div>
                         </div>
@@ -404,19 +404,14 @@ const RoomDetails = ({ room, similarRooms }) => {
                            <div className="divide-y divide-stone-100">
                               <div className="p-4 hover:bg-stone-50">
                                  <h4 className="font-medium text-stone-800 mb-1">Check-in & Check-out</h4>
-                                 <p className="text-stone-600 text-sm">Check-in: From 3:00 PM</p>
-                                 <p className="text-stone-600 text-sm">Check-out: Until 11:00 AM</p>
+                                 <p className="text-stone-600 text-sm">Check-in: 24/7 Available</p>
+                                 <p className="text-stone-600 text-sm">Check-out: 24/7 Available</p>
                               </div>
-                              <div className="p-4 hover:bg-stone-50">
+                              {/* <div className="p-4 hover:bg-stone-50">
                                  <h4 className="font-medium text-stone-800 mb-1">Cancellation Policy</h4>
                                  <p className="text-stone-600 text-sm">Free cancellation up to 48 hours before arrival</p>
                                  <p className="text-stone-600 text-sm">Cancellations within 48 hours are subject to one night's charge</p>
-                              </div>
-                              <div className="p-4 hover:bg-stone-50">
-                                 <h4 className="font-medium text-stone-800 mb-1">Extra Guest Policy</h4>
-                                 <p className="text-stone-600 text-sm">$40 per additional guest per night</p>
-                                 <p className="text-stone-600 text-sm">Children under 6 stay free in existing bedding</p>
-                              </div>
+                              </div> */}
                            </div>
                         </div>
                      </div>

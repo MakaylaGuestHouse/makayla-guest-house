@@ -14,7 +14,7 @@ const limitNumber = (value) => {
   return Math.min(defaultLimit, maxNumber);
 };
 
-export const createBooking = async (bookingData, roomId) => {
+export const createBooking = async (bookingData) => {
   try {
     await connectDb();
 
