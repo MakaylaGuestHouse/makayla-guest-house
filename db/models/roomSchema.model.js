@@ -40,4 +40,4 @@ const roomSchema = new Schema({
 
 const Room = models.Room || model("Room", roomSchema);
 
-export default Room;
+export default Room; 
